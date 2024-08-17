@@ -10,46 +10,67 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '@/lib/constants';
 
 
 const USER_TYPES = ["client", "company"] as const;
 
 const formSchema = z.object({
     email: z.string({
-        description:'Email of user',
+        description: 'Email of user',
         required_error: 'Please enter a valid email address'
     }).email(),
     user_type: z.enum(USER_TYPES, {
-  errorMap: (issue, ctx) => ({ message: 'Please select a user type' })
-}),
+        errorMap: (issue, ctx) => ({ message: 'Please select a user type' })
+    }),
     password: z.string({
-        description:'Password of user',
+        description: 'Password of user',
         required_error: 'Please enter a password',
     }).min(8),
     confirm_password: z.string({
-        description:'Confirm password of user',
+        description: 'Confirm password of user',
         required_error: 'Please confirm your password',
     }).min(8),
 });
 
 const NewUserForm = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] =useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
-     const {
-         formState: { isDirty, isSubmitting },
-  } = form;
+    const {
+        formState: { isDirty, isSubmitting },
+    } = form;
 
-    const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) =>{
-        try{
-            if(data.password.toLowerCase() !== data.confirm_password.toLowerCase()) {
-                     return toast.error('Passwords do not match');
-                 }
-               //   Do something with the form data.
+    const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
+        try {
+            if (data.password.toLowerCase() !== data.confirm_password.toLowerCase()) {
+                return toast.error('Passwords do not match');
+            }
+
+            const { password, user_type, email } = data;
+            console.log(data)
+            //   Do something with the form data.
+            const res = await fetch(`${API_BASE_URL}/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password, user_type }),
+            });
+            const newUserRes = await res.json();
+            console.log(newUserRes);
+            if (res.status !== 201) {
+                return toast.error(newUserRes.message);
+            }
+            if (res.status === 201) {
                 console.log(data)
-        }catch(error){
+                toast.success('User created successfully');
+                form.reset();
+                return;
+            }
+        } catch (error) {
             console.error(error);
         }
     }
@@ -144,7 +165,7 @@ const NewUserForm = () => {
                                     </FormControl>
                                     <SelectContent>
                                         {USER_TYPES.map(item => (
-                                            <SelectItem  key={item} value={item}>
+                                            <SelectItem className='capitalize' key={item} value={item}>
                                                 {item}
                                             </SelectItem>
                                         ))}
@@ -154,7 +175,7 @@ const NewUserForm = () => {
                             </FormItem>
                         )}
                     />
-                    <Button type="submit" disabled={!isDirty || isSubmitting} className='w-full disabled:disabled:pointer-events-auto disabled:bg-opacity-70'>{isSubmitting? 'Submitting': 'Register'}</Button>
+                    <Button type="submit" disabled={!isDirty || isSubmitting} className='w-full disabled:cursor-not-allowed disabled:bg-opacity-70'>{isSubmitting ? 'Submitting' : 'Register'}</Button>
                 </form>
             </Form>
         </div>
