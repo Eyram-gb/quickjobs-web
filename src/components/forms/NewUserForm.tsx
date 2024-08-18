@@ -66,7 +66,7 @@ const NewUserForm = () => {
             }
             if (res.status === 201) {
                 console.log(data)
-                toast.success('User created successfully');
+                toast.success('Account created successfully');
                 form.reset();
                 return;
             }
