@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { API_BASE_URL } from '@/lib/constants';
+import { Router, useRouter } from 'next/router';
 
 
 const USER_TYPES = ["client", "company"] as const;
@@ -34,6 +35,7 @@ const formSchema = z.object({
 });
 
 const NewUserForm = () => {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
@@ -59,7 +61,14 @@ const NewUserForm = () => {
                 },
                 body: JSON.stringify({ email, password, user_type }),
             });
-            const newUserRes = await res.json();
+            const newUserRes = await res.json() as {
+                user: {
+                    id: string,
+                    email: string,
+                    user_type: string,
+                },
+                message: string,
+            };
             console.log(newUserRes);
             if (res.status !== 201) {
                 return toast.error(newUserRes.message);
@@ -67,8 +76,31 @@ const NewUserForm = () => {
             if (res.status === 201) {
                 console.log(data)
                 toast.success('Account created successfully');
+                const loginRes = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ email, password, id: newUserRes.user.id }),
+                });
                 form.reset();
-                return;
+                const { user } = await loginRes.json() as {
+                    user: {
+                        id: string,
+                        email: string,
+                        user_type: string,
+                    },
+                    message: string,
+                };
+                if (loginRes.status === 201) {
+                    router.push(`/${user.id}/create-profile`);
+                    return;
+                } else {
+                    return router.push(`/login`)
+                }
+            } else {
+                toast.error('An error occurred. Please try again.')
             }
         } catch (error) {
             console.error(error);

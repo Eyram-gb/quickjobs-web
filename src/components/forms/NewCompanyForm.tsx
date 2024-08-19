@@ -14,7 +14,6 @@ const companySchema = z.object({
     }),
     logo_url: z.string(),
     website_url: z.string().url(),
-    email: z.string().email(),
 })
 type TCompanySchema = z.infer<typeof companySchema>;
 const NewCompanyForm = () => {
