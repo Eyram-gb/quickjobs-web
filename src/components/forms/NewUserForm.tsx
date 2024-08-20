@@ -12,6 +12,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { API_BASE_URL } from '@/lib/constants';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/lib/store/authStore';
 
 
 const USER_TYPES = ["client", "company"] as const;
@@ -38,6 +39,7 @@ const NewUserForm = () => {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const { login } = useAuthStore();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
@@ -94,7 +96,8 @@ const NewUserForm = () => {
                     message: string,
                 };
                 if (loginRes.status === 201) {
-                    router.push(`/${user.id}/create-profile`);
+                    login(user)
+                    return router.push(`/${user.id}/create-profile`);
                     // return toast.success('login successful');
                 } else {
                     // return toast.error('login failed');
