@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { API_BASE_URL } from '@/lib/constants';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 
 const USER_TYPES = ["client", "company"] as const;
@@ -95,8 +95,9 @@ const NewUserForm = () => {
                 };
                 if (loginRes.status === 201) {
                     router.push(`/${user.id}/create-profile`);
-                    return;
+                    // return toast.success('login successful');
                 } else {
+                    // return toast.error('login failed');
                     return router.push(`/login`)
                 }
             } else {
