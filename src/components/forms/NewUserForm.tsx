@@ -97,13 +97,11 @@ const NewUserForm = () => {
                 };
                 if (loginRes.status === 201) {
                     login(user)
-                    console.log('--------loginres',loginRes)
-                    console.log('--------user',user)
-                    // return router.push(`/${user.id}/create-profile`);
-                    return toast.success('login successful');
+                    return router.push(`/${user.id}/create-profile`);
+                    // return toast.success('login successful');
                 } else {
-                    return toast.error('login failed');
-                    // return router.push(`/login`)
+                    // return toast.error('login failed');
+                    return router.push(`/login`)
                 }
             } else {
                 toast.error('An error occurred. Please try again.')
