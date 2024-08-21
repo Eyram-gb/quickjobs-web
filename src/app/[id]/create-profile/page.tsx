@@ -12,7 +12,7 @@ const CreateProfile = async ({
     children: React.ReactNode;
     params: { id: string };
 }) => {
-    const authToken = cookies().get('qjsessionid');
+    const authToken = cookies();
     const getUser = async (userId: string) => {
         const res = await fetch(
             `${API_BASE_URL}/users/${userId}`,
@@ -37,8 +37,11 @@ const CreateProfile = async ({
     // const cookieStore = cookies()
 
     return (
-        <div>
-            users: {id}
+        <div className='flex justify-center max-w-xl mx-auto p-8 border rounded-md'>
+            {
+                user?.user_type === 'client' ?
+                    <NewClientForm user_id={id} email={user.email} /> : <NewCompanyForm />
+            }
         </div>
     )
 }
