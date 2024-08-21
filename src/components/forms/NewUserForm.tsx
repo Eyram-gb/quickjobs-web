@@ -78,7 +78,7 @@ const NewUserForm = () => {
             if (res.status === 201) {
                 console.log(data)
                 toast.success('Account created successfully');
-                const loginRes = await fetch(`${API_BASE_URL}/auth/login`, {
+                const loginRes = await fetch(`/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -97,11 +97,13 @@ const NewUserForm = () => {
                 };
                 if (loginRes.status === 201) {
                     login(user)
-                    return router.push(`/${user.id}/create-profile`);
-                    // return toast.success('login successful');
+                    console.log('--------loginres',loginRes)
+                    console.log('--------user',user)
+                    // return router.push(`/${user.id}/create-profile`);
+                    return toast.success('login successful');
                 } else {
-                    // return toast.error('login failed');
-                    return router.push(`/login`)
+                    return toast.error('login failed');
+                    // return router.push(`/login`)
                 }
             } else {
                 toast.error('An error occurred. Please try again.')
