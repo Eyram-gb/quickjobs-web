@@ -78,7 +78,7 @@ const NewUserForm = () => {
             if (res.status === 201) {
                 console.log(data)
                 toast.success('Account created successfully');
-                const loginRes = await fetch(`/api/login`, {
+                const loginRes = await fetch(`http://localhost:3000/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -95,13 +95,17 @@ const NewUserForm = () => {
                     },
                     message: string,
                 };
+                // const cookies = loginRes.headers.getSetCookie();
+                // cookies.forEach(cookie => {
+                //     Response.headers.append('Set-Cookie', cookie);
+                // });
                 if (loginRes.status === 201) {
                     login(user)
-                    return router.push(`/${user.id}/create-profile`);
-                    // return toast.success('login successful');
+                    // return router.push(`/${user.id}/create-profile`);
+                    return toast.success('login successful');
                 } else {
-                    // return toast.error('login failed');
-                    return router.push(`/login`)
+                    return toast.error('login failed');
+                    // return router.push(`/login`)
                 }
             } else {
                 toast.error('An error occurred. Please try again.')

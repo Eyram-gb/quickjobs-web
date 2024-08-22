@@ -1,18 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies, headers } from "next/headers";
+import { API_BASE_URL } from "@/lib/constants";
 
-// Replace this with your actual API base URL
-const API_BASE_URL = process.env.NEXT_PUBLIC_QUICKJOBS_ENDPOINT || "";
-
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, res:NextResponse) {
   try {
     // Parse the incoming request body
     const { email, password, id } = await req.json();
-    const qjCookies = cookies();
-    const qjHeaders = headers();
-
-    // console.log("---------Headers:", qjHeaders);
-    // console.log("---------Cookies:", qjCookies);
 
     // Send a request to the external API
     const loginRes = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -32,17 +25,32 @@ export async function POST(req: NextRequest) {
       throw err;
     }
 
-    const { user, message } = (await loginRes.json()) as {
-      user: {
-        id: string;
-        email: string;
-        user_type: string;
-      };
-      message: string;
+    const data = await loginRes.json();
+    
+    const response = NextResponse.json(data, { status: 201 });
+
+    // Forward the Set-Cookie header
+    const setCookie = loginRes.headers.get('set-cookie');
+    console.log('------SET COOKIE', setCookie)
+
+    const options = {
+      maxAge: 20 * 60 * 1000, // would expire in 20minutes
+      httpOnly: true, // The cookie is only accessible by the web server
+    //   secure: false,
+    //   path: "/",
+    //   sameSite: "none" as const,
     };
+    
+    if (setCookie) {
+        console.log('------ENTERING SET COOKIE')
+        const cookieValue = setCookie.split('=')[1].split(';')[0];
+        console.log('------ COOKIE value', cookieValue);
+        cookies().set('QJSessionID', cookieValue, options);
+    //   response.headers.set('Set-Cookie', setCookie);
+    }
 
     // Return the user data as a response
-    return Response.json({ user, message }, { status: 201 });
+    return response;
   } catch (error) {
     // Handle any errors that occur
     return NextResponse.json(

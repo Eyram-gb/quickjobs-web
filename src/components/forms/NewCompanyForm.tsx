@@ -31,12 +31,12 @@ const NewCompanyForm = () => {
     return (
         <>
             <Form {...form}>
-                <form className='space-y-3'>
+                <form className='space-y-3 w-full'>
                     <FormField
                         control={form.control}
                         name="name"
                         render={({ field }) => (
-                            <FormItem className='col-span-1'>
+                            <FormItem className='w-full'>
                                 <FormLabel className='text-lg font-semibold'>Company Name</FormLabel>
                                 <FormControl>
                                     <Input placeholder="Barclays Enterprise" {...field} />
@@ -49,7 +49,7 @@ const NewCompanyForm = () => {
                         control={form.control}
                         name="description"
                         render={({ field }) => (
-                            <FormItem className='col-span-1'>
+                            <FormItem className='w-full'>
                                 <FormLabel className='text-lg font-semibold'>Company Description</FormLabel>
                                 <FormControl>
                                     <Textarea placeholder="Barclays Enterprise" {...field} className='resize-none' />
@@ -62,7 +62,7 @@ const NewCompanyForm = () => {
                         control={form.control}
                         name="logo_url"
                         render={({ field }) => (
-                            <FormItem className='col-span-1'>
+                            <FormItem className='w-full'>
                                 <FormLabel className='text-lg font-semibold'>Logo Url</FormLabel>
                                 <FormControl>
                                     <Input placeholder="https://cloudinary.ehibjb343.png" {...field} />
@@ -75,7 +75,7 @@ const NewCompanyForm = () => {
                         control={form.control}
                         name="website_url"
                         render={({ field }) => (
-                            <FormItem className='col-span-1'>
+                            <FormItem className='w-full'>
                                 <FormLabel className='text-lg font-semibold'>Company Website</FormLabel>
                                 <FormControl>
                                     <Input placeholder="https://barclaysent.com" {...field} />
