@@ -26,7 +26,6 @@ const clientSchema = z.object({
     }),
     other_name: z.string({
         description: 'First name of user.',
-        required_error: 'Please enter a valid email address'
     }).max(25, {
         message: 'Other name should not exceed 25 characters',
     }).optional(),
@@ -47,9 +46,13 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
         resolver: zodResolver(clientSchema)
     });
 
+    const {
+        formState: { isDirty, isSubmitting },
+    } = form;
+
     const onSubmit: SubmitHandler<z.infer<typeof clientSchema>> = async (data) => {
         try {
-            const res = await fetch(`${API_BASE_URL}/auth/register`, {
+            const res = await fetch(`${API_BASE_URL}/users/applicants`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,11 +60,11 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
                 body: JSON.stringify({ ...data, email, user_id }),
             });
             const newClientRes = await res.json();
-            if (res.status !== 201 ) {
+            if (res.status !== 201) {
                 throw new Error('Failed to create your profile. Please try again.');
             }
 
-            if(res.status === 201){
+            if (res.status === 201) {
                 form.reset();
                 toast.success('Your profile has been created successfully.');
                 return;
@@ -73,10 +76,10 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
         }
     }
     return (
-        <div>
+        <div className='w-full'>
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-3'>
-                    <div className='md:grid grid-cols-2'>
+                <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-3 w-full'>
+                    <div className='md:grid grid-cols-2 gap-4'>
                         <FormField
                             control={form.control}
                             name="first_name"
@@ -84,7 +87,7 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
                                 <FormItem className='col-span-1'>
                                     <FormLabel className='text-lg font-semibold'>First Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="example@eg.com" {...field} />
+                                        <Input placeholder="John" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -97,14 +100,14 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
                                 <FormItem className='col-span-1'>
                                     <FormLabel className='text-lg font-semibold'>Last Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="example@eg.com" {...field} />
+                                        <Input placeholder="Doe" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
-                    <div className='md:grid grid-cols-2'>
+                    <div className='md:grid grid-cols-2 gap-4'>
                         <FormField
                             control={form.control}
                             name="other_name"
@@ -112,22 +115,30 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
                                 <FormItem className='col-span-1'>
                                     <FormLabel className='text-lg font-semibold'>Middle Name</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="example@eg.com" {...field} />
+                                        <Input placeholder="Middle name" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Input disabled defaultValue={email} className='col-span-1' />
+                        <div className='col-span-1 mt-0.5'>
+                            <FormLabel className='text-lg font-semibold'>Email</FormLabel>
+                            <FormControl>
+                                <Input disabled defaultValue={email} className='text-black' />
+                            </FormControl>
+                            <FormMessage />
+                        </div>
+
+                        {/* <Input disabled defaultValue={email} className='col-span-1' /> */}
                     </div>
                     <FormField
                         control={form.control}
                         name="profile_url"
                         render={({ field }) => (
                             <FormItem className='col-span-1'>
-                                <FormLabel className='text-lg font-semibold'>Middle Name</FormLabel>
+                                <FormLabel className='text-lg font-semibold'>Profile Url</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="example@eg.com" {...field} />
+                                    <Input placeholder="https://image.png" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -140,13 +151,13 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
                             <FormItem className=''>
                                 <FormLabel className='text-lg font-semibold'>Bio</FormLabel>
                                 <FormControl>
-                                    <Textarea {...field} rows={3} className='resize-none' />
+                                    <Textarea {...field} rows={3} className='resize-none' placeholder='A brief description about you...' />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
-                    <Button type='submit'>
+                    <Button type='submit' disabled={!isDirty || isSubmitting}>
                         Save
                     </Button>
                 </form>

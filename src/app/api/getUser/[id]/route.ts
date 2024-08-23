@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "@/lib/constants";
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function GET(
   req: NextRequest,
@@ -7,9 +8,8 @@ export async function GET(
 ) {
   try {
     // Logic to get user data based on user ID
-    // Example:
-    console.log('------id------',params.id);
-    
+    console.log("=========REQ", req);
+
     const userRes = await fetch(`${API_BASE_URL}/users/${params.id}`, {
       method: "GET",
       headers: {
@@ -17,18 +17,17 @@ export async function GET(
       },
       credentials: "include",
     });
-
-    console.log('------userRES----', userRes);
-    
+    console.log("-----GETTTTTTT-----", cookies().getAll());
+    console.log("-----USERRESSS-----", userRes);
 
     if (!userRes.ok) {
       const err: { error: Error } = await userRes.json();
       throw err;
     }
     const user = await userRes.json();
-    return NextResponse.json(user);
+    // return userRes.json();
     // const user = await getUserById(userId);
-    // return NextResponse.json(user);
+    return NextResponse.json(user);
   } catch (error) {
     return NextResponse.json(
       { error: "Internal Server error" },

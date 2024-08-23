@@ -17,8 +17,6 @@ export async function POST(req: NextRequest, res:NextResponse) {
       body: JSON.stringify({ email, password, id }),
     });
 
-    console.log(loginRes);
-
     // Handle the response from the external API
     if (!loginRes.ok) {
       const err: { error: Error } = await loginRes.json();
@@ -31,22 +29,11 @@ export async function POST(req: NextRequest, res:NextResponse) {
 
     // Forward the Set-Cookie header
     const setCookie = loginRes.headers.get('set-cookie');
-    console.log('------SET COOKIE', setCookie)
-
-    const options = {
-      maxAge: 20 * 60 * 1000, // would expire in 20minutes
-      httpOnly: true, // The cookie is only accessible by the web server
-    //   secure: false,
-    //   path: "/",
-    //   sameSite: "none" as const,
-    };
     
     if (setCookie) {
-        console.log('------ENTERING SET COOKIE')
-        const cookieValue = setCookie.split('=')[1].split(';')[0];
-        console.log('------ COOKIE value', cookieValue);
-        cookies().set('QJSessionID', cookieValue, options);
-    //   response.headers.set('Set-Cookie', setCookie);
+        // const cookieValue = setCookie.split('=')[1].split(';')[0];
+        // cookies().set('QJSessionID', cookieValue, options);
+      response.headers.set('Set-Cookie', setCookie);
     }
 
     // Return the user data as a response

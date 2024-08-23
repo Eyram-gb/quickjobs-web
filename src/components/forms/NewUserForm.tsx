@@ -95,14 +95,10 @@ const NewUserForm = () => {
                     },
                     message: string,
                 };
-                // const cookies = loginRes.headers.getSetCookie();
-                // cookies.forEach(cookie => {
-                //     Response.headers.append('Set-Cookie', cookie);
-                // });
                 if (loginRes.status === 201) {
                     login(user)
-                    // return router.push(`/${user.id}/create-profile`);
-                    return toast.success('login successful');
+                    return router.push(`/${user.id}/create-profile`);
+                    // return toast.success('login successful');
                 } else {
                     return toast.error('login failed');
                     // return router.push(`/login`)

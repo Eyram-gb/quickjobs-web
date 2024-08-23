@@ -12,10 +12,9 @@ const CreateProfile = async ({
     children: React.ReactNode;
     params: { id: string };
 }) => {
-    const authToken = cookies();
     const getUser = async (userId: string) => {
         try {
-            // console.log('-------ENTERED-----')
+            console.log('-------ENTERED-----')
             const res = await fetch(
                 `http://localhost:3000/api/getUser/${userId}`,
                 {
@@ -27,19 +26,17 @@ const CreateProfile = async ({
                     credentials: "include",
                 }
             );
-            console.log("-----------RESPONSE------------", res)
             const data = await res.json() as User;
             console.log(data);
 
             return !data ? null : data;
 
         } catch (error) {
-            return;
+            return console.error('--SERVER ERROR')
         }
     };
     const user = await getUser(id)
     console.log(user);
-    console.log('---------TOKEN--------', authToken)
     const cookieStore = cookies()
     console.log('---------+++++++++',cookieStore)
 

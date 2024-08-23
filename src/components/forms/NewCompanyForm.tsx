@@ -31,7 +31,7 @@ const NewCompanyForm = () => {
     return (
         <>
             <Form {...form}>
-                <form className='space-y-3 w-full'>
+                <form className='space-y-3 '>
                     <FormField
                         control={form.control}
                         name="name"
