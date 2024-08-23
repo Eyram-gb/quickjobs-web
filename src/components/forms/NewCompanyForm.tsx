@@ -3,12 +3,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react'
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
+import { API_BASE_URL } from '@/lib/constants';
+import toast from 'react-hot-toast';
 
 const companySchema = z.object({
     name: z.string({
@@ -23,15 +25,45 @@ const companySchema = z.object({
     website_url: z.string().url(),
 })
 type TCompanySchema = z.infer<typeof companySchema>;
-const NewCompanyForm = () => {
+const NewCompanyForm = ({ user_id, email }: { user_id: string, email: string }) => {
     const form = useForm<z.infer<typeof companySchema>>({
         resolver: zodResolver(companySchema),
     });
 
+    const {
+        formState: { isDirty, isSubmitting },
+    } = form;
+
+    const onSubmit: SubmitHandler<z.infer<typeof companySchema>> = async (data) => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/users/employers`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ...data, user_id }),
+            });
+            const newClientRes = await res.json();
+            if (res.status !== 201) {
+                throw new Error('Failed to create your profile. Please try again.');
+            }
+
+            if (res.status === 201) {
+                form.reset();
+                toast.success('Your company profile has been created successfully.');
+                return;
+            }
+
+            console.log(data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
-        <>
+        <div className='w-full'>
             <Form {...form}>
-                <form className='space-y-3 '>
+                <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-3 w-full'>
                     <FormField
                         control={form.control}
                         name="name"
@@ -84,12 +116,12 @@ const NewCompanyForm = () => {
                             </FormItem>
                         )}
                     />
-                    <Button type='submit'>
+                    <Button type='submit' disabled={!isDirty || isSubmitting}>
                         Save
                     </Button>
                 </form>
             </Form>
-        </>
+        </div>
     )
 }
 
