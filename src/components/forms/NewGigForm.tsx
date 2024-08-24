@@ -3,52 +3,17 @@
 import React from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Button } from '../ui/button'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import Link from 'next/link'
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 import { API_BASE_URL } from '@/lib/constants';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '@/lib/store/authStore';
-// import { Stardos_Stencil } from 'next/font/google'
-
-const GigSchema = z.object({
-    title: z.string({
-        description: 'Company name',
-        required_error: 'Please enter a company name',
-    }),
-    description: z.string({
-        description: 'Description of the gig',
-        required_error: 'Description is required',
-    }),
-    duration: z.string({
-        description: 'Duration of the gig',
-        required_error: 'Duration is required',
-    }),
-    industry_id: z.string({
-        description: 'Industry ID of the gig',
-        required_error: 'Industry is required',
-    }).optional(),
-    negotiable: z.enum(['true', 'false'], {
-        description: 'Is budget for the gig negotiable',
-        required_error: 'Negotiable field is required',
-    }),
-    budget_range: z.string({
-        description: 'Budget range of the gig',
-        required_error: 'Budget is required',
-    }),
-    requirements: z.string({
-        description: 'Skills required for the gig',
-        required_error: 'Skills are required',
-    })
-})
-
-type TGigSchema = z.infer<typeof GigSchema>;
+import { GigSchema, TGigSchema } from '@/lib/schemas';
 
 const NewGigForm = ({ industries }: {
     industries: {
@@ -67,11 +32,9 @@ const NewGigForm = ({ industries }: {
 
     const onSubmit: SubmitHandler<TGigSchema> = async (data) => {
         try {
-            const negotiable = (data.negotiable?.toLowerCase?.() === 'true')
             const industry_id = Number(data.industry_id);
             const gigInfo = {
                 ...data,
-                // negotiable,
                 industry_id, 
                 employer_id: employer_profile?.id, 
                 user_id: user?.id
