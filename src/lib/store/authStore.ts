@@ -1,3 +1,4 @@
+// import { TCompanySchema } from '@/components/forms/NewCompanyForm';
 // store/authStore.ts
 import { TClientSchema } from "@/components/forms/NewClientForm";
 import { TCompanySchema } from "@/components/forms/NewCompanyForm";
@@ -10,10 +11,14 @@ export interface User {
   user_type: string;
 }
 
+interface TEmployer extends TCompanySchema {
+  id: string;
+}
+
 interface AuthState {
   user: User | null;
-  employer_profile: TCompanySchema | null;
-  setEmployerProfile: (profile: TCompanySchema) => void;
+  employer_profile: TEmployer | null;
+  setEmployerProfile: (profile: TEmployer) => void;
   client_profile: TClientSchema | null; // Add client profile schema here.
   setClientProfile: (profile: TClientSchema) => void;
   isAuthenticated: boolean;

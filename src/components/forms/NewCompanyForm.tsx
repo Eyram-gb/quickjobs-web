@@ -11,6 +11,7 @@ import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { API_BASE_URL } from '@/lib/constants';
 import toast from 'react-hot-toast';
+import {useRouter} from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
 
 const companySchema = z.object({
@@ -31,6 +32,7 @@ const NewCompanyForm = ({ user_id, email }: { user_id: string, email: string }) 
     const form = useForm<z.infer<typeof companySchema>>({
         resolver: zodResolver(companySchema),
     });
+    const router = useRouter();
 
     const {setEmployerProfile} = useAuthStore();
 
@@ -56,10 +58,10 @@ const NewCompanyForm = ({ user_id, email }: { user_id: string, email: string }) 
                 form.reset();
                 toast.success('Your company profile has been created successfully.');
                 setEmployerProfile(newEmployerRes);
-                return;
+                return router.push(`/${user_id}/(company)/profile`);
             }
 
-            console.log(data)
+            toast.error('Failed to create your company profile. Please try again.');
         } catch (error) {
             console.error(error);
         }

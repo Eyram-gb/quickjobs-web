@@ -3,7 +3,7 @@ import { API_BASE_URL } from "./constants";
 
 export const getIndustries = async () => {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/industries`);
+    const res = await fetch(`${API_BASE_URL}/industries`);
     const data = await res.json() as {
         id: number;
         name: string
@@ -11,7 +11,9 @@ export const getIndustries = async () => {
     if(!data){
         return toast.error('No industries were found')
     }
-    return data;
+    if(res.status===200){
+        return data;
+    }
   } catch (error) {
     console.log("error fetching industries");
   }

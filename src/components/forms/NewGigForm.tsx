@@ -4,7 +4,7 @@ import React from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Button } from '../ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '../ui/input'
@@ -12,6 +12,9 @@ import { Textarea } from '../ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import Link from 'next/link'
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
+import { API_BASE_URL } from '@/lib/constants';
+import toast from 'react-hot-toast';
+import { useAuthStore } from '@/lib/store/authStore';
 // import { Stardos_Stencil } from 'next/font/google'
 
 const GigSchema = z.object({
@@ -27,10 +30,10 @@ const GigSchema = z.object({
         description: 'Duration of the gig',
         required_error: 'Duration is required',
     }),
-    industry_id: z.number({
+    industry_id: z.string({
         description: 'Industry ID of the gig',
         required_error: 'Industry is required',
-    }),
+    }).optional(),
     negotiable: z.enum(['true', 'false'], {
         description: 'Is budget for the gig negotiable',
         required_error: 'Negotiable field is required',
@@ -60,6 +63,39 @@ const NewGigForm = ({ industries }: {
         formState: { isDirty, isSubmitting },
     } = form;
 
+    const { employer_profile, user } = useAuthStore();
+
+    const onSubmit: SubmitHandler<TGigSchema> = async (data) => {
+        try {
+            const negotiable = (data.negotiable?.toLowerCase?.() === 'true')
+            const industry_id = Number(data.industry_id);
+            const gigInfo = {
+                ...data,
+                // negotiable,
+                industry_id, 
+                employer_id: employer_profile?.id, 
+                user_id: user?.id
+            }
+            console.log(gigInfo)
+            const res = await fetch(`${API_BASE_URL}/gigs`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(gigInfo),
+            });
+
+            if (res.status === 201) {
+                form.reset(); 
+                                return toast.success('Gig created successfully');
+            } else {
+                toast.error('Failed to create gig');
+            }
+        } catch (error) {
+            toast.error('Failed to create gig');
+        }
+    }
+
     return (
         <>
             <Dialog>
@@ -73,7 +109,7 @@ const NewGigForm = ({ industries }: {
                         <DialogTitle>Create a New Gig</DialogTitle>
                     </DialogHeader>
                     <Form {...form}>
-                        <form>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2'>
                             <FormField
                                 control={form.control}
                                 name="title"
@@ -127,9 +163,13 @@ const NewGigForm = ({ industries }: {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    <SelectItem value="m@example.com">m@example.com</SelectItem>
-                                                    <SelectItem value="m@google.com">m@google.com</SelectItem>
-                                                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                                                    {
+                                                        industries.map((industry) => (
+                                                            <SelectItem key={industry.id} value={industry.id.toString()}>
+                                                                {industry.name}
+                                                            </SelectItem>
+                                                        ))
+                                                    }
                                                 </SelectContent>
                                             </Select>
                                             {/* <FormDescription>
