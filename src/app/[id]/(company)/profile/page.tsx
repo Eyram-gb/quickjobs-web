@@ -1,4 +1,6 @@
+import NewGigForm from '@/components/forms/NewGigForm'
 import { Button } from '@/components/ui/button'
+import { DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { ArrowUpRight, BriefcaseBusiness, ChartColumnIncreasing, House } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
@@ -36,9 +38,7 @@ const EmployerProfile = () => {
                         </div>
                     </div>
                     <div>
-                        <Button type='button'>
-                            Post a gig
-                        </Button>
+                        <NewGigForm />
                     </div>
                 </div>
                 {/* <hr className='mx-8 my-6' /> */}
