@@ -1,4 +1,6 @@
 // store/authStore.ts
+import { TClientSchema } from "@/components/forms/NewClientForm";
+import { TCompanySchema } from "@/components/forms/NewCompanyForm";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -10,6 +12,10 @@ export interface User {
 
 interface AuthState {
   user: User | null;
+  employer_profile: TCompanySchema | null;
+  setEmployerProfile: (profile: TCompanySchema) => void;
+  client_profile: TClientSchema | null; // Add client profile schema here.
+  setClientProfile: (profile: TClientSchema) => void;
   isAuthenticated: boolean;
   login: (user: User) => void;
   logout: () => void;
@@ -19,13 +25,17 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
+      employer_profile: null,
+      client_profile: null,
       isAuthenticated: false,
+      setEmployerProfile: (profile) => set({ employer_profile: profile }),
+      setClientProfile: (profile) => set({ client_profile: profile }),
       login: (user) => set({ user, isAuthenticated: true }),
       logout: () => set({ user: null, isAuthenticated: false }),
     }),
     {
       name: "qj-auth-storage", // name of the item in the storage (must be unique)
-      getStorage: () => localStorage, // (optional) by default, 'localStorage' is used
+      // getStorage: () => localStorage, // (optional) by default, 'localStorage' is used
     }
   )
 );

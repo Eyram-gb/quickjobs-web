@@ -1,11 +1,17 @@
 import NewGigForm from '@/components/forms/NewGigForm'
 import { Button } from '@/components/ui/button'
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { getIndustries } from '@/lib/queries'
 import { ArrowUpRight, BriefcaseBusiness, ChartColumnIncreasing, House } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 
-const EmployerProfile = () => {
+const EmployerProfile = async () => {
+    const industries = await getIndustries() as {
+        id: number;
+        name: string
+    }[];
+
     return (
         <div className='grid grid-cols-5'>
             <aside className='col-span-1 pt-24 px-4'>
@@ -38,7 +44,7 @@ const EmployerProfile = () => {
                         </div>
                     </div>
                     <div>
-                        <NewGigForm />
+                        <NewGigForm industries={industries}/>
                     </div>
                 </div>
                 {/* <hr className='mx-8 my-6' /> */}

@@ -10,6 +10,7 @@ import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { API_BASE_URL } from '@/lib/constants';
 import toast from 'react-hot-toast';
+import { useAuthStore } from '@/lib/store/authStore';
 
 const clientSchema = z.object({
     first_name: z.string({
@@ -40,7 +41,7 @@ const clientSchema = z.object({
         message: 'Bio should not exceed 1000 characters',
     })
 });
-
+export type TClientSchema = z.infer<typeof clientSchema>
 const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) => {
     const form = useForm<z.infer<typeof clientSchema>>({
         resolver: zodResolver(clientSchema)
@@ -49,6 +50,8 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
     const {
         formState: { isDirty, isSubmitting },
     } = form;
+
+    const { setClientProfile } = useAuthStore();
 
     const onSubmit: SubmitHandler<z.infer<typeof clientSchema>> = async (data) => {
         try {
@@ -67,10 +70,9 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
             if (res.status === 201) {
                 form.reset();
                 toast.success('Your profile has been created successfully.');
+                setClientProfile(newClientRes);
                 return;
             }
-
-            console.log(data)
         } catch (error) {
             console.error(error);
         }

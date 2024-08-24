@@ -11,6 +11,7 @@ import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { API_BASE_URL } from '@/lib/constants';
 import toast from 'react-hot-toast';
+import { useAuthStore } from '@/lib/store/authStore';
 
 const companySchema = z.object({
     name: z.string({
@@ -24,11 +25,14 @@ const companySchema = z.object({
     logo_url: z.string(),
     website_url: z.string().url(),
 })
-type TCompanySchema = z.infer<typeof companySchema>;
+
+export type TCompanySchema = z.infer<typeof companySchema>;
 const NewCompanyForm = ({ user_id, email }: { user_id: string, email: string }) => {
     const form = useForm<z.infer<typeof companySchema>>({
         resolver: zodResolver(companySchema),
     });
+
+    const {setEmployerProfile} = useAuthStore();
 
     const {
         formState: { isDirty, isSubmitting },
@@ -43,7 +47,7 @@ const NewCompanyForm = ({ user_id, email }: { user_id: string, email: string }) 
                 },
                 body: JSON.stringify({ ...data, user_id }),
             });
-            const newClientRes = await res.json();
+            const newEmployerRes = await res.json();
             if (res.status !== 201) {
                 throw new Error('Failed to create your profile. Please try again.');
             }
@@ -51,6 +55,7 @@ const NewCompanyForm = ({ user_id, email }: { user_id: string, email: string }) 
             if (res.status === 201) {
                 form.reset();
                 toast.success('Your company profile has been created successfully.');
+                setEmployerProfile(newEmployerRes);
                 return;
             }
 

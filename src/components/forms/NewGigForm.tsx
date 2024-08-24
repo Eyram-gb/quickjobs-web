@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Button } from '../ui/button'
@@ -9,6 +11,7 @@ import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import Link from 'next/link'
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 // import { Stardos_Stencil } from 'next/font/google'
 
 const GigSchema = z.object({
@@ -28,9 +31,9 @@ const GigSchema = z.object({
         description: 'Industry ID of the gig',
         required_error: 'Industry is required',
     }),
-    negotiable: z.boolean({
+    negotiable: z.enum(['true', 'false'], {
         description: 'Is budget for the gig negotiable',
-        required_error: 'Negotiable flag is required',
+        required_error: 'Negotiable field is required',
     }),
     budget_range: z.string({
         description: 'Budget range of the gig',
@@ -44,7 +47,12 @@ const GigSchema = z.object({
 
 type TGigSchema = z.infer<typeof GigSchema>;
 
-const NewGigForm = () => {
+const NewGigForm = ({ industries }: {
+    industries: {
+        id: number;
+        name: string
+    }[]
+}) => {
     const form = useForm<TGigSchema>({
         resolver: zodResolver(GigSchema),
     });
@@ -60,7 +68,7 @@ const NewGigForm = () => {
                         Post a gig
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[625px]">
                     <DialogHeader>
                         <DialogTitle>Create a New Gig</DialogTitle>
                     </DialogHeader>
@@ -92,45 +100,95 @@ const NewGigForm = () => {
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="duration"
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel className='text-lg font-semibold'>Title</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="14 working days" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="industry_id"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Industry</FormLabel>
-                                        <Select onValueChange={field.onChange}>
+                            <div className='flex gap-x-4 w-full '>
+                                <FormField
+                                    control={form.control}
+                                    name="duration"
+                                    render={({ field }) => (
+                                        <FormItem className='w-1/2'>
+                                            <FormLabel className='text-lg font-semibold'>Duration</FormLabel>
                                             <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select an industry relating to the gig" />
-                                                </SelectTrigger>
+                                                <Input placeholder="14 working days" {...field} />
                                             </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="m@example.com">m@example.com</SelectItem>
-                                                <SelectItem value="m@google.com">m@google.com</SelectItem>
-                                                <SelectItem value="m@support.com">m@support.com</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="industry_id"
+                                    render={({ field }) => (
+                                        <FormItem className='w-1/2'>
+                                            <FormLabel className='text-lg font-semibold'>Industry</FormLabel>
+                                            <Select onValueChange={field.onChange}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select an industry relating to the gig" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="m@example.com">m@example.com</SelectItem>
+                                                    <SelectItem value="m@google.com">m@google.com</SelectItem>
+                                                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            {/* <FormDescription>
                                             You can manage email addresses in your{" "}
                                             <Link href="/examples/forms">email settings</Link>.
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                                        </FormDescription> */}
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                            </div>
+                            <div className='flex gap-x-4 w-full'>
+                                <FormField
+                                    control={form.control}
+                                    name="budget_range"
+                                    render={({ field }) => (
+                                        <FormItem className='w-1/2'>
+                                            <FormLabel className='text-lg font-semibold'>Budget</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="$3200" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="negotiable"
+                                    render={({ field }) => (
+                                        <FormItem className="w-1/2">
+                                            <FormLabel className='text-lg font-semibold'>Negotiable</FormLabel>
+                                            <FormControl>
+                                                <RadioGroup
+                                                    onValueChange={field.onChange}
+                                                    defaultValue={field.value}
+                                                    className="flex gap-x-4"
+                                                >
+                                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                                        <FormControl>
+                                                            <RadioGroupItem value={'true'} />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">
+                                                            True
+                                                        </FormLabel>
+                                                    </FormItem>
+                                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                                        <FormControl>
+                                                            <RadioGroupItem value={'false'} />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">False</FormLabel>
+                                                    </FormItem>
+                                                </RadioGroup>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
                             <FormField
                                 control={form.control}
                                 name="requirements"
@@ -144,7 +202,7 @@ const NewGigForm = () => {
                                     </FormItem>
                                 )}
                             />
-                            <Button type='submit' disabled={!isDirty || isSubmitting}>
+                            <Button type='submit' disabled={!isDirty || isSubmitting} className='w-full'>
                                 Save
                             </Button>
                         </form>
