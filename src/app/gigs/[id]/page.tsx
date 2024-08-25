@@ -28,7 +28,7 @@ const GigDetails = async ({
                         <h2 className='text-2xl font-semibold'>{gig.title}</h2>
                         <div>
                             <h2 className='text-lg font-semibold'>Description</h2>
-                            {/* <p className='text-sm'>{gig.description}</p> */}
+                            <p className='text-sm'>{gig.description}</p>
                         </div>
                         <div>
                             <h2 className='text-lg font-semibold'>Budget</h2>
