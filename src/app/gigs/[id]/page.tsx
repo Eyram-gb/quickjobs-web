@@ -1,6 +1,8 @@
 import Gig from '@/components/Gig';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
 import { getGigById } from '@/lib/queries';
+import { getRelativeTime } from '@/lib/utils';
 import React from 'react';
 
 const GigDetails = async ({
@@ -12,47 +14,54 @@ const GigDetails = async ({
     if (!gig) return <h1>Gig Not found</h1>
     return (
         <div className='p-24'>
-            <BreadcrumbNavigation />
-            <div className=''>
-                <h1 className='text-center text-5xl font-bold'>Gig Details</h1>
-                <div className='space-y-5'>
-                    <h2 className='text-2xl font-semibold'>Real Estate Broker</h2>
-                    <div>
-                        <h2 className='text-lg font-semibold'>Description</h2>
-                        <p className='text-sm'>
-                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Doloribus velit deleniti magnam? Vero necessitatibus enim iusto sunt qui. Sequi culpa hic, aliquam, perspiciatis a dolores odit earum amet itaque unde molestiae ullam quos minus voluptatum! Tenetur recusandae sunt amet voluptates fuga incidunt quae commodi sit praesentium labore. Neque esse eligendi aliquid corporis similique eum quae suscipit numquam. Impedit ullam, reiciendis rem ab voluptatum velit, et ea iste veniam vitae soluta quae minus, recusandae id?
-
-                            Nam quaerat architecto, beatae laboriosam rerum consequatur quo nihil aliquid placeat nesciunt! Suscipit consequuntur reprehenderit voluptatum at tenetur illo ex ab voluptatem ratione optio voluptas excepturi, consequatur consectetur libero molestias inventore. Perspiciatis molestiae fuga distinctio labore voluptatum incidunt dolor ad doloremque reiciendis veniam repudiandae quaerat autem, libero minima ab quae consequuntur placeat! Adipisci voluptate beatae corrupti ratione distinctio dicta quibusdam, iure nihil, illum soluta ea autem fugiat saepe incidunt at magnam alias aut consectetur porro quo.
-                        </p>
-                    </div>
-                    <div>
-                        <h2 className='text-lg font-semibold'>Requirements</h2>
-                        <p className='text-sm'>
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                            <br />
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias odio nulla expedita ullam deserunt sequi.
-                            <br />
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus, dolores!
-                        </p>
-                    </div>
-                    <div>
-                        <h2 className='text-lg font-semibold'>Tags</h2>
+            {/* <div className='sticky top-[100px] w-1/4'>
+                <StickyComponent />
+            </div> */}
+            <div className='flex justify-between'>
+                <BreadcrumbNavigation />
+                <p className='text-sm'>{getRelativeTime(gig.created_at)}</p>
+            </div>
+                    <h1 className='text-center text-5xl font-bold'>Gig Details</h1>
+            <div>
+                <div>
+                    <div className='space-y-5'>
+                        <h2 className='text-2xl font-semibold'>{gig.title}</h2>
                         <div>
-                            <div className='flex gap-2 flex-wrap mt-1.5'>
-                                <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>Remote</p>
-                                <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>In-Person</p>
-                                <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>Flexible Schedule</p>
+                            <h2 className='text-lg font-semibold'>Description</h2>
+                            {/* <p className='text-sm'>{gig.description}</p> */}
+                        </div>
+                        <div>
+                            <h2 className='text-lg font-semibold'>Budget</h2>
+                            <p className='text-sm'>{gig.budget_range}
+                            </p>
+                        </div>
+                        <div>
+                            <h2 className='text-lg font-semibold'>Requirements</h2>
+                            <p className='text-sm'>{gig.requirements}
+                            </p>
+                        </div>
+                        <div>
+                            <h2 className='text-lg font-semibold'>Tags</h2>
+                            <div>
+                                <div className='flex gap-2 flex-wrap mt-1.5'>
+                                    <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>Remote</p>
+                                    <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>In-Person</p>
+                                    <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>Flexible Schedule</p>
+                                </div>
                             </div>
+                        </div>
+                        <div className='flex'>
+                            <Button size='lg' className='w-64 mx-auto'>Apply</Button>
                         </div>
                     </div>
                 </div>
-                <div className='mt-10 space-y-3'>
-                    <h2 className='text-3xl font-bold'>Related Gigs</h2>
-                    <div className='flex gap-5 flex-wrap'>
-                        <Gig gig={gig} />
-                        <Gig gig={gig} />
-                        <Gig gig={gig} />
-                    </div>
+            </div>
+            <div className='mt-10 space-y-3'>
+                <h2 className='text-3xl font-bold'>Related Gigs</h2>
+                <div className='flex gap-5 flex-wrap'>
+                    <Gig gig={gig} />
+                    <Gig gig={gig} />
+                    <Gig gig={gig} />
                 </div>
             </div>
         </div>
@@ -61,7 +70,7 @@ const GigDetails = async ({
 
 export default GigDetails
 
-export function BreadcrumbNavigation() {
+function BreadcrumbNavigation() {
     return (
         <Breadcrumb>
             <BreadcrumbList className='text-xs'>
@@ -80,3 +89,11 @@ export function BreadcrumbNavigation() {
         </Breadcrumb>
     )
 }
+
+const StickyComponent = () => {
+    return (
+        <div className="w-16 h-44 bg-blue-500 rounded-full flex items-center justify-center text-white cursor-pointer hover:bg-blue-600 transition-colors">
+            <span className="transform -rotate-90 whitespace-nowrap">Quick Action</span>
+        </div>
+    );
+};

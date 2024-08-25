@@ -3,6 +3,7 @@ import Image from 'next/image'
 import React from 'react'
 import { Button } from './ui/button'
 import Link from 'next/link'
+import { getRelativeTime } from '@/lib/utils'
 
 const Gig = ({ gig }: { gig: TGig }) => {
     return (
@@ -14,7 +15,7 @@ const Gig = ({ gig }: { gig: TGig }) => {
                     </div>
                     <div className='flex gap-x-1 items-center'>
                         <h3 className='font-semibold'>Amazon</h3>
-                        <h3 className='text-xs text-gray-500'>30 days ago</h3>
+                        <h3 className='text-xs text-gray-500'>{getRelativeTime(gig.created_at)}</h3>
                     </div>
                 </div>
                 <div className='mt-6'>

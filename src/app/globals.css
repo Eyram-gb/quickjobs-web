@@ -67,3 +67,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+.sticky-container {
+  position: sticky;
+  top: 100px;
+  /* This makes it stick 100px from the top */
+  height: calc(100vh - 100px);
+  /* This ensures it doesn't extend beyond the viewport */
+  display: flex;
+  align-items: flex-start;
+}
