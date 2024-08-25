@@ -26,10 +26,24 @@ export const getGigs = async () => {
 
     if (res.status === 200) {
       return data;
-    }else{
-       throw new Error("error fetching gigs. try again");
+    } else {
+      throw new Error("error fetching gigs. try again");
     }
   } catch (error) {
     console.log("error fetching industries");
+  }
+};
+
+export const getGigById = async (id: string) => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/gigs/${id}`);
+    const data = (await res.json()) as TGig;
+    if (res.status === 200) {
+      return data;
+    } else {
+      throw new Error("error fetching gig. try again");
+    }
+  } catch (error) {
+    console.log("error fetching gig with id: " + id);
   }
 };
