@@ -63,9 +63,14 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+button {
+  outline: none;
 }
 
 .sticky-container {
