@@ -11,6 +11,7 @@ import { Button } from '../ui/button';
 import { API_BASE_URL } from '@/lib/constants';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '@/lib/store/authStore';
+import { useRouter } from 'next/navigation';
 
 const clientSchema = z.object({
     first_name: z.string({
@@ -53,6 +54,8 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
 
     const { setClientProfile } = useAuthStore();
 
+    const router = useRouter();
+
     const onSubmit: SubmitHandler<z.infer<typeof clientSchema>> = async (data) => {
         try {
             const res = await fetch(`${API_BASE_URL}/users/applicants`, {
@@ -71,7 +74,7 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
                 form.reset();
                 toast.success('Your profile has been created successfully.');
                 setClientProfile(newClientRes);
-                return;
+                return router.push(`/${user_id}/(client)/client-profile`);
             }
         } catch (error) {
             console.error(error);

@@ -4,9 +4,10 @@ import React from 'react'
 import { Button } from '../ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { LogOut, Mail,Settings, UserRound, UserCog } from 'lucide-react';
+import Link from 'next/link';
 
 const NavBar = () => {
-  const { isAuthenticated, employer_profile } = useAuthStore();
+  const { isAuthenticated, employer_profile, user } = useAuthStore();
   return (
     <nav className='flex justify-between px-12 py-4'>
       <h2 className='text-4xl font-bold'>Quickjobs</h2>
@@ -27,13 +28,14 @@ const NavBar = () => {
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className='md:w-52 mr-4'>
-                <DropdownMenuLabel>{employer_profile?.name}</DropdownMenuLabel>
+                <DropdownMenuLabel>{employer_profile?.name} </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                className='flex gap-x-4'
                 >
+                  <Link className='flex gap-x-4' href={`/${user?.id}/client-profile`}>
                   <UserRound size={16}/>
                   <span>Profile</span>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                 className='flex gap-x-4'
