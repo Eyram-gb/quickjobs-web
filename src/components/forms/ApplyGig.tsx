@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { API_BASE_URL } from '@/lib/constants';
+import toast from 'react-hot-toast';
 
 const ApplyGigSchema = z.object({
     // gig_id: z.string({
@@ -49,6 +50,7 @@ const ApplyGig = ({ gigId, applicantId }: {
             if (res.status !== 201) {
                 throw new Error('Failed to create your profile. Please try again.');
             }
+            return toast.success('Application submitted successfully.');
         } catch (error) {
             console.log(error)
         }
