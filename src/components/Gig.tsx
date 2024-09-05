@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { getRelativeTime } from '@/lib/utils'
 
 const Gig = ({ gig }: { gig: TGig }) => {
+    console.log(gig)
     return (
         <Link href={`/gigs/${gig.id}`}>
             <div className='w-64 rounded-lg border transition duration-300 hover:shadow-lg p-4 h-80 flex flex-col'>

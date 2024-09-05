@@ -14,13 +14,16 @@ export interface User {
 interface TEmployer extends TCompanySchema {
   id: string;
 }
+interface TClient extends TClientSchema {
+  id: string;
+}
 
 interface AuthState {
   user: User | null;
   employer_profile: TEmployer | null;
   setEmployerProfile: (profile: TEmployer) => void;
-  client_profile: TClientSchema | null; // Add client profile schema here.
-  setClientProfile: (profile: TClientSchema) => void;
+  client_profile: TClient | null; // Add client profile schema here.
+  setClientProfile: (profile: TClient) => void;
   isAuthenticated: boolean;
   login: (user: User) => void;
   logout: () => void;

@@ -2,16 +2,18 @@
 
 import React from 'react'
 import Gig from '@/components/Gig';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from './ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { getRelativeTime } from '@/lib/utils';
 import { TGig } from '@/lib/types';
 import { useAuthStore } from '@/lib/store/authStore';
+import { DialogTrigger, Dialog, DialogContent, DialogDescription, DialogTitle } from './ui/dialog';
+import ApplyGig from './forms/ApplyGig';
 
 const GigDetails = ({ gig }: { gig: TGig }) => {
     const { user } = useAuthStore();
     const isGigCreator = user?.id === gig.user_id;
-
+    const { client_profile } = useAuthStore()
     return (
         <>
             <div className='p-24'>
@@ -52,7 +54,17 @@ const GigDetails = ({ gig }: { gig: TGig }) => {
                                 </div>
                             </div>
                             <div className='flex'>
-                                <Button size='lg' className='w-64 mx-auto'>{isGigCreator ? 'Edit Gig' : 'Apply'}</Button>
+                                <Dialog>
+                                    <DialogTrigger>
+                                        <Button size='lg' className='w-64 mx-auto'>{isGigCreator ? 'Edit Gig' : 'Apply'}</Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogTitle>Are you absolutely sure?</DialogTitle>
+                                        <div>
+                                            <ApplyGig gigId={gig.id} applicantId={client_profile?.id as string} />
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
                         </div>
                     </div>

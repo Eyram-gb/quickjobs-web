@@ -21,7 +21,7 @@ export const getIndustries = async () => {
 };
 export const getGigs = async () => {
   try {
-    const res = await fetch(`${API_BASE_URL}/gigs`);
+    const res = await fetch(`${API_BASE_URL}/gigs`, { cache: 'no-store',});
     const data = (await res.json()) as TGig[];
 
     if (res.status === 200) {
