@@ -39,7 +39,7 @@ const ApplyGig = ({ gigId, applicantId }: {
     const onSubmit: SubmitHandler<TApplyGig> = async (data) => {
         try {
             console.log(data)
-            const res = await fetch(`${API_BASE_URL}/users/applicants`, {
+            const res = await fetch(`${API_BASE_URL}/applications`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -58,15 +58,15 @@ const ApplyGig = ({ gigId, applicantId }: {
     return (
         <div>
             <Form {...form}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
                     <FormField
                         control={form.control}
                         name="cv_url"
                         render={({ field }) => (
                             <FormItem className='col-span-1'>
-                                <FormLabel className='text-lg font-semibold'>First Name</FormLabel>
+                                <FormLabel className='text-lg font-semibold'>Cv Url</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="John" {...field} />
+                                    <Input placeholder="google drive link to your cv" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
