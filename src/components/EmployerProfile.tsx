@@ -7,6 +7,20 @@ import { useAuthStore } from '@/lib/store/authStore';
 import { ArrowUpRight, BriefcaseBusiness, ChartColumnIncreasing, House } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
+import { SideTabsProps } from './SideTabs';
+
+export const employerSideTabs: SideTabsProps[] = [
+    {
+        name: "Gigs",
+        href: "/profile/gigs",
+        icon: <BriefcaseBusiness />,
+    },
+    {
+        name: "Dashboard",
+        href: "/profile/dashboard",
+        icon: <ChartColumnIncreasing />,
+    },
+];
 
 const EmployerProfile = ({ industries }: {
     industries: {
@@ -17,24 +31,8 @@ const EmployerProfile = ({ industries }: {
     const { employer_profile, user } = useAuthStore();
     return (
         <>
-            <div className='grid grid-cols-5'>
-                <aside className='col-span-1 pt-24 px-4'>
-                    <div className='flex flex-col'>
-                        <button className='flex items-center gap-x-4 bg-gray-100 rounded-lg py-2.5 px-2'>
-                            <House />
-                            <span className='text-sm'>Home</span>
-                        </button>
-                        <button className='flex items-center gap-x-4 py-2.5 px-2'>
-                            <BriefcaseBusiness />
-                            <span>Gigs</span>
-                        </button>
-                        <button className='flex items-center gap-x-4 py-2.5 px-2'>
-                            <ChartColumnIncreasing />
-                            <span>Dashboard</span>
-                        </button>
-                    </div>
-                </aside>
-                <div className='col-start-2 col-span-full'>
+            <div className=''>
+                <div className=''>
                     {/* BANNER AND PROFILE IMAGES */}
                     <div className='relative h-56 bg-sky-50'>
                     </div>

@@ -1,11 +1,11 @@
 import Image from "next/image";
 import MainLayout from "../components/layout/MainLayout";
 
-export default function Home() {
+export default function Home({children}:{children: React.ReactNode}) {
   return (
     <>
       <MainLayout>
-        <div></div>
+        <div>{children}</div>
       </MainLayout>
     </>
   );

@@ -78,7 +78,7 @@ const NewUserForm = () => {
             if (res.status === 201) {
                 console.log(data)
                 toast.success('Account created successfully');
-                const loginRes = await fetch(`http://localhost:3000/api/login`, {
+                const loginRes = await fetch(`/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

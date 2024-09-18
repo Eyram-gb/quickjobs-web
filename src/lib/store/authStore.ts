@@ -39,7 +39,13 @@ export const useAuthStore = create<AuthState>()(
       setEmployerProfile: (profile) => set({ employer_profile: profile }),
       setClientProfile: (profile) => set({ client_profile: profile }),
       login: (user) => set({ user, isAuthenticated: true }),
-      logout: () => set({ user: null, isAuthenticated: false }),
+      logout: () =>
+        set({
+          user: null,
+          isAuthenticated: false,
+          client_profile: null,
+          employer_profile: null,
+        }),
     }),
     {
       name: "qj-auth-storage", // name of the item in the storage (must be unique)
