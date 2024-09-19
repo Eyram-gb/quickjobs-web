@@ -47,3 +47,17 @@ export const getGigById = async (id: string) => {
     console.log("error fetching gig with id: " + id);
   }
 };
+
+export const employerGigs = async (employer_id: string) => {
+  try{
+    const res = await fetch(`${API_BASE_URL}/gigs/${employer_id}/employer`);
+    const data = (await res.json()) as TGig[];
+    if (res.status === 200) {
+      return data;
+    } else {
+      throw new Error("error fetching gigs. try again");
+    }
+  } catch (error) {
+    console.error(error)
+  }
+}

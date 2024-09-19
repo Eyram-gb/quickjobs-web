@@ -10,3 +10,20 @@ export interface TGig extends TGigSchema {
   updated_at: Date;
   location?: string;
 }
+
+export interface TGigDetails {
+  id: string;
+  user_id: string;
+  employer_id: string;
+  title: string;
+  description: string;
+  duration: string;
+  location: string | null;
+  budget_range: string;
+  requirements: string;
+  industry_id: number;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+  is_deleted: boolean;
+}

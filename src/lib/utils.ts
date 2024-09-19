@@ -20,14 +20,14 @@ export function getRelativeTime(date: Date): string {
   }
 
   if (diffInMinutes < 60) {
-    return `${diffInMinutes} minute${diffInMinutes > 1 ? "s" : ""} ago`;
+    return `${diffInMinutes} min${diffInMinutes > 1 ? "s" : ""} ago`;
   }
 
   if (diffInHours < 24) {
     return `${diffInHours} hour${diffInHours > 1 ? 's': ''} ago`;
   }
 
-  return `${diffInDays} day${diffInDays === 1 ? "" : "1"} ago`;
+  return `${diffInDays} day${diffInDays === 1 ? "" : "s"} ago`;
 
   // Using 'day' and 'hour' differences to determine today and yesterday
   // if (currentDate.isSame(formattedtDate, 'day')) {

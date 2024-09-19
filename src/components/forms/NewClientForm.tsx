@@ -74,7 +74,7 @@ const NewClientForm = ({ user_id, email }: { user_id: string, email: string }) =
                 form.reset();
                 toast.success('Your profile has been created successfully.');
                 setClientProfile(newClientRes);
-                return router.push(`/${user_id}/(client)/client-profile`);
+                return router.push(`/${user_id}/client-profile`);
             }
         } catch (error) {
             console.error(error);

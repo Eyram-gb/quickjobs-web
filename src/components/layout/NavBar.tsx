@@ -7,7 +7,7 @@ import { LogOut, Mail, Settings, UserRound, UserCog } from 'lucide-react';
 import Link from 'next/link';
 
 const NavBar = () => {
-  const { isAuthenticated, employer_profile, user } = useAuthStore();
+  const { isAuthenticated, employer_profile, user, logout } = useAuthStore();
   return (
     <nav className='flex justify-between px-12 py-4'>
       <h2 className='text-4xl font-bold'>Quickjobs</h2>
@@ -20,7 +20,9 @@ const NavBar = () => {
       </ul>
       {!isAuthenticated ? <div className='flex gap-x-2'>
         <Button variant='outline'>Login</Button>
-        <Button className=''>Register</Button>
+        <Button className=''>
+          <Link href='/register'>Register</Link>
+        </Button>
       </div> :
         <div>
           <DropdownMenu>
@@ -34,7 +36,7 @@ const NavBar = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem
               >
-                <Link className='flex gap-x-4' href={`/${user?.id}/client-profile`}>
+                <Link className='flex gap-x-4' href={`/${user?.id}/${user?.user_type === 'client' ? 'client-profile' : 'profile'}`}>
                   <UserRound size={16} />
                   <span>Profile</span>
                 </Link>
@@ -63,6 +65,7 @@ const NavBar = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className='flex gap-x-4'
+                onClick={logout}
               //  onClick={() => {
               //   localStorage.removeItem('jwt');
               //   window.location.reload();

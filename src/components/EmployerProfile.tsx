@@ -9,18 +9,6 @@ import Image from 'next/image'
 import React from 'react'
 import { SideTabsProps } from './SideTabs';
 
-export const employerSideTabs: SideTabsProps[] = [
-    {
-        name: "Gigs",
-        href: "/profile/gigs",
-        icon: <BriefcaseBusiness />,
-    },
-    {
-        name: "Dashboard",
-        href: "/profile/dashboard",
-        icon: <ChartColumnIncreasing />,
-    },
-];
 
 const EmployerProfile = ({ industries }: {
     industries: {
@@ -29,6 +17,18 @@ const EmployerProfile = ({ industries }: {
     }[]
 }) => {
     const { employer_profile, user } = useAuthStore();
+    // export const employerSideTabs: SideTabsProps[] = [
+    //     {
+    //         name: "My Gigs",
+    //         href: `/${user?.id}/profile/${employer_profile?.id}`,
+    //         icon: <BriefcaseBusiness />,
+    //     },
+    //     {
+    //         name: "Dashboard",
+    //         href: "/profile/dashboard",
+    //         icon: <ChartColumnIncreasing />,
+    //     },
+    // ];
     return (
         <>
             <div className=''>

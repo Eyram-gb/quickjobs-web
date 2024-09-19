@@ -58,7 +58,7 @@ const NewCompanyForm = ({ user_id, email }: { user_id: string, email: string }) 
                 form.reset();
                 toast.success('Your company profile has been created successfully.');
                 setEmployerProfile(newEmployerRes);
-                return router.push(`/${user_id}/(company)/profile`);
+                return router.push(`/${user_id}/profile`);
             }
 
             toast.error('Failed to create your company profile. Please try again.');

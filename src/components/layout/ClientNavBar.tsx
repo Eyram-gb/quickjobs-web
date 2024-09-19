@@ -42,7 +42,7 @@ const ClientNavBar = () => {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                         >
-                          <Link className='flex gap-x-4' href={`/${user?.id}/client-profile`}>
+                          <Link className='flex gap-x-4' href={`/${user?.id}/${user?.user_type === 'client' ? 'client-profile' : 'profile'}`}>
                             <UserRound size={16} />
                             <span>Profile</span>
                           </Link>

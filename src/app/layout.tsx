@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
+import {
+  QueryClientProvider,
+  QueryClient,
+} from '@tanstack/react-query'
 import { Montserrat } from "next/font/google";
+
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import { queryClient } from "@/lib/queryclient";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -17,12 +23,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={montserrat.className}>
-        <>
-          {children}
-          <Toaster />
-        </>
-      </body>
+      <QueryClientProvider client={queryClient}>
+        <body className={montserrat.className}>
+          <>
+            {children}
+            <Toaster />
+          </>
+        </body>
+      </QueryClientProvider>
     </html>
   );
 }

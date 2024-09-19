@@ -5,7 +5,7 @@ import { Button } from './ui/button'
 import Link from 'next/link'
 import { getRelativeTime } from '@/lib/utils'
 
-const Gig = ({ gig }: { gig: TGig }) => {
+const GigCard = ({ gig }: { gig: TGig }) => {
     console.log(gig)
     return (
         <Link href={`/gigs/${gig.id}`}>
@@ -20,14 +20,14 @@ const Gig = ({ gig }: { gig: TGig }) => {
                     </div>
                 </div>
                 <div className='mt-6'>
-                    <h2 className='text-xl font-bold'>
+                    <h2 className='text-lg font-bold leading-none'>
                         {gig.title}
                     </h2>
                     <p className='text-xs mt-1.5'>
                         {gig.description.slice(0, 100)}
                     </p>
                 </div>
-                <div className='flex gap-2 flex-wrap mt-1.5'>
+                <div className='flex gap-1 flex-wrap mt-1.5'>
                     <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>Remote</p>
                     <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>In-Person</p>
                     <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>Flexible Schedule</p>
@@ -43,4 +43,4 @@ const Gig = ({ gig }: { gig: TGig }) => {
     )
 }
 
-export default Gig
+export default GigCard
