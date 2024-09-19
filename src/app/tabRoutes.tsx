@@ -18,7 +18,7 @@ export function getTabRoutes (address:string) {
 		},
 		{
 			name: "Applications",
-			href: `/${address}/applications`,
+			href: `/${address}/profile/applications`,
 			icon: <BriefcaseBusiness />,
 		},
 	];

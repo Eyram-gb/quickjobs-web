@@ -1,10 +1,11 @@
+import ApplicationsTable from '@/components/ApplicationsTable'
 import React from 'react'
 
 const EmployerApplications = () => {
   return (
     <div>
-        <h1>Applications</h1>
-        
+        <ApplicationsTable />
+
     </div>
   )
 }
