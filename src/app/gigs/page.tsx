@@ -1,4 +1,4 @@
-import GigCard from '@/components/Gig';
+import GigCard from '@/components/GigCard';
 import { Input } from '@/components/ui/input';
 import { getGigs } from '@/lib/queries';
 import { Search } from 'lucide-react';
@@ -15,9 +15,9 @@ const Gigs = async () => {
         </div>
       </div>
       <div className='flex gap-5 flex-wrap p-12'>
-      {gigs?.map((item, index) => (
-        <GigCard gig={item} key={index} />
-      ))}
+        {gigs?.map((item, index) => (
+          <GigCard gig={item} key={index} />
+        ))}
       </div>
     </div>
   )

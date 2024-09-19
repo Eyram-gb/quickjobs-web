@@ -15,6 +15,9 @@ export interface Application {
     gig_id: string;
     applicant_id: string;
     cv_url: string;
+    first_name: string;
+    last_name: string;
+    email: string;
     created_at: string;
     gig_title: string;
     gig_description: string;
@@ -43,6 +46,19 @@ export const columns: ColumnDef<Application>[] = [
         ),
         enableSorting: false,
         enableHiding: false,
+    },
+    {
+        accessorKey: "full_name",
+        header: "Full Name",
+        cell: ({ row }) => {
+            const firstName = row.original.first_name
+            const lastName = row.original.last_name
+            return `${firstName} ${lastName}`
+        },
+    },
+    {
+        accessorKey: "email",
+        header: "Email",
     },
     {
         accessorKey: "status",

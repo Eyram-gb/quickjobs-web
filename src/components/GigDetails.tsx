@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Gig from '@/components/Gig';
+import Gig from '@/components/GigCard';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from './ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { getRelativeTime } from '@/lib/utils';
