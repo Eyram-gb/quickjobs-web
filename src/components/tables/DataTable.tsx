@@ -43,11 +43,15 @@ const csvConfig = mkConfig({
     useKeysAsHeaders: true,
 })
 
-// Update the exportExcel function
-const exportExcel = (rows: Row<Application>[]) => {
-    const rowData = rows.map((row) => row.original)
-    const csv = generateCsv(csvConfig)(rowData)
-    download(csvConfig)(csv)
+function exportExcel<T>(rows: Row<T>[]) {
+    const rowData = rows.map((row) => {
+        const { original } = row;
+        return Object.fromEntries(
+            Object.entries(original as Record<string, unknown>).map(([key, value]) => [key, String(value)])
+        );
+    });
+    const csv = generateCsv(csvConfig)(rowData);
+    download(csvConfig)(csv);
 }
 
 interface DataTableProps<TData, TValue> {
@@ -131,7 +135,7 @@ export function DataTable<TData, TValue>({
                                 })}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button onClick={() => exportExcel(table.getFilteredRowModel().rows)} className='inline-flex gap-x-2'>Export Data <Download size={16} strokeWidth={1} /></Button>
+                    <Button onClick={() => exportExcel<TData>(table.getFilteredRowModel().rows)} className='inline-flex gap-x-2'>Export Data <Download size={16} strokeWidth={1} /></Button>
                 </div>
             </div>
             <div className="rounded-md border">
