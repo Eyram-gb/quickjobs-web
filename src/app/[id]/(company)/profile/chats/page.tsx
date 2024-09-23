@@ -46,11 +46,11 @@ const Chats: React.FC = () => {
     return (
         <div className="flex h-screen">
             <div className="w-1/3 border-r border-gray-300 flex flex-col">
-                <div className="p-4 border-b border-gray-300">
+                <div className="p-3 border-b border-gray-300">
                     <Input
                         type="text"
                         placeholder="Search..."
-                        className="rounded-full"
+                        className="rounded-full -mb-[1.3px]"
                     />
                 </div>
                 <div className="flex-1 overflow-y-auto">
