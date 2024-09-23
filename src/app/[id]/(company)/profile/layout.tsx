@@ -1,6 +1,6 @@
 'use client'
 import EmployerNavBar from '@/components/layout/EmployerNavBar'
-import { getTabRoutes } from '@/app/tabRoutes';
+import { getTabRoutes } from '@/lib/tabRoutes';
 import SideTabs from '@/components/SideTabs'
 import React from 'react'
 

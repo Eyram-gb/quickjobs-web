@@ -1,5 +1,5 @@
 // import { employerSideTabs } from '@/components/EmployerProfile'
-import { getTabRoutes } from '@/app/tabRoutes';
+import { getTabRoutes } from '@/lib/tabRoutes';
 import ClientNavBar from '@/components/layout/ClientNavBar'
 import SideTabs from '@/components/SideTabs'
 // import useTabRoutes from '@/app/tabRoutes';

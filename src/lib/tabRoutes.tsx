@@ -1,7 +1,7 @@
 'use client'
 
 import { SideTabsProps } from "@/components/SideTabs";
-import { BriefcaseBusiness, ChartColumnIncreasing, UserCircle, Settings } from "lucide-react";
+import { BriefcaseBusiness, ChartColumnIncreasing, UserCircle, Settings, Mails, MessagesSquare } from "lucide-react";
 
 export function getTabRoutes (address:string) {
 
@@ -19,7 +19,12 @@ export function getTabRoutes (address:string) {
 		{
 			name: "Applications",
 			href: `/${address}/profile/applications`,
-			icon: <BriefcaseBusiness />,
+			icon: <Mails />,
+		},
+		{
+			name: "Chats",
+			href: `/${address}/profile/chats`,
+			icon: <MessagesSquare />,
 		},
 	];
 

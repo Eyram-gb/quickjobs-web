@@ -107,6 +107,7 @@ export const columns: ColumnDef<Application>[] = [
     },
     {
         id: "actions",
+        header: "Actions",
         cell: ({ row }) => {
             const application = row.original
 
