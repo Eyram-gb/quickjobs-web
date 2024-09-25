@@ -20,9 +20,14 @@ export interface Message {
     message_text: string;
 }
 
-export const useWebSocket = ({senderId, recipientId}:{senderId:string, recipientId:string}) => {
+export interface UserChat {
+    chatUser: string;
+}
+
+export const useWebSocket = ({ senderId, recipientId }: { senderId: string, recipientId: string }) => {
     const { user } = useAuthStore()
     const [messages, setMessages] = useState<Message[]>([])
+    const [userChats, setUserChats] = useState<UserChat[]>([])
     const socketRef = useRef<Socket | null>(null);
 
     const addMessage = useCallback((newMessage: Message) => {
@@ -49,10 +54,17 @@ export const useWebSocket = ({senderId, recipientId}:{senderId:string, recipient
             addMessage(newMessage);
         });
 
-        socket.emit('getChatHistory', {userId1: senderId, userId2: recipientId}, (response: SocketResponse<{chatHistory: Message[]}>) => {
+        socket.emit('getChatHistory', { userId1: senderId, userId2: recipientId }, (response: SocketResponse<{ chatHistory: Message[] }>) => {
             console.log('Received chat history:', response);
             if (response.status === 'OK' && response.data) {
                 setMessages(response.data.chatHistory);
+            }
+        });
+
+        socket.emit('getUserChats', senderId, (response: SocketResponse<{ userChats: UserChat[] }>) => {
+            console.log('Received user chats:', response);
+            if (response.status === 'OK' && response.data) {
+                setUserChats(response.data.userChats);
             }
         });
 
@@ -67,7 +79,7 @@ export const useWebSocket = ({senderId, recipientId}:{senderId:string, recipient
         console.log('Sending message:', message);
         if (!user || !socketRef.current) return;
 
-        socketRef.current.emit('sendMessage', { message, senderId: user.id, recipientId }, (response: SocketResponse<{message: Message}>) => {
+        socketRef.current.emit('sendMessage', { message, senderId: user.id, recipientId }, (response: SocketResponse<{ message: Message }>) => {
             if (response.status === 'OK' && response.data) {
                 console.log('Message sent successfully:', response.data.message);
             } else {
@@ -76,8 +88,23 @@ export const useWebSocket = ({senderId, recipientId}:{senderId:string, recipient
         });
     }, [user, recipientId]);
 
+    const getUserChats = useCallback(() => {
+        if (!user || !socketRef.current) return;
+
+        socketRef.current.emit('getUserChats', user.id, (response: SocketResponse<{ userChats: UserChat[] }>) => {
+            if (response.status === 'OK' && response.data) {
+                console.log('Received user chats:', response.data.userChats);
+                setUserChats(response.data.userChats);
+            } else {
+                console.error('Failed to get user chats:', response.error);
+            }
+        });
+    }, [user]);
+
     return {
         messages,
-        sendMessage
+        userChats,
+        sendMessage,
+        getUserChats
     }
 }

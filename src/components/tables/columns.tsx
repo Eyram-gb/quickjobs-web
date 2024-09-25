@@ -134,7 +134,7 @@ export const columns: ColumnDef<Application>[] = [
                             </DialogTrigger>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <MessageClientDialog recipient_id={application.user_id} />
+                    <MessageClientDialog recipient_id={application.user_id} client_name={`${application.first_name} ${application.last_name}`}     />
                 </Dialog>
             )
         },

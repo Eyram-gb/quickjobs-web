@@ -31,7 +31,7 @@ interface Message {
     time: string;
 }
 
-const MessageClientDialog = ({ recipient_id }: { recipient_id: string }) => {
+const MessageClientDialog = ({ recipient_id, client_name }: { recipient_id: string, client_name:string }) => {
     const { user } = useAuthStore()
     const { messages, sendMessage } = useWebSocket({ 
         senderId: user?.id as string, 
@@ -56,7 +56,7 @@ const MessageClientDialog = ({ recipient_id }: { recipient_id: string }) => {
             <DialogContent>
                 <div className="p-4 border-b border-gray-300 flex justify-between items-center">
                     <div>
-                        <div className="font-bold">Mensah Bruwaa</div>
+                        <div className="font-bold">{client_name}</div>
                     </div>
                     <div>
                         <DropdownMenu>
@@ -71,7 +71,7 @@ const MessageClientDialog = ({ recipient_id }: { recipient_id: string }) => {
                         </DropdownMenu>
                     </div>
                 </div>
-                <div className="flex-1 p-4 overflow-y-auto">
+                <div className="flex-1 p-4 overflow-y-auto h-80 customScroll">
                     {messages.map(message => (
                         <div key={message.id} className={`flex mb-4 ${message.sender_id === user?.id ? 'justify-end' : ''}`}>
                             {message.sender_id !== user?.id && <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div>}
@@ -88,7 +88,7 @@ const MessageClientDialog = ({ recipient_id }: { recipient_id: string }) => {
                         type="text"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                         placeholder="Your message"
                         className="flex-1 p-2 border border-gray-300 rounded mr-4"
                     />
