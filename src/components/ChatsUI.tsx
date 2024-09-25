@@ -42,7 +42,6 @@ export const messages: Message[] = [
 const ChatsUI: React.FC = () => {
     const [selectedChat, setSelectedChat] = useState<number | null>(null);
 
-
     return (
         <div className="flex h-screen">
             <div className="w-1/3 border-r border-gray-300 flex flex-col">

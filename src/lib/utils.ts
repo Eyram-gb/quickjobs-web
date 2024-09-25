@@ -48,3 +48,8 @@ export function getRelativeTime(date: Date): string {
   //   .toDate()
   //   .toLocaleDateString()} • ${formattedtDate.format('h:mm a')}`;
 }
+
+export function getTime(date: Date): string {
+  const formattedtDate = dayjs(date);
+  return formattedtDate.format('H:mm ');
+}

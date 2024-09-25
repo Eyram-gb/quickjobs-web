@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { Socket } from 'socket.io-client';
 import { socketConfig } from '../socketConfig';
 import { useAuthStore } from '../store/authStore';
@@ -11,7 +11,7 @@ export type SocketResponse<T> = {
     data?: T;
     error?: Error;
 };
-interface Message {
+export interface Message {
     id?: number;
     created_at?: Date | null;
     updated_at?: Date | null;
@@ -20,52 +20,64 @@ interface Message {
     message_text: string;
 }
 
-export const useWebSocket = () => {
+export const useWebSocket = ({senderId, recipientId}:{senderId:string, recipientId:string}) => {
     const { user } = useAuthStore()
     const [messages, setMessages] = useState<Message[]>([])
-    const socketRef = useRef<Socket>(null);
+    const socketRef = useRef<Socket | null>(null);
+
+    const addMessage = useCallback((newMessage: Message) => {
+        console.log('Adding new message:', newMessage);
+        setMessages(prevMessages => [newMessage, ...prevMessages]);
+    }, []);
+
     useEffect(() => {
-        let socket = socketRef.current;
-        if (!socket) {
-            socket = socketConfig;
-            socket.connect();
-            socket.on('join', onConnect)
-            socket.on('message', onMessage)
-            socket.on('getChatHistory', onGetChatHistory)
-            socket.on('getUserChats', onGetUserChats)
+        console.log('Setting up socket connection');
+        if (!socketRef.current) {
+            socketRef.current = socketConfig;
+            socketRef.current.connect();
         }
 
-        function onConnect() {
-            if (process.env.NODE_ENV === 'development') {
-                console.log('Connected 🔥');
+        const socket = socketRef.current;
+
+        socket.on('connect', () => {
+            console.log('Socket connected');
+            socket.emit('join', senderId);
+        });
+
+        socket.on('receiveMessage', (newMessage: Message) => {
+            console.log('Received new message:', newMessage);
+            addMessage(newMessage);
+        });
+
+        socket.emit('getChatHistory', {userId1: senderId, userId2: recipientId}, (response: SocketResponse<{chatHistory: Message[]}>) => {
+            console.log('Received chat history:', response);
+            if (response.status === 'OK' && response.data) {
+                setMessages(response.data.chatHistory);
             }
-        }
-        function onGetChatHistory(response: SocketResponse<Message>) {
-            const data = response.data
-            if (!data) return;
-            console.log('message sent');
+        });
 
-            setMessages((prev) => [data, ...prev.reverse()].reverse());
-        }
+        return () => {
+            console.log('Cleaning up socket listeners');
+            socket.off('connect');
+            socket.off('receiveMessage');
+        };
+    }, [senderId, recipientId, addMessage]);
 
-        function onMessage(response: SocketResponse<Message>) {
-            console.log('message entered');
-            const data = response.data;
-            if (!data) return;
-            console.log('message sent');
+    const sendMessage = useCallback((message: string) => {
+        console.log('Sending message:', message);
+        if (!user || !socketRef.current) return;
 
-            setMessages((prev) => [data, ...prev.reverse()].reverse());
-        }
+        socketRef.current.emit('sendMessage', { message, senderId: user.id, recipientId }, (response: SocketResponse<{message: Message}>) => {
+            if (response.status === 'OK' && response.data) {
+                console.log('Message sent successfully:', response.data.message);
+            } else {
+                console.error('Failed to send message:', response.error);
+            }
+        });
+    }, [user, recipientId]);
 
-        function onGetUserChats() {
-            // userChats
-        }
-    }, [user])
-
-    return (
-        {
-            socketConfig,
-            messages
-        }
-    )
+    return {
+        messages,
+        sendMessage
+    }
 }

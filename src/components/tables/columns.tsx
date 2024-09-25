@@ -9,14 +9,11 @@ import { MoreHorizontal } from "lucide-react"
 import { Dialog, DialogTrigger } from "../ui/dialog"
 import MessageClientDialog from "../MessageClientDialog"
 
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
 export interface Application {
     application_id: string;
     gig_id: string;
     applicant_id: string;
+    user_id: string;
     cv_url: string;
     first_name: string;
     last_name: string;
@@ -137,7 +134,7 @@ export const columns: ColumnDef<Application>[] = [
                             </DialogTrigger>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <MessageClientDialog />
+                    <MessageClientDialog recipient_id={application.user_id} />
                 </Dialog>
             )
         },
