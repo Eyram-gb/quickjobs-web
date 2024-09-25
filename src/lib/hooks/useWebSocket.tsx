@@ -27,7 +27,7 @@ export const useWebSocket = ({senderId, recipientId}:{senderId:string, recipient
 
     const addMessage = useCallback((newMessage: Message) => {
         console.log('Adding new message:', newMessage);
-        setMessages(prevMessages => [newMessage, ...prevMessages]);
+        setMessages(prevMessages => [...prevMessages, newMessage]);
     }, []);
 
     useEffect(() => {

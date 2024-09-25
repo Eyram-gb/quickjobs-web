@@ -73,7 +73,7 @@ const MessageClientDialog = ({ recipient_id }: { recipient_id: string }) => {
                 </div>
                 <div className="flex-1 p-4 overflow-y-auto">
                     {messages.map(message => (
-                        <div key={message.id} className={`flex mb-4 ${message.sender_id === 'You' ? 'justify-end' : ''}`}>
+                        <div key={message.id} className={`flex mb-4 ${message.sender_id === user?.id ? 'justify-end' : ''}`}>
                             {message.sender_id !== user?.id && <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div>}
                             <div className={`p-2 rounded-lg max-w-xs ${message.sender_id === user?.id ? 'bg-blue-100' : 'bg-gray-100'}`}>
                                 {/* {message.sender !== 'You' && <div className="font-bold">{message.sender}</div>} */}
