@@ -1,3 +1,4 @@
+'use client'
 // import { employerSideTabs } from '@/components/EmployerProfile'
 import { getTabRoutes } from '@/lib/tabRoutes';
 import ClientNavBar from '@/components/layout/ClientNavBar'

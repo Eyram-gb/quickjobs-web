@@ -27,7 +27,6 @@ export interface UserChat {
 export const useWebSocket = ({ senderId, recipientId }: { senderId: string, recipientId: string }) => {
     const { user } = useAuthStore()
     const [messages, setMessages] = useState<Message[]>([])
-    const [userChats, setUserChats] = useState<UserChat[]>([])
     const socketRef = useRef<Socket | null>(null);
 
     const addMessage = useCallback((newMessage: Message) => {
@@ -54,17 +53,10 @@ export const useWebSocket = ({ senderId, recipientId }: { senderId: string, reci
             addMessage(newMessage);
         });
 
-        socket.emit('getChatHistory', { userId1: senderId, userId2: recipientId }, (response: SocketResponse<{ chatHistory: Message[] }>) => {
+        socket.emit('getChatHistory', { senderId, recipientId }, (response: SocketResponse<{ chatHistory: Message[] }>) => {
             console.log('Received chat history:', response);
             if (response.status === 'OK' && response.data) {
                 setMessages(response.data.chatHistory);
-            }
-        });
-
-        socket.emit('getUserChats', senderId, (response: SocketResponse<{ userChats: UserChat[] }>) => {
-            console.log('Received user chats:', response);
-            if (response.status === 'OK' && response.data) {
-                setUserChats(response.data.userChats);
             }
         });
 
@@ -88,23 +80,8 @@ export const useWebSocket = ({ senderId, recipientId }: { senderId: string, reci
         });
     }, [user, recipientId]);
 
-    const getUserChats = useCallback(() => {
-        if (!user || !socketRef.current) return;
-
-        socketRef.current.emit('getUserChats', user.id, (response: SocketResponse<{ userChats: UserChat[] }>) => {
-            if (response.status === 'OK' && response.data) {
-                console.log('Received user chats:', response.data.userChats);
-                setUserChats(response.data.userChats);
-            } else {
-                console.error('Failed to get user chats:', response.error);
-            }
-        });
-    }, [user]);
-
     return {
         messages,
-        userChats,
-        sendMessage,
-        getUserChats
+        sendMessage
     }
 }

@@ -31,13 +31,18 @@ export function getTabRoutes (address:string) {
 	const clientSideTabs: SideTabsProps[] = [
 		{
 			name: "My Profile",
-			href: `/${address}/profile}`,
+			href: `/${address}/client-profile}`,
 			icon: <UserCircle />,
 		},
 		{
 			name: "Available Jobs",
-			href: "/jobs",
+			href: "/gigs",
 			icon: <BriefcaseBusiness />,
+		},
+		{
+			name: "Chats",
+			href: "/${address}/cleint-profile/chats",
+			icon: <MessagesSquare />,
 		},
 	];
 

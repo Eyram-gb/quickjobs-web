@@ -31,7 +31,7 @@ interface Message {
     time: string;
 }
 
-const MessageClientDialog = ({ recipient_id, client_name }: { recipient_id: string, client_name:string }) => {
+const MessageClientDialog = ({ recipient_id }: { recipient_id: string }) => {
     const { user } = useAuthStore()
     const { messages, sendMessage } = useWebSocket({ 
         senderId: user?.id as string, 
@@ -56,7 +56,7 @@ const MessageClientDialog = ({ recipient_id, client_name }: { recipient_id: stri
             <DialogContent>
                 <div className="p-4 border-b border-gray-300 flex justify-between items-center">
                     <div>
-                        <div className="font-bold">{client_name}</div>
+                        <div className="font-bold">Client Name</div>
                     </div>
                     <div>
                         <DropdownMenu>
