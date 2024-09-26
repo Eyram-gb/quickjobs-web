@@ -1,17 +1,14 @@
-'use client'
 import EmployerNavBar from '@/components/layout/EmployerNavBar'
-import { getTabRoutes } from '@/lib/tabRoutes';
-import SideTabs from '@/components/SideTabs'
 import React from 'react'
+import DashboardSideBar from '@/components/DashboardSideBar';
 
 const Layout = ({ children, params: { id } }: { children: React.ReactNode, params: { id: string }; }) => {
-    const { employerSideTabs } = getTabRoutes(id);
 
     return (
         <div>
             <EmployerNavBar />
             <div className='grid grid-cols-8'>
-                <SideTabs tabs={employerSideTabs} />
+                <DashboardSideBar id={id} />
                 <div className='col-start-3 col-span-full'>
                     {children}
                 </div>
