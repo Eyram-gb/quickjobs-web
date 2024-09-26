@@ -13,34 +13,7 @@ import {
 import { EllipsisVertical, SendHorizontal } from 'lucide-react';
 import { useWebSocket } from '@/lib/hooks/useWebSocket';
 import { useAuthStore } from '@/lib/store/authStore';
-
-export interface Chat {
-    id: number;
-    name: string;
-    message: string;
-    time: string;
-}
-
-export interface Message {
-    id: number;
-    sender: string;
-    text: string;
-    time: string;
-}
-
-export const chats: Chat[] = [
-    { id: 1, name: 'TechPulse Company', message: 'Reminder that we have a project meeting...', time: '13:02' },
-    { id: 2, name: 'Michelle Davis', message: 'Just finished a workout and feeling energized!', time: '13:02' },
-    { id: 3, name: 'Joseph King', message: 'Please prepare a presentation on the recent...', time: '13:02' },
-    // Add more chat items here
-];
-
-export const messages: Message[] = [
-    { id: 1, sender: 'Virginia Jordan', text: 'Hi, I\'ve just finished my report.', time: '12:38' },
-    { id: 2, sender: 'You', text: 'Great job! How long did it take you?', time: '12:42' },
-    { id: 3, sender: 'Virginia Jordan', text: 'About two hours. I had to check some data and make sure everything was accurate.', time: '12:49' },
-    // Add more messages here
-];
+import { getTime } from '@/lib/utils';
 
 const ChatsUI: React.FC = () => {
     const { user } = useAuthStore();
@@ -123,7 +96,7 @@ const ChatsUI: React.FC = () => {
                                     <div className={`p-2 rounded-lg max-w-xs ${message.sender_id === user?.id ? 'bg-blue-100' : 'bg-gray-100'}`}>
                                         <div className='text-xs'>{message.message_text}</div>
                                         <div className="text-gray-500 text-[10px] mt-2 flex justify-end leading-none">
-                                            {new Date(message.created_at!).toLocaleTimeString()}
+                                            {getTime(message?.created_at as Date)}
                                         </div>
                                     </div>
                                 </div>
