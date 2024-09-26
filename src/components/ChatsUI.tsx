@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,7 +10,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { EllipsisVertical, SendHorizontal } from 'lucide-react'
+import { EllipsisVertical, SendHorizontal } from 'lucide-react';
+import { useWebSocket } from '@/lib/hooks/useWebSocket';
+import { useAuthStore } from '@/lib/store/authStore';
 
 export interface Chat {
     id: number;
@@ -39,8 +41,33 @@ export const messages: Message[] = [
     { id: 3, sender: 'Virginia Jordan', text: 'About two hours. I had to check some data and make sure everything was accurate.', time: '12:49' },
     // Add more messages here
 ];
+
 const ChatsUI: React.FC = () => {
-    const [selectedChat, setSelectedChat] = useState<number | null>(null);
+    const { user } = useAuthStore();
+    const [selectedChat, setSelectedChat] = useState<string | null>(null);
+    const { messages, userChats, sendMessage, getUserChats } = useWebSocket({
+        senderId: user?.id || '',
+        recipientId: selectedChat || '',
+    });
+
+    useEffect(() => {
+        if (user) {
+            getUserChats();
+        }
+    }, [user, getUserChats]);
+
+    const handleChatSelect = (chatUserId: string) => {
+        setSelectedChat(chatUserId);
+    };
+
+    const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const messageInput = e.currentTarget.elements.namedItem('message') as HTMLInputElement;
+        if (messageInput.value.trim() && selectedChat) {
+            sendMessage(messageInput.value.trim());
+            messageInput.value = '';
+        }
+    };
 
     return (
         <div className="flex h-screen">
@@ -53,30 +80,28 @@ const ChatsUI: React.FC = () => {
                     />
                 </div>
                 <div className="flex-1 overflow-y-auto">
-                    {/* Chat Tab */}
-                    {chats.map(chat => (
+                    {userChats.map(chat => (
                         <div
-                            key={chat.id}
-                            className={`flex items-center p-4 border-b border-gray-300 cursor-pointer ${selectedChat === chat.id ? 'bg-gray-200' : ''}`}
-                            onClick={() => setSelectedChat(chat.id)}
+                            key={chat.chatUser}
+                            className={`flex items-center p-4 border-b border-gray-300 cursor-pointer ${selectedChat === chat.chatUser ? 'bg-gray-200' : ''}`}
+                            onClick={() => handleChatSelect(chat.chatUser)}
                         >
                             <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div>
                             <div className="flex-1 min-w-0">
-                                <div className="font-bold">{chat.name}</div>
-                                <div className="text-gray-600 text-xs truncate">{chat.message}</div>
+                                <div className="font-bold">{chat.chatUser}</div>
+                                {/* You might want to add a preview of the last message here */}
                             </div>
-                            <div className="text-gray-500 text-xs self-start mt-1">{chat.time}</div>
+                            <div className="text-gray-500 text-xs self-start mt-1">7:24pm</div>
                         </div>
                     ))}
                 </div>
             </div>
             <div className="flex-1 flex flex-col">
-                {/* Select Chat Tab Item */}
                 {selectedChat ? (
                     <>
                         <div className="p-4 border-b border-gray-300 flex justify-between items-center">
                             <div>
-                                <div className="font-bold">{chats.find(chat => chat.id === selectedChat)?.name}</div>
+                                <div className="font-bold">{selectedChat}</div>
                             </div>
                             <div>
                                 <DropdownMenu>
@@ -93,24 +118,26 @@ const ChatsUI: React.FC = () => {
                         </div>
                         <div className="flex-1 p-4 overflow-y-auto">
                             {messages.map(message => (
-                                <div key={message.id} className={`flex mb-4 ${message.sender === 'You' ? 'justify-end' : ''}`}>
-                                    {message.sender !== 'You' && <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div>}
-                                    <div className={`p-2 rounded-lg max-w-xs ${message.sender === 'You' ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                                        {/* {message.sender !== 'You' && <div className="font-bold">{message.sender}</div>} */}
-                                        <div className='text-xs'>{message.text}</div>
-                                        <div className="text-gray-500 text-[10px] mt-2 flex justify-end leading-none">{message.time}</div>
+                                <div key={message.id} className={`flex mb-4 ${message.sender_id === user?.id ? 'justify-end' : ''}`}>
+                                    {message.sender_id !== user?.id && <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div>}
+                                    <div className={`p-2 rounded-lg max-w-xs ${message.sender_id === user?.id ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                                        <div className='text-xs'>{message.message_text}</div>
+                                        <div className="text-gray-500 text-[10px] mt-2 flex justify-end leading-none">
+                                            {new Date(message.created_at!).toLocaleTimeString()}
+                                        </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                        <div className="p-4 border-t border-gray-300 flex">
+                        <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-300 flex">
                             <input
                                 type="text"
+                                name="message"
                                 placeholder="Your message"
                                 className="flex-1 p-2 border border-gray-300 rounded mr-4"
                             />
-                            <Button className=""><SendHorizontal /></Button>
-                        </div>
+                            <Button type="submit"><SendHorizontal /></Button>
+                        </form>
                     </>
                 ) : (
                     <div className="flex-1 flex items-center justify-center">

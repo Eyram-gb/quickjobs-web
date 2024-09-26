@@ -31,7 +31,7 @@ export function getTabRoutes (address:string) {
 	const clientSideTabs: SideTabsProps[] = [
 		{
 			name: "My Profile",
-			href: `/${address}/client-profile}`,
+			href: `/${address}/client-profile`,
 			icon: <UserCircle />,
 		},
 		{
@@ -41,7 +41,7 @@ export function getTabRoutes (address:string) {
 		},
 		{
 			name: "Chats",
-			href: "/${address}/cleint-profile/chats",
+			href: `/${address}/client-profile/chats`,
 			icon: <MessagesSquare />,
 		},
 	];
