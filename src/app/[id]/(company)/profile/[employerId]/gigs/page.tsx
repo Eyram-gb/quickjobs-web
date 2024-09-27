@@ -36,7 +36,10 @@ const Gigs = async ( {
                             </div>
                         </div>
                         <p className='text-xs'>{item.description}</p>
-                        <Link href={`/${id}/profile/${employerId}/applications?gigId=${item.id}`} className={`${buttonVariants({ variant: "default" })} mt-4 h-8`}>View Applications</Link>
+                        <div className='flex justify-between mt-4'>
+                        <Link href={`/${id}/profile/${employerId}/applications?gigId=${item.id}`} className={`${buttonVariants({ variant: "default" })} h-8`}>View Applications</Link>
+<Button variant='outline' className='h-8'>Edit Gig</Button>
+                        </div>
                     </Card>
                 ))
             }
