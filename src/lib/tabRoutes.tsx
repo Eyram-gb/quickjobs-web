@@ -3,27 +3,27 @@
 import { SideTabsProps } from "@/components/SideTabs";
 import { BriefcaseBusiness, ChartColumnIncreasing, UserCircle, Settings, Mails, MessagesSquare } from "lucide-react";
 
-export function getTabRoutes (address:string) {
+export function getTabRoutes (userId:string, employer_id?:string) {
 
 	const employerSideTabs: SideTabsProps[] = [
 		{
 			name: "Dashboard",
-			href: `/${address}/profile`,
+			href: `/${userId}/profile`,
 			icon: <ChartColumnIncreasing />,
 		},
 		{
 			name: "My Gigs",
-			href: `/${address}/profile/gigs`,
+			href: `/${userId}/profile/gigs`,
 			icon: <BriefcaseBusiness />,
 		},
 		{
 			name: "Applications",
-			href: `/${address}/profile/applications`,
+			href: `/${userId}/profile/applications`,
 			icon: <Mails />,
 		},
 		{
 			name: "Chats",
-			href: `/${address}/profile/chats`,
+			href: `/${userId}/profile/chats`,
 			icon: <MessagesSquare />,
 		},
 	];
@@ -31,7 +31,7 @@ export function getTabRoutes (address:string) {
 	const clientSideTabs: SideTabsProps[] = [
 		{
 			name: "My Profile",
-			href: `/${address}/client-profile`,
+			href: `/${userId}/client-profile`,
 			icon: <UserCircle />,
 		},
 		{
@@ -41,7 +41,7 @@ export function getTabRoutes (address:string) {
 		},
 		{
 			name: "Chats",
-			href: `/${address}/client-profile/chats`,
+			href: `/${userId}/client-profile/chats`,
 			icon: <MessagesSquare />,
 		},
 	];

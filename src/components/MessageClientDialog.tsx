@@ -31,7 +31,7 @@ interface Message {
     time: string;
 }
 
-const MessageClientDialog = ({ recipient_id }: { recipient_id: string }) => {
+const MessageClientDialog = ({ recipient_id, client_name }: { recipient_id: string, client_name?:string }) => {
     const { user } = useAuthStore()
     const { messages, sendMessage } = useWebSocket({ 
         senderId: user?.id as string, 

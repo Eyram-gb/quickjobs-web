@@ -8,6 +8,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { queryClient } from "@/lib/queryclient";
+import MainLayout from "@/components/layout/MainLayout";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -22,15 +23,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <html lang="en">
         <body className={montserrat.className}>
           <>
-            {children}
+            <MainLayout>
+              {children}
+            </MainLayout>
             <Toaster />
           </>
         </body>
-      </QueryClientProvider>
-    </html>
+      </html>
+    </QueryClientProvider>
   );
 }

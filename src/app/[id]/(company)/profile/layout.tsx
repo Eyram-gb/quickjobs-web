@@ -1,4 +1,4 @@
-import EmployerNavBar from '@/components/layout/EmployerNavBar'
+import {EmployerNavBar} from '@/components/layout/EmployerNavBar'
 import React from 'react'
 import DashboardSideBar from '@/components/DashboardSideBar';
 
