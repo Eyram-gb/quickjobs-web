@@ -1,11 +1,11 @@
 "use client"
-
+import React, {useState} from 'react'
 import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "../ui/checkbox"
 import { Badge } from "../ui/badge"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
-import { MoreHorizontal } from "lucide-react"
+import { MoreHorizontal, ChevronsUpDown, Check } from "lucide-react"
 import { Dialog, DialogTrigger } from "../ui/dialog"
 import MessageClientDialog from "../MessageClientDialog"
 
@@ -64,21 +64,8 @@ export const columns: ColumnDef<Application>[] = [
         accessorKey: "status",
         header: "Status",
         cell: ({ row }) => {
-            const status = row.getValue("status") as string
-            return (
-                <Badge
-                    variant="outline"
-                    className={
-                        status === "accepted"
-                            ? "bg-emerald-100 text-emerald-800 border-emerald-500"
-                            : status === "pending"
-                                ? "bg-orange-100 text-orange-800 border-orange-500"
-                                : "bg-rose-100 text-rose-800 border-rose-500"
-                    }
-                >
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
-                </Badge>
-            )
+            const application = row.original;
+            return <UpdateStatusDropdown applicationId={application.application_id} currentStatus={application.status} />;
         },
     },
     {
@@ -140,3 +127,87 @@ export const columns: ColumnDef<Application>[] = [
         },
     },
 ]
+
+export function DropdownMenuRadioGroupDemo() {
+    const [position, setPosition] = useState("pending")
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline">Open</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
+                    <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="right">Right</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
+
+const statusOptions: Array<string> = ['pending', 'accepted', 'rejected'];
+
+interface UpdateStatusDropdownProps {
+    applicationId: string;
+    currentStatus: string;
+}
+
+const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ applicationId, currentStatus }) => {
+    const [selectedStatus, setSelectedStatus] = useState<string>(currentStatus);
+
+    const handleStatusChange = async (newStatus: string) => {
+        try {
+            const response = await fetch('/api/update-status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    application_id: applicationId,
+                    status: newStatus,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            setSelectedStatus(newStatus);
+        } catch (error) {
+            console.error("Error updating status:", error);
+        }
+    };
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger>
+                <Badge
+                    variant="outline"
+                    className={
+                        selectedStatus === "accepted"
+                            ? "bg-emerald-100 text-emerald-800 border-emerald-500 cursor-pointer"
+                            : selectedStatus === "pending"
+                                ? "bg-orange-100 text-orange-800 border-orange-500 cursor-pointer"
+                                : "bg-rose-100 text-rose-800 border-rose-500 cursor-pointer"
+                    }
+                >
+                    {selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1)} <ChevronsUpDown size={14} />
+                </Badge>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Update Status</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {statusOptions.map((status) => (
+                    <DropdownMenuItem key={status} onClick={() => handleStatusChange(status)}>
+                        {selectedStatus === status && <span className="mr-2"><Check size={16}/></span>}
+                        <span className={`${selectedStatus !== status? 'ml-6': ''}`}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                    </DropdownMenuItem>
+                ))}
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+}
