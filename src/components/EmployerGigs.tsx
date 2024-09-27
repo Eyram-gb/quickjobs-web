@@ -5,11 +5,12 @@ import { TGigDetails } from '@/lib/types'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Card } from './ui/card'
-import { Button } from './ui/button'
+import { Button, buttonVariants } from './ui/button'
 import { Checkbox } from './ui/checkbox'
+import Link from 'next/link'
 
 const EmployerGigs = () => {
-    const { employer_profile } = useAuthStore()
+    const { user, employer_profile } = useAuthStore()
 
     const { isPending, isError, data, error } = useQuery<TGigDetails[]>({
         queryKey: ['employerGigs'], queryFn: () =>
@@ -39,7 +40,7 @@ const EmployerGigs = () => {
 
                         </div>
                         <p className='text-xs'>{item.description}</p>
-                        <Button size='sm' className='mt-4 h-8'>View Applications</Button>
+                        <Link href={`/${user?.id}/profile/${employer_profile?.id}/applications?gigId=${item.id}`} className={`${buttonVariants({ variant: "default" })} mt-4 h-8`}>View Applications</Link>
                     </Card>
                 ))
             }

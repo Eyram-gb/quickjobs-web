@@ -5,10 +5,20 @@ import { Application, columns } from "@/components/tables/columns";
 import { DataTable } from "@/components/tables/DataTable";
 import { API_BASE_URL } from "@/lib/constants"
 
-export default async function ApplicationsTable({ params: { employerId } }: { params: { employerId: string }; }) {
+export default async function ApplicationsTable(
+  {
+    params: { employerId },
+    searchParams }:
+    {
+      params: { employerId: string };
+      searchParams: { [key: string]: string | string[] | undefined }
+    }
+) {
   // const { employer_profile } = useAuthStore()
-  const res = await fetch(`${API_BASE_URL}/applications/employer/${employerId}`)
+  const { gigId } = searchParams;
+  const res = await fetch(`${API_BASE_URL}/applications/employer/${employerId}?gigId=${gigId}`)
   const data: Application[] = await res.json()
+  console.log(searchParams)
 
   // Remove the useQuery hook and loading/error states
   // if (isPending) return <div>Loading...</div>
