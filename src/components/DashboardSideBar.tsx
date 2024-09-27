@@ -9,8 +9,8 @@ const DashboardSideBar = ({
 }: {
     id: string;
 }) => {
-    const { employerSideTabs, clientSideTabs } = getTabRoutes(id);
-    const { user } = useAuthStore();
+    const { user, employer_profile } = useAuthStore();
+    const { employerSideTabs, clientSideTabs } = getTabRoutes(id, employer_profile.id);
     return (
         <>
             <SideTabs tabs={user?.user_type !== 'client' ? employerSideTabs : clientSideTabs} />

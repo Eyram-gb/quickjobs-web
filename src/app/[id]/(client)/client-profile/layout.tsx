@@ -1,5 +1,5 @@
 
-import ClientNavBar from '@/components/layout/ClientNavBar'
+import {ClientNavBar} from '@/components/layout/ClientNavBar'
 import React, { ReactNode } from 'react'
 import DashboardSideBar from '@/components/DashboardSideBar';
 

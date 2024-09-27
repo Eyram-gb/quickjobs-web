@@ -3,7 +3,7 @@
 import { SideTabsProps } from "@/components/SideTabs";
 import { BriefcaseBusiness, ChartColumnIncreasing, UserCircle, Settings, Mails, MessagesSquare } from "lucide-react";
 
-export function getTabRoutes (userId:string, employer_id?:string) {
+export function getTabRoutes(userId: string, employer_id?: string) {
 
 	const employerSideTabs: SideTabsProps[] = [
 		{
@@ -18,7 +18,7 @@ export function getTabRoutes (userId:string, employer_id?:string) {
 		},
 		{
 			name: "Applications",
-			href: `/${userId}/profile/applications`,
+			href: `/${userId}/profile/${employer_id}/applications`,
 			icon: <Mails />,
 		},
 		{
