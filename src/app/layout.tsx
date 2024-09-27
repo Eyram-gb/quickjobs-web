@@ -7,6 +7,7 @@ import { Montserrat } from "next/font/google";
 
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner"
 import { queryClient } from "@/lib/queryclient";
 import MainLayout from "@/components/layout/MainLayout";
 
@@ -31,6 +32,7 @@ export default function RootLayout({
               {children}
             </MainLayout>
             <Toaster />
+            <SonnerToaster richColors  position="top-center"/>
           </>
         </body>
       </html>

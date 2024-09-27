@@ -8,6 +8,8 @@ import { Button } from "../ui/button"
 import { MoreHorizontal, ChevronsUpDown, Check } from "lucide-react"
 import { Dialog, DialogTrigger } from "../ui/dialog"
 import MessageClientDialog from "../MessageClientDialog"
+import { API_BASE_URL } from '@/lib/constants'
+import { toast } from 'sonner'
 
 export interface Application {
     application_id: string;
@@ -160,9 +162,9 @@ const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ application
     const [selectedStatus, setSelectedStatus] = useState<string>(currentStatus);
 
     const handleStatusChange = async (newStatus: string) => {
-        try {
-            const response = await fetch('/api/update-status', {
-                method: 'POST',
+        const promise = async () => {
+            const response = await fetch(`${API_BASE_URL}/applications/${applicationId}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -172,14 +174,19 @@ const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ application
                 }),
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            if (response.status === 201) {
+                setSelectedStatus(newStatus);
+                return { name: newStatus }; // Return the new status for the success message
+            } else {
+                throw new Error('Failed to update status'); // Throw an error if the response is not 201
             }
+        };
 
-            setSelectedStatus(newStatus);
-        } catch (error) {
-            console.error("Error updating status:", error);
-        }
+        toast.promise(promise, {
+            loading: 'Updating status...',
+            success: (data) => `${data.name.charAt(0).toUpperCase() + data.name.slice(1)} status updated successfully`,
+            error: 'Error updating status',
+        });
     };
 
     return (

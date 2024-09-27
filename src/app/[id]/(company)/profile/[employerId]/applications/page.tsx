@@ -16,7 +16,7 @@ export default async function ApplicationsTable(
 ) {
   // const { employer_profile } = useAuthStore()
   const { gigId } = searchParams;
-  const res = await fetch(`${API_BASE_URL}/applications/employer/${employerId}?gigId=${gigId}`)
+  const res = await fetch(`${API_BASE_URL}/applications/employer/${employerId}?gigId=${gigId ? gigId : ''}`)
   const data: Application[] = await res.json()
   console.log(searchParams)
 
