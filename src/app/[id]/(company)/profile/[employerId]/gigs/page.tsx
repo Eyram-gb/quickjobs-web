@@ -1,27 +1,23 @@
-'use client'
 import { API_BASE_URL } from '@/lib/constants'
 import { useAuthStore } from '@/lib/store/authStore'
 import { TGigDetails } from '@/lib/types'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
-import { Card } from './ui/card'
-import { Button, buttonVariants } from './ui/button'
-import { Checkbox } from './ui/checkbox'
+import { Card } from '@/components/ui/card'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import Link from 'next/link'
 
-const EmployerGigs = () => {
-    const { user, employer_profile } = useAuthStore()
+const Gigs = async ( {
+    params: { employerId, id }
+}:
+    {
+      params: { employerId: string, id:string };
+    }) => {
+    const res = await fetch(`${API_BASE_URL}/gigs/${employerId}/employer`);
+    const data: TGigDetails[] = await res.json();
 
-    const { isPending, isError, data, error } = useQuery<TGigDetails[]>({
-        queryKey: ['employerGigs'], queryFn: () =>
-            fetch(`${API_BASE_URL}/gigs/${employer_profile?.id}/employer`).then(
-                (res) => res.json()
-            )
-    })
-
-    if (isPending) return <div>Loading...</div>
-    if (isError) return <div>Error: {error.message}</div>
-    console.log(data)
+    console.log(data);
     return (
         <div className='p-10'>
             {
@@ -38,10 +34,9 @@ const EmployerGigs = () => {
                                 </label>
                                 <Checkbox id="expired" className='data-[state=checked]:bg-rose-500' />
                             </div>
-
                         </div>
                         <p className='text-xs'>{item.description}</p>
-                        <Link href={`/${user?.id}/profile/${employer_profile?.id}/applications?gigId=${item.id}`} className={`${buttonVariants({ variant: "default" })} mt-4 h-8`}>View Applications</Link>
+                        <Link href={`/${id}/profile/${employerId}/applications?gigId=${item.id}`} className={`${buttonVariants({ variant: "default" })} mt-4 h-8`}>View Applications</Link>
                     </Card>
                 ))
             }
@@ -49,4 +44,4 @@ const EmployerGigs = () => {
     )
 }
 
-export default EmployerGigs
+export default Gigs;

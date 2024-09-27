@@ -13,7 +13,7 @@ export function getTabRoutes(userId: string, employer_id?: string) {
 		},
 		{
 			name: "My Gigs",
-			href: `/${userId}/profile/gigs`,
+			href: `/${userId}/profile/${employer_id}/gigs`,
 			icon: <BriefcaseBusiness />,
 		},
 		{
