@@ -37,7 +37,7 @@ const Gigs = async ({
                         <p className='text-xs'>{item.description}</p>
                         <div className='flex justify-between mt-4'>
                             <Link href={`/${id}/profile/${employerId}/applications?gigId=${item.id}`} className={`${buttonVariants({ variant: "default" })} h-8`}>View Applications</Link>
-                            <EditGig employerId={employerId} userId={id} gig={item} /> 
+                            <EditGig employerId={employerId} userId={id} gig={item} />
                         </div>
                     </Card>
                 ))

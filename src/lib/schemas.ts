@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const GigSchema = z.object({
+  id: z.string().optional(),
   title: z.string({
     description: "Company name",
     required_error: "Please enter a company name",

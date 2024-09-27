@@ -35,8 +35,8 @@ const NewGigForm = ({ industries }: {
             const industry_id = Number(data.industry_id);
             const gigInfo = {
                 ...data,
-                industry_id, 
-                employer_id: employer_profile?.id, 
+                industry_id,
+                employer_id: employer_profile?.id,
                 user_id: user?.id
             }
             console.log(gigInfo)
@@ -49,8 +49,8 @@ const NewGigForm = ({ industries }: {
             });
 
             if (res.status === 201) {
-                form.reset(); 
-                                return toast.success('Gig created successfully');
+                form.reset();
+                return toast.success('Gig created successfully');
             } else {
                 toast.error('Failed to create gig');
             }
