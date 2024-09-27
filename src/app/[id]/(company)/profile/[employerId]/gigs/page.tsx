@@ -1,18 +1,17 @@
 import { API_BASE_URL } from '@/lib/constants'
-import { useAuthStore } from '@/lib/store/authStore'
 import { TGigDetails } from '@/lib/types'
-import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Card } from '@/components/ui/card'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import Link from 'next/link'
+import EditGig from '@/components/forms/EditGig'
 
-const Gigs = async ( {
+const Gigs = async ({
     params: { employerId, id }
 }:
     {
-      params: { employerId: string, id:string };
+        params: { employerId: string, id: string };
     }) => {
     const res = await fetch(`${API_BASE_URL}/gigs/${employerId}/employer`);
     const data: TGigDetails[] = await res.json();
@@ -37,8 +36,8 @@ const Gigs = async ( {
                         </div>
                         <p className='text-xs'>{item.description}</p>
                         <div className='flex justify-between mt-4'>
-                        <Link href={`/${id}/profile/${employerId}/applications?gigId=${item.id}`} className={`${buttonVariants({ variant: "default" })} h-8`}>View Applications</Link>
-<Button variant='outline' className='h-8'>Edit Gig</Button>
+                            <Link href={`/${id}/profile/${employerId}/applications?gigId=${item.id}`} className={`${buttonVariants({ variant: "default" })} h-8`}>View Applications</Link>
+                            <EditGig employerId={employerId} userId={id} gig={item} /> 
                         </div>
                     </Card>
                 ))

@@ -20,8 +20,9 @@ export interface TGigDetails {
   duration: string;
   location: string | null;
   budget_range: string;
+  negotiable: 'true' | 'false';
   requirements: string;
-  industry_id: number;
+  industry_id: string;
   created_at: string;
   updated_at: string;
   is_active: boolean;
