@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { GigSchema, TGigSchema } from '@/lib/schemas';
@@ -8,7 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group'
 
 import { API_BASE_URL } from '@/lib/constants';
@@ -50,16 +52,17 @@ const EditGig = ({ employerId, userId, gig }: { employerId: string, userId: stri
                 form.reset();
                 return toast.success('Gig created successfully');
             } else {
-                toast.error('Failed to create gig');
+                toast.error('Failed to update gig');
             }
         } catch (error) {
-            toast.error('Failed to create gig');
+            toast.error('Failed to update gig');
+            console.log(error)
         }
     }
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button type='button'>
+                <Button type='button' variant='outline' className='h-8'>
                     Edit Gig
                 </Button>
             </DialogTrigger>

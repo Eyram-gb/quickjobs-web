@@ -8,7 +8,8 @@ import { API_BASE_URL } from "@/lib/constants"
 export default async function ApplicationsTable(
   {
     params: { employerId },
-    searchParams }:
+    searchParams 
+  }:
     {
       params: { employerId: string };
       searchParams: { [key: string]: string | string[] | undefined }
