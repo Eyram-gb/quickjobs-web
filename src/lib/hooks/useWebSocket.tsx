@@ -22,6 +22,7 @@ export interface Message {
 
 export interface UserChat {
     chatUser: string;
+    userId: string;
 }
 
 export const useWebSocket = ({ senderId, recipientId }: { senderId: string, recipientId: string }) => {
@@ -61,7 +62,7 @@ export const useWebSocket = ({ senderId, recipientId }: { senderId: string, reci
             }
         });
 
-        socket.emit('getUserChats', senderId, (response: SocketResponse<{ userChats: UserChat[] }>) => {
+        socket.emit('getUserChats', {userId: senderId, user_type:user?.user_type}, (response: SocketResponse<{ userChats: UserChat[] }>) => {
             console.log('Received user chats:', response);
             if (response.status === 'OK' && response.data) {
                 setUserChats(response.data.userChats);
@@ -73,7 +74,7 @@ export const useWebSocket = ({ senderId, recipientId }: { senderId: string, reci
             socket.off('connect');
             socket.off('receiveMessage');
         };
-    }, [senderId, recipientId, addMessage]);
+    }, [senderId, recipientId, addMessage, user?.user_type]);
 
     const sendMessage = useCallback((message: string) => {
         console.log('Sending message:', message);

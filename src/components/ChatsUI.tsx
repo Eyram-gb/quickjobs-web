@@ -11,16 +11,16 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { EllipsisVertical, SendHorizontal } from 'lucide-react';
-import { useWebSocket } from '@/lib/hooks/useWebSocket';
+import { UserChat, useWebSocket } from '@/lib/hooks/useWebSocket';
 import { useAuthStore } from '@/lib/store/authStore';
 import { getTime } from '@/lib/utils';
 
 const ChatsUI: React.FC = () => {
     const { user } = useAuthStore();
-    const [selectedChat, setSelectedChat] = useState<string | null>(null);
+    const [selectedChat, setSelectedChat] = useState<UserChat | null>(null);
     const { messages, userChats, sendMessage, getUserChats } = useWebSocket({
         senderId: user?.id || '',
-        recipientId: selectedChat || '',
+        recipientId: selectedChat?.userId || '',
     });
 
     useEffect(() => {
@@ -29,8 +29,8 @@ const ChatsUI: React.FC = () => {
         }
     }, [user, getUserChats]);
 
-    const handleChatSelect = (chatUserId: string) => {
-        setSelectedChat(chatUserId);
+    const handleChatSelect = (chat: UserChat) => {
+        setSelectedChat(chat);
     };
 
     const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,6 +41,8 @@ const ChatsUI: React.FC = () => {
             messageInput.value = '';
         }
     };
+
+    console.log(userChats)
 
     return (
         <div className="flex h-screen">
@@ -53,11 +55,11 @@ const ChatsUI: React.FC = () => {
                     />
                 </div>
                 <div className="flex-1 overflow-y-auto">
-                    {userChats.map(chat => (
+                    {userChats? userChats.map(chat => (
                         <div
                             key={chat.chatUser}
-                            className={`flex items-center p-4 border-b border-gray-300 cursor-pointer ${selectedChat === chat.chatUser ? 'bg-gray-200' : ''}`}
-                            onClick={() => handleChatSelect(chat.chatUser)}
+                            className={`flex items-center p-4 border-b border-gray-300 cursor-pointer ${selectedChat?.userId === chat.userId ? 'bg-gray-200' : ''}`}
+                            onClick={() => handleChatSelect(chat)}
                         >
                             <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div>
                             <div className="flex-1 min-w-0">
@@ -66,7 +68,7 @@ const ChatsUI: React.FC = () => {
                             </div>
                             <div className="text-gray-500 text-xs self-start mt-1">7:24pm</div>
                         </div>
-                    ))}
+                    )): <p>No User Chats</p>}
                 </div>
             </div>
             <div className="flex-1 flex flex-col">
@@ -74,7 +76,7 @@ const ChatsUI: React.FC = () => {
                     <>
                         <div className="p-4 border-b border-gray-300 flex justify-between items-center">
                             <div>
-                                <div className="font-bold">{selectedChat}</div>
+                                <div className="font-bold">{selectedChat.chatUser}</div>
                             </div>
                             <div>
                                 <DropdownMenu>
