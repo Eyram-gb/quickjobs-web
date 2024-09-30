@@ -62,7 +62,7 @@ export const useWebSocket = ({ senderId, recipientId }: { senderId: string, reci
             }
         });
 
-        socket.emit('getUserChats', {userId: senderId, user_type:user?.user_type}, (response: SocketResponse<{ userChats: UserChat[] }>) => {
+        socket.emit('getUserChats', { userId: senderId, user_type: user?.user_type }, (response: SocketResponse<{ userChats: UserChat[] }>) => {
             console.log('Received user chats:', response);
             if (response.status === 'OK' && response.data) {
                 setUserChats(response.data.userChats);

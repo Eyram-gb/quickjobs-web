@@ -55,7 +55,7 @@ const ChatsUI: React.FC = () => {
                     />
                 </div>
                 <div className="flex-1 overflow-y-auto">
-                    {userChats? userChats.map(chat => (
+                    {userChats ? userChats.map(chat => (
                         <div
                             key={chat.chatUser}
                             className={`flex items-center p-4 border-b border-gray-300 cursor-pointer ${selectedChat?.userId === chat.userId ? 'bg-gray-200' : ''}`}
@@ -68,7 +68,7 @@ const ChatsUI: React.FC = () => {
                             </div>
                             <div className="text-gray-500 text-xs self-start mt-1">7:24pm</div>
                         </div>
-                    )): <p>No User Chats</p>}
+                    )) : <p>No User Chats</p>}
                 </div>
             </div>
             <div className="flex-1 flex flex-col">

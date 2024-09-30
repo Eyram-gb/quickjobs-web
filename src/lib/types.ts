@@ -5,6 +5,8 @@ export interface TGig extends TGigSchema {
   user_id: string;
   employer_id: string;
   is_active: boolean;
+  company_logo: string;
+  company_name: string;
   is_deleted: boolean;
   created_at: Date;
   updated_at: Date;
