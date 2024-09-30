@@ -1,4 +1,4 @@
-import {EmployerNavBar} from '@/components/layout/EmployerNavBar'
+import { EmployerNavBar } from '@/components/layout/EmployerNavBar'
 import React from 'react'
 import DashboardSideBar from '@/components/DashboardSideBar';
 
@@ -6,7 +6,7 @@ const Layout = ({ children, params: { id } }: { children: React.ReactNode, param
 
     return (
         <div>
-            <EmployerNavBar />
+            {/* <EmployerNavBar /> */}
             <div className='grid grid-cols-8'>
                 <DashboardSideBar id={id} />
                 <div className='col-start-3 col-span-full'>

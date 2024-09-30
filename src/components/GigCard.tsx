@@ -15,7 +15,7 @@ const GigCard = ({ gig }: { gig: TGig }) => {
                     <div className='relative h-12 w-12'>
                         <Image alt='logo' src={gig.company_logo} fill className='object-cover rounded-full' />
                     </div>
-                        <h3 className='font-semibold text-sm'>{gig.company_name}</h3>
+                    <h3 className='font-semibold text-sm'>{gig.company_name}</h3>
                 </div>
                 <div className='mt-6'>
                     <h2 className='text-lg font-bold leading-none'>

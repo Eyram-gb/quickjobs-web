@@ -14,6 +14,7 @@ import { API_BASE_URL } from '@/lib/constants';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '@/lib/store/authStore';
 import { GigSchema, TGigSchema } from '@/lib/schemas';
+import { Pencil, X, Check } from 'lucide-react'; // Import Check icon
 
 const NewGigForm = ({ industries }: {
     industries: {
@@ -21,11 +22,50 @@ const NewGigForm = ({ industries }: {
         name: string
     }[]
 }) => {
+    const [requirements, setRequirements] = React.useState<string[]>([]);
+    const [newRequirement, setNewRequirement] = React.useState<string>(''); // State for new requirement input
+    const [editIndex, setEditIndex] = React.useState<number | null>(null); // Track the index of the requirement being edited
+
+    const addRequirement = () => {
+        if (newRequirement.trim() !== '') { // Check if the input is not empty
+            setRequirements([...requirements, newRequirement]); // Add the new requirement
+            setNewRequirement(''); // Clear the input field
+        }
+    };
+
+    const handleRequirementChange = (index: number, value: string) => {
+        const newRequirements = [...requirements];
+        newRequirements[index] = value;
+        setRequirements(newRequirements);
+    };
+
+    const deleteRequirement = (index: number) => {
+        const newRequirements = requirements.filter((_, i) => i !== index);
+        setRequirements(newRequirements);
+        if (editIndex === index) {
+            setEditIndex(null); // Reset edit index if the edited requirement is deleted
+        }
+    };
+
+    const startEditing = (index: number) => {
+        setEditIndex(index); // Set the index of the requirement to edit
+    };
+
+    const handleEditChange = (value: string) => {
+        if (editIndex !== null) {
+            handleRequirementChange(editIndex, value); // Update the requirement being edited
+        }
+    };
+
+    const saveEdit = () => {
+        setEditIndex(null); // Exit edit mode
+    };
+
     const form = useForm<TGigSchema>({
         resolver: zodResolver(GigSchema),
     });
     const {
-        formState: { isDirty, isSubmitting },
+        formState: { isDirty, isSubmitting }, control
     } = form;
 
     const { employer_profile, user } = useAuthStore();
@@ -35,6 +75,7 @@ const NewGigForm = ({ industries }: {
             const industry_id = Number(data.industry_id);
             const gigInfo = {
                 ...data,
+                requirements,
                 industry_id,
                 employer_id: employer_profile?.id,
                 user_id: user?.id
@@ -67,7 +108,7 @@ const NewGigForm = ({ industries }: {
                         Post a gig
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[625px]">
+                <DialogContent className="sm:max-w-[625px] max-h-screen customScroll overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Create a New Gig</DialogTitle>
                     </DialogHeader>
@@ -159,39 +200,40 @@ const NewGigForm = ({ industries }: {
                                         </FormItem>
                                     )}
                                 />
-                                <FormField
-                                    control={form.control}
-                                    name="negotiable"
-                                    render={({ field }) => (
-                                        <FormItem className="w-1/2">
-                                            <FormLabel className='text-lg font-semibold'>Negotiable</FormLabel>
-                                            <FormControl>
-                                                <RadioGroup
-                                                    onValueChange={field.onChange}
-                                                    defaultValue={field.value}
-                                                    className="flex gap-x-4"
-                                                >
-                                                    <FormItem className="flex items-center space-x-3 space-y-0">
-                                                        <FormControl>
-                                                            <RadioGroupItem value={'true'} />
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal">
-                                                            True
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                    <FormItem className="flex items-center space-x-3 space-y-0">
-                                                        <FormControl>
-                                                            <RadioGroupItem value={'false'} />
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal">False</FormLabel>
-                                                    </FormItem>
-                                                </RadioGroup>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                    <FormField
+                                        control={form.control}
+                                        name="negotiable"
+                                        render={({ field }) => (
+                                            <FormItem className="w-1/2">
+                                                <FormLabel className='text-lg font-semibold'>Negotiable</FormLabel>
+                                                <FormControl>
+                                                    <RadioGroup
+                                                        onValueChange={field.onChange}
+                                                        defaultValue={field.value}
+                                                        className="flex gap-x-4"
+                                                    >
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value={'true'} />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                True
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value={'false'} />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">False</FormLabel>
+                                                        </FormItem>
+                                                    </RadioGroup>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
                             </div>
+                            <div>
                             <FormField
                                 control={form.control}
                                 name="requirements"
@@ -199,14 +241,48 @@ const NewGigForm = ({ industries }: {
                                     <FormItem className='w-full'>
                                         <FormLabel className='text-lg font-semibold'>Requirements</FormLabel>
                                         <FormControl>
-                                            <Textarea placeholder="Gig description" {...field} className='resize-none' />
+                                            <Textarea 
+                                            placeholder="Gig description" 
+                                            {...field} 
+                                            className='resize-none' 
+                                            value={newRequirement}
+                                        onChange={(e) => setNewRequirement(e.target.value)}
+                                          />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                            <Button type='submit' disabled={!isDirty || isSubmitting} className='w-full'>
-                                Save
+                            <Button type='button' onClick={addRequirement} className='mt-2'>
+                                        Add Requirement
+                                    </Button>
+                            <div className='my-4'>
+                                    <ul className='w-full space-y-3'>
+                                        {requirements.map((req, index) => (
+                                            <li key={index} className='relative text-xs w-full'>
+                                                    <Input
+                                                        value={req}
+                                                        onChange={(e) => handleEditChange(e.target.value)}
+                                                        className='w-full'
+                                                        disabled={editIndex !== index}
+                                                        onBlur={saveEdit} // Stop editing on blur
+                                                    />
+                                                <div className='absolute top-3 right-4 flex gap-x-2'>
+                                                    {editIndex === index ? (
+                                                        <Check size={16} className='cursor-pointer text-green-600' onClick={saveEdit} />
+                                                    ) : (
+                                                        <Pencil size={15} className='cursor-pointer' onClick={() => startEditing(index)} />
+                                                    )}
+                                                    <X size={16} className='text-rose-500 cursor-pointer' onClick={() => deleteRequirement(index)} />
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                            </div>
+                            </div>
+                            <Button type='submit' disabled={!isDirty || isSubmitting} className='w-full mt-8'>
+                                Create Gig
                             </Button>
                         </form>
                     </Form>

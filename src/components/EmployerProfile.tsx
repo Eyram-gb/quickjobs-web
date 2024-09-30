@@ -17,18 +17,6 @@ const EmployerProfile = ({ industries }: {
     }[]
 }) => {
     const { employer_profile, user } = useAuthStore();
-    // export const employerSideTabs: SideTabsProps[] = [
-    //     {
-    //         name: "My Gigs",
-    //         href: `/${user?.id}/profile/${employer_profile?.id}`,
-    //         icon: <BriefcaseBusiness />,
-    //     },
-    //     {
-    //         name: "Dashboard",
-    //         href: "/profile/dashboard",
-    //         icon: <ChartColumnIncreasing />,
-    //     },
-    // ];
     return (
         <>
             <div className=''>

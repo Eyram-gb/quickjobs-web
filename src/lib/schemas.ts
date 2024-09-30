@@ -31,7 +31,7 @@ export const GigSchema = z.object({
   requirements: z.string({
     description: "Skills required for the gig",
     required_error: "Skills are required",
-  }),
+  }).array().optional(),
 });
 
 export type TGigSchema = z.infer<typeof GigSchema>;

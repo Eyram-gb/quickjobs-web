@@ -9,11 +9,11 @@ import { TGig } from '@/lib/types';
 import { useAuthStore } from '@/lib/store/authStore';
 import { DialogTrigger, Dialog, DialogContent, DialogDescription, DialogTitle } from './ui/dialog';
 import ApplyGig from './forms/ApplyGig';
+import EditGig from './forms/EditGig';
 
 const GigDetails = ({ gig }: { gig: TGig }) => {
-    const { user } = useAuthStore();
+    const { client_profile, user, employer_profile } = useAuthStore()
     const isGigCreator = user?.id === gig.user_id;
-    const { client_profile } = useAuthStore()
     return (
         <>
             <div className='p-24'>
@@ -40,8 +40,15 @@ const GigDetails = ({ gig }: { gig: TGig }) => {
                             </div>
                             <div>
                                 <h2 className='text-lg font-semibold'>Requirements</h2>
-                                <p className='text-sm'>{gig.requirements}
-                                </p>
+                                {gig?.requirements ? (
+                                    gig.requirements.map((item, index) => (
+                                        <p className='text-sm' key={index}>
+                                            {item}
+                                        </p>
+                                    ))
+                                ) : (
+                                    <p className='text-sm'>No requirements available.</p>
+                                )}
                             </div>
                             <div>
                                 <h2 className='text-lg font-semibold'>Tags</h2>
@@ -56,12 +63,24 @@ const GigDetails = ({ gig }: { gig: TGig }) => {
                             <div className='flex'>
                                 <Dialog>
                                     <DialogTrigger>
-                                        <Button size='lg' className='w-64 mx-auto'>{isGigCreator ? 'Edit Gig' : 'Apply'}</Button>
+                                        <>
+                                            {user?.user_type === 'client' && <Button size='lg' className='w-64 mx-auto'>Apply</Button>}
+                                            {isGigCreator && <Button size='lg' className='w-64 mx-auto'>Edit gig</Button>}
+                                        </>
                                     </DialogTrigger>
                                     <DialogContent>
                                         <DialogTitle>Are you absolutely sure?</DialogTitle>
                                         <div>
-                                            <ApplyGig gigId={gig.id} applicantId={client_profile?.id as string} />
+                                            {isGigCreator ? <ApplyGig
+                                             gigId={gig.id}
+                                              applicantId={client_profile?.id as string} 
+                                              /> 
+                                            : <EditGig 
+                                            employerId={employer_profile?.id as string} 
+                                            gig={gig} 
+                                            userId={user?.id as string} 
+                                            />
+                                            }
                                         </div>
                                     </DialogContent>
                                 </Dialog>
