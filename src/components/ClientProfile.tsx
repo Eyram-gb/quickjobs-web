@@ -4,9 +4,10 @@ import { useAuthStore } from '@/lib/store/authStore'
 import { BriefcaseBusiness, ChartColumnIncreasing, House } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react'
+import { EditClientProfile } from './forms/EditClientProfile';
 
 const ClientProfile = () => {
-  const {client_profile} = useAuthStore();
+  const { client_profile } = useAuthStore();
   return (
     <div className=''>
       <div className=''>
@@ -18,8 +19,9 @@ const ClientProfile = () => {
             <div className='bg-teal-100 h-28 w-28 border-4 border-white rounded-full -mt-12 relative z-10 overflow-hidden'>
               <Image alt='logo' src={client_profile?.profile_url || ''} fill className='object-cover' />
             </div>
-            <div>
+            <div className='flex justify-between items-center'>
               <h2 className='text-2xl font-bold'>{`${client_profile?.first_name} ${client_profile?.last_name}`}</h2>
+              <EditClientProfile />
             </div>
           </div>
         </div>
