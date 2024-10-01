@@ -8,6 +8,7 @@ import { ArrowUpRight, BriefcaseBusiness, ChartColumnIncreasing, House } from 'l
 import Image from 'next/image'
 import React from 'react'
 import { SideTabsProps } from './SideTabs';
+import { EditEmployerProfile } from './forms/EditEmployerProfile';
 
 
 const EmployerProfile = ({ industries }: {
@@ -33,8 +34,9 @@ const EmployerProfile = ({ industries }: {
                                 <h2 className='text-2xl font-bold'>{employer_profile?.name}</h2>
                             </div>
                         </div>
-                        <div>
+                        <div className='flex gap-5'>
                             <NewGigForm industries={industries} />
+                            <EditEmployerProfile />
                         </div>
                     </div>
                     {/* <hr className='mx-8 my-6' /> */}

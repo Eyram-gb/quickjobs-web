@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useRouter } from 'next/navigation';
 
-const clientSchema = z.object({
+export const clientSchema = z.object({
     first_name: z.string({
         description: 'First name of user.',
         required_error: 'Please enter a valid email address'

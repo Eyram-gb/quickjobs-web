@@ -14,7 +14,7 @@ import toast from 'react-hot-toast';
 import {useRouter} from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
 
-const companySchema = z.object({
+export const companySchema = z.object({
     name: z.string({
         description: 'Company name',
         required_error: 'Please enter a company name',
