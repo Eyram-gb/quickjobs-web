@@ -71,7 +71,7 @@ const GigDetails = ({ gig }: { gig: TGig }) => {
                                     <DialogContent>
                                         <DialogTitle>Are you absolutely sure?</DialogTitle>
                                         <div>
-                                            {isGigCreator ? <ApplyGig
+                                            {!isGigCreator ? <ApplyGig
                                              gigId={gig.id}
                                               applicantId={client_profile?.id as string} 
                                               /> 

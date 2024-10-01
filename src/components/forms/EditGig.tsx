@@ -32,10 +32,10 @@ const EditGig = ({ employerId, userId, gig }: { employerId: string, userId: stri
 
     const onSubmit: SubmitHandler<TGigSchema> = async (data) => {
         try {
-            const industry_id = Number(data.industry_id);
+            // const industry_id = Number(data.industry_id);
             const gigInfo = {
                 ...data,
-                industry_id,
+                // industry_id,
                 employer_id: employerId,
                 user_id: userId
             }
@@ -49,8 +49,7 @@ const EditGig = ({ employerId, userId, gig }: { employerId: string, userId: stri
             });
 
             if (res.status === 201) {
-                form.reset();
-                return toast.success('Gig created successfully');
+                return toast.success('Gig edited successfully');
             } else {
                 toast.error('Failed to update gig');
             }
@@ -60,26 +59,60 @@ const EditGig = ({ employerId, userId, gig }: { employerId: string, userId: stri
         }
     }
     return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button type='button' variant='outline' className='h-8'>
-                    Edit Gig
-                </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[625px]">
-                <DialogHeader>
-                    <DialogTitle>Update Gig Details</DialogTitle>
-                </DialogHeader>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2'>
+        <>
+
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2'>
+                    <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                            <FormItem className='w-full'>
+                                <FormLabel className='text-lg font-semibold'>Title</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="HR Consulting" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem className='w-full'>
+                                <FormLabel className='text-lg font-semibold'>Description</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="Gig description" {...field} className='resize-none' />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <div className='flex gap-x-4 w-full '>
                         <FormField
                             control={form.control}
-                            name="title"
+                            name="duration"
                             render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel className='text-lg font-semibold'>Title</FormLabel>
+                                <FormItem className='w-1/2'>
+                                    <FormLabel className='text-lg font-semibold'>Duration</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="HR Consulting" {...field} />
+                                        <Input placeholder="14 working days" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <div className='flex gap-x-4 w-full'>
+                        <FormField
+                            control={form.control}
+                            name="budget_range"
+                            render={({ field }) => (
+                                <FormItem className='w-1/2'>
+                                    <FormLabel className='text-lg font-semibold'>Budget</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="$3200" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -87,99 +120,56 @@ const EditGig = ({ employerId, userId, gig }: { employerId: string, userId: stri
                         />
                         <FormField
                             control={form.control}
-                            name="description"
+                            name="negotiable"
                             render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel className='text-lg font-semibold'>Description</FormLabel>
+                                <FormItem className="w-1/2">
+                                    <FormLabel className='text-lg font-semibold'>Negotiable</FormLabel>
                                     <FormControl>
-                                        <Textarea placeholder="Gig description" {...field} className='resize-none' />
+                                        <RadioGroup
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                            className="flex gap-x-4"
+                                        >
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem value={'true'} />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    True
+                                                </FormLabel>
+                                            </FormItem>
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem value={'false'} />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">False</FormLabel>
+                                            </FormItem>
+                                        </RadioGroup>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <div className='flex gap-x-4 w-full '>
-                            <FormField
-                                control={form.control}
-                                name="duration"
-                                render={({ field }) => (
-                                    <FormItem className='w-1/2'>
-                                        <FormLabel className='text-lg font-semibold'>Duration</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="14 working days" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <div className='flex gap-x-4 w-full'>
-                            <FormField
-                                control={form.control}
-                                name="budget_range"
-                                render={({ field }) => (
-                                    <FormItem className='w-1/2'>
-                                        <FormLabel className='text-lg font-semibold'>Budget</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder="$3200" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="negotiable"
-                                render={({ field }) => (
-                                    <FormItem className="w-1/2">
-                                        <FormLabel className='text-lg font-semibold'>Negotiable</FormLabel>
-                                        <FormControl>
-                                            <RadioGroup
-                                                onValueChange={field.onChange}
-                                                defaultValue={field.value}
-                                                className="flex gap-x-4"
-                                            >
-                                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                                    <FormControl>
-                                                        <RadioGroupItem value={'true'} />
-                                                    </FormControl>
-                                                    <FormLabel className="font-normal">
-                                                        True
-                                                    </FormLabel>
-                                                </FormItem>
-                                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                                    <FormControl>
-                                                        <RadioGroupItem value={'false'} />
-                                                    </FormControl>
-                                                    <FormLabel className="font-normal">False</FormLabel>
-                                                </FormItem>
-                                            </RadioGroup>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <FormField
-                            control={form.control}
-                            name="requirements"
-                            render={({ field }) => (
-                                <FormItem className='w-full'>
-                                    <FormLabel className='text-lg font-semibold'>Requirements</FormLabel>
-                                    <FormControl>
-                                        <Textarea placeholder="Gig description" {...field} className='resize-none' />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <Button type='submit' disabled={!isDirty || isSubmitting} className='w-full'>
-                            Save
-                        </Button>
-                    </form>
-                </Form>
-            </DialogContent>
-        </Dialog>
+                    </div>
+                    <FormField
+                        control={form.control}
+                        name="requirements"
+                        render={({ field }) => (
+                            <FormItem className='w-full'>
+                                <FormLabel className='text-lg font-semibold'>Requirements</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="Gig description" {...field} className='resize-none' />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <Button type='submit' disabled={!isDirty || isSubmitting} className='w-full'>
+                        Save
+                    </Button>
+                </form>
+            </Form>
+        </>
     )
 }
 

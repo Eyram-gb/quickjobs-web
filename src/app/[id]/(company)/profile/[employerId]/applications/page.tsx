@@ -4,6 +4,7 @@
 import { Application, columns } from "@/components/tables/columns";
 import { DataTable } from "@/components/tables/DataTable";
 import { API_BASE_URL } from "@/lib/constants"
+import React from "react";
 
 export default async function ApplicationsTable(
   {

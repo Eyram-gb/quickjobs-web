@@ -15,7 +15,7 @@ export const EmployerNavBar = () => {
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
               <a href="/" className="text-xl font-bold">
-                QuickJobs
+                QuickJobsxx
               </a>
             </div>
             <div className="hidden md:block">

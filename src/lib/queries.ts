@@ -50,7 +50,9 @@ export const getGigById = async (id: string) => {
 
 export const employerGigs = async (employer_id: string) => {
   try{
-    const res = await fetch(`${API_BASE_URL}/gigs/${employer_id}/employer`);
+    const res = await fetch(`${API_BASE_URL}/gigs/${employer_id}/employer`, {
+      cache: "no-store",
+    });
     const data = (await res.json()) as TGig[];
     if (res.status === 200) {
       return data;

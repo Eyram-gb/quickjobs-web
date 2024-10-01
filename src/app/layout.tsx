@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner"
 import { queryClient } from "@/lib/queryclient";
 import MainLayout from "@/components/layout/MainLayout";
+import React from "react";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 

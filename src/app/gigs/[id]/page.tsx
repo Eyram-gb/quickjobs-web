@@ -12,9 +12,7 @@ const GigByID = async ({
     const gig = await getGigById(id)
     if (!gig) return <h1>Gig Not found</h1>
     return (
-        <MainLayout>
-            <GigDetails gig={gig} />
-        </MainLayout>
+        <GigDetails gig={gig} />
     )
 }
 

@@ -15,8 +15,7 @@ const MainLayout = ({
     return (
         <>
             {/* <NavBar /> */}
-            {!user && <NavBar />}
-            {user && user?.user_type === 'client' ? <ClientNavBar /> : <EmployerNavBar />}
+            {!user ? <NavBar /> : (user.user_type === 'client' ? <ClientNavBar /> : <EmployerNavBar />)}
             <div>{children}</div>
             <footer></footer>
         </>
