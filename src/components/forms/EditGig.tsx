@@ -61,7 +61,7 @@ const EditGig = ({ employerId, userId, gig }: { employerId: string, userId: stri
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button type='button' variant='outline' className='h-8'>
+                <Button type='button' variant='secondary' className='h-8'>
                     Edit Gig
                 </Button>
             </DialogTrigger>

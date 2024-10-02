@@ -16,7 +16,7 @@ export const EmployerNavBar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
-              <a href="/" className="text-xl font-bold flex gap-2 items-center">
+              <a href="/" className="text-xl font-bold flex gap-2 items-center relative">
                 <img src="/logo.svg" alt="logo" className='h-8' />
                 <p className='text-2xl font-medium'>Quickjobs</p>
               </a>

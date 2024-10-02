@@ -95,9 +95,9 @@ const ChatsUI: React.FC = () => {
                             {messages.map(message => (
                                 <div key={message.id} className={`flex mb-4 ${message.sender_id === user?.id ? 'justify-end' : ''}`}>
                                     {message.sender_id !== user?.id && <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div>}
-                                    <div className={`p-2 rounded-lg max-w-xs ${message.sender_id === user?.id ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                                        <div className='text-xs'>{message.message_text}</div>
-                                        <div className="text-gray-500 text-[10px] mt-2 flex justify-end leading-none">
+                                    <div className={`p-1.5 rounded-lg max-w-xs ${message.sender_id === user?.id ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                                        <div className='text-xs mr-10'>{message.message_text}</div>
+                                        <div className="text-gray-500 text-[10px] flex justify-end leading-none">
                                             {getTime(message?.created_at as Date)}
                                         </div>
                                     </div>
