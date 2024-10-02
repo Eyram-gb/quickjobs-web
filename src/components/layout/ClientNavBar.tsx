@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { LogOut, Mail, Settings, UserRound, UserCog } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react'
+import { useRouter } from 'next/navigation';
 
 export const ClientNavBar = () => {
   const { isAuthenticated, client_profile, logout, user } = useAuthStore();
@@ -14,8 +15,9 @@ export const ClientNavBar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
-              <a href="/" className="text-xl font-bold">
-                QuickJobs
+              <a href="/" className="text-xl font-bold flex gap-2 items-center">
+                <img src="/logo.svg" alt="logo" className='h-8'/>
+                <p className='text-2xl font-medium'>Quickjobs</p>
               </a>
             </div>
             <div className="hidden md:block">
@@ -45,6 +47,7 @@ export const ClientNavBar = () => {
 
 export const ClientNavProfile = () => {
   const { client_profile, logout, user } = useAuthStore();
+    const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -87,7 +90,10 @@ export const ClientNavProfile = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className='flex gap-x-4'
-          onClick={logout}
+          onClick={()=> {
+            router.push('/');
+            logout()
+          }}
         //  onClick={() => {
         //   localStorage.removeItem('jwt');
         //   window.location.reload();

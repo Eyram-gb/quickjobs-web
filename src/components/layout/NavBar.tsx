@@ -10,7 +10,12 @@ const NavBar = () => {
   const { isAuthenticated, user } = useAuthStore();
   return (
     <nav className='flex justify-between px-12 py-4'>
-      <h2 className='text-4xl font-bold'>Quickjobs</h2>
+      <div className="flex-shrink-0">
+        <a href="/" className="text-xl font-bold flex gap-2 items-center">
+          <img src="/logo.svg" alt="logo" className='h-8' />
+          <p className='text-2xl font-medium'>Quickjobs</p>
+        </a>
+      </div>
       <ul className='flex gap-x-4 items-center'>
         <li>Home</li>
         <li>
@@ -19,7 +24,9 @@ const NavBar = () => {
         <li>Services</li>
       </ul>
       {!isAuthenticated ? <div className='flex gap-x-2'>
-        <Button variant='outline'>Login</Button>
+        <Button variant='outline'>
+          <Link href='/login'>Login</Link>
+        </Button>
         <Button className=''>
           <Link href='/register'>Register</Link>
         </Button>

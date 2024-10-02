@@ -50,7 +50,7 @@ export function EditEmployerProfile() {
                 },
                 body: JSON.stringify({ ...data, user_id: user?.id }),
             });
-            const newEmployerRes = await res.json();
+            const updatedRes = await res.json();
             if (res.status !== 201) {
                 throw new Error('Failed to update your profile. Please try again.');
             }
@@ -58,7 +58,7 @@ export function EditEmployerProfile() {
             if (res.status === 201) {
                 // form.reset();
                 toast.success('Your company profile has been updated successfully.');
-                setEmployerProfile(newEmployerRes);
+                setEmployerProfile(updatedRes);
                 return router.refresh();
             }
 

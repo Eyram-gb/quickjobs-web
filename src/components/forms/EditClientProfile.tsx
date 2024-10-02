@@ -24,7 +24,7 @@ import { clientSchema, TClientSchema } from "./NewClientForm";
 
 
 export function EditClientProfile() {
-    const { setEmployerProfile, user, client_profile } = useAuthStore();
+    const { setClientProfile, user, client_profile } = useAuthStore();
     const form = useForm<TClientSchema>({
         resolver: zodResolver(clientSchema),
         defaultValues: {
@@ -45,14 +45,14 @@ export function EditClientProfile() {
 
     const onSubmit: SubmitHandler<TClientSchema> = async (data) => {
         try {
-            const res = await fetch(`${API_BASE_URL}/users/applicant/${client_profile?.id}`, {
+            const res = await fetch(`${API_BASE_URL}/users/applicants/d76ce434-8105-49e8-ac3a-7d39c424e6eb`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ ...data, user_id: user?.id, email: user?.email }),
             });
-            const newEmployerRes = await res.json();
+            const updatedRes = await res.json();
             if (res.status !== 201) {
                 throw new Error('Failed to update your profile. Please try again.');
             }
@@ -60,7 +60,7 @@ export function EditClientProfile() {
             if (res.status === 201) {
                 // form.reset();
                 toast.success('Your profile has been updated successfully.');
-                setEmployerProfile(newEmployerRes);
+                setClientProfile(updatedRes);
                 return router.refresh();
             }
 
@@ -73,7 +73,7 @@ export function EditClientProfile() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline">Update Profile</Button>
+                <Button>Update Profile</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -162,14 +162,11 @@ export function EditClientProfile() {
                                 </FormItem>
                             )}
                         />
-                        <Button type='submit' disabled={!isDirty || isSubmitting}>
+                        <Button type='submit' disabled={!isDirty || isSubmitting} className='w-full mt-4'>
                             Save
                         </Button>
                     </form>
                 </Form>
-                <DialogFooter>
-                    <Button type="submit">Save changes</Button>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     )

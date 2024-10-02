@@ -3,13 +3,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, LoaderCircle } from 'lucide-react'
 import React, { useState } from 'react'
 import { useAuthStore } from '@/lib/store/authStore';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import { API_BASE_URL } from '@/lib/constants'
 
 const LoginSchema = z.object({
   email: z.string({
@@ -25,7 +26,8 @@ type TLogin = z.infer<typeof LoginSchema>
 const Login = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { isAuthenticated, login, user } = useAuthStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const { isAuthenticated, login, user, setClientProfile, setEmployerProfile } = useAuthStore();
   const form = useForm<TLogin>();
 
   const { formState: { isDirty, isSubmitting }, handleSubmit } = form;
@@ -33,6 +35,7 @@ const Login = () => {
   const onSubmit: SubmitHandler<TLogin> = async (data) => {
     const { email, password } = data;
     try {
+      setIsLoading(true)
       const loginRes = await fetch(`/api/login`, {
         method: 'POST',
         headers: {
@@ -41,7 +44,6 @@ const Login = () => {
         credentials: 'include',
         body: JSON.stringify({ email, password })
       })
-      form.reset();
       const { user } = await loginRes.json() as {
         user: {
           id: string,
@@ -51,8 +53,26 @@ const Login = () => {
         message: string,
       };
       if (loginRes.status === 201) {
+        const profileRes = await fetch(`${API_BASE_URL}/users/${user.user_type === 'client' ? 'applicants' : 'employers'}/${user.id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include'
+        })
+
+        const profile = await profileRes.json()
+
+        if (profile) {
+          if (user.user_type === 'client') {
+            setClientProfile(profile)
+          } else {
+            setEmployerProfile(profile)
+          }
+        }
         login(user)
-        return router.push(`/${user.id}/${user.user_type==='client'? 'client-profile': ''}`);
+        setIsLoading(false)
+        return router.push(`/${user.id}/${user.user_type === 'client' ? 'client-profile' : 'profile'}`);
         // return toast.success('login successful');
       } else {
         return toast.error('login failed');
@@ -66,9 +86,9 @@ const Login = () => {
   return (
     <div className='flex flex-col h-screen justify-center items-center '>
       <Form {...form}>
-        <Card className='p-5 h-fit w-fit'>
+        <Card className='p-4 h-fit w-fit'>
           <CardHeader>
-            <CardTitle>Login</CardTitle>
+            <CardTitle className='text-center'>Login</CardTitle>
           </CardHeader>
           <form onSubmit={handleSubmit(onSubmit)} className='w-80 max-w-sm space-y-3'>
             <FormField
@@ -114,7 +134,13 @@ const Login = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmitting || !isDirty} className='w-full'>Login</Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting || !isDirty || isLoading}
+              className='w-full'
+            >
+              {isLoading || isSubmitting ? <LoaderCircle className='text-base animate-spin' /> : 'Login'}
+            </Button>
           </form>
           <p className='text-xs pt-1.5'>Don&apos;t have an account? <a href="/register" className='text-sky-500 hover:underline'>Sign up</a></p>
         </Card>
