@@ -46,6 +46,7 @@ const ChatsUI: React.FC = () => {
 
     return (
         <div className="flex h-screen">
+           {userChats && userChats.length > 0 ? <>
             <div className="w-1/3 border-r border-gray-300 flex flex-col">
                 <div className="p-3 border-b border-gray-300">
                     <Input
@@ -120,6 +121,7 @@ const ChatsUI: React.FC = () => {
                     </div>
                 )}
             </div>
+            </>: <p className='mt-32 w-2/3 mx-auto'>You have no chats as at this moment. You&apos;ll be contacted by an employer if your application is accepted🤞🏼</p>}
         </div>
     );
 };

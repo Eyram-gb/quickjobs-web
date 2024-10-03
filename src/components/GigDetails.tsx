@@ -40,15 +40,17 @@ const GigDetails = ({ gig }: { gig: TGig }) => {
                             </div>
                             <div>
                                 <h2 className='text-lg font-semibold'>Requirements</h2>
-                                {gig?.requirements ? (
-                                    gig.requirements.map((item, index) => (
-                                        <p className='text-sm' key={index}>
-                                            {item}
-                                        </p>
-                                    ))
-                                ) : (
-                                    <p className='text-sm'>No requirements available.</p>
-                                )}
+                                <ul className='list-disc list-inside'>
+                                    {gig?.requirements ? (
+                                        gig.requirements.map((item, index) => (
+                                            <li className='text-sm' key={index}>
+                                                {item}
+                                            </li>
+                                        ))
+                                    ) : (
+                                        <p className='text-sm'>No requirements available.</p>
+                                    )}
+                                </ul>
                             </div>
                             <div>
                                 <h2 className='text-lg font-semibold'>Tags</h2>
@@ -72,14 +74,14 @@ const GigDetails = ({ gig }: { gig: TGig }) => {
                                         <DialogTitle>Are you absolutely sure?</DialogTitle>
                                         <div>
                                             {!isGigCreator ? <ApplyGig
-                                             gigId={gig.id}
-                                              applicantId={client_profile?.id as string} 
-                                              /> 
-                                            : <EditGig 
-                                            employerId={employer_profile?.id as string} 
-                                            gig={gig} 
-                                            userId={user?.id as string} 
+                                                gigId={gig.id}
+                                                applicantId={client_profile?.id as string}
                                             />
+                                                : <EditGig
+                                                    employerId={employer_profile?.id as string}
+                                                    gig={gig}
+                                                    userId={user?.id as string}
+                                                />
                                             }
                                         </div>
                                     </DialogContent>

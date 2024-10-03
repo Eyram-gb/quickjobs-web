@@ -17,12 +17,13 @@ const GigCard = ({ gig }: { gig: TGig }) => {
                     </div>
                     <h3 className='font-semibold text-sm'>{gig.company_name}</h3>
                 </div>
-                <div className='mt-6'>
+                <div className='mt-4'>
                     <h2 className='text-lg font-bold leading-none'>
                         {gig.title}
                     </h2>
                     <p className='text-xs mt-1.5'>
                         {gig.description.slice(0, 100)}
+                        {gig.description.length > 100? '...': ''}
                     </p>
                 </div>
                 {/* <div className='flex gap-1 flex-wrap mt-1.5'>

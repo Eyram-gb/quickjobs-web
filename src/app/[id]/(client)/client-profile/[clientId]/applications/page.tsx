@@ -12,7 +12,9 @@ interface TClientApplication {
 }
 
 export default async function ClientApplications({ params: { clientId } }: { params: { clientId: string } }) {
-    const res = await fetch(`${API_BASE_URL}/applications/client/${clientId}`)
+    const res = await fetch(`${API_BASE_URL}/applications/client/${clientId}`, {
+        cache: "no-store",
+    })
     const data: TClientApplication[] = await res.json();
     console.log(data)
     function getStatusClass(status: string) {
@@ -33,7 +35,7 @@ export default async function ClientApplications({ params: { clientId } }: { par
                 data.map((item,idx) =>{
                     return(
 
-            <Card className='p-2 w-52' key={idx}>
+            <Card className='p-2 w-56' key={idx}>
                 <div className='flex justify-end'>
                    <Badge
                     variant="outline"
@@ -43,7 +45,10 @@ export default async function ClientApplications({ params: { clientId } }: { par
                 </Badge>
                 </div>
                 <p className='font-semibold'>{item.gig_title}</p>
-                <p className='text-xs text-gray-400 leading-tight'>{item.gig_description}</p>
+                <p className='text-xs text-gray-400 leading-tight'>
+                    {item.gig_description.slice(0, 100)}
+                        {item.gig_description.length > 100? '...': ''}
+                        </p>
             </Card>
                     )
                 })

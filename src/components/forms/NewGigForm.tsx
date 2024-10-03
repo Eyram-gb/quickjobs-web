@@ -22,6 +22,7 @@ const NewGigForm = ({ industries }: {
         name: string
     }[]
 }) => {
+    const [open, setOpen] = React.useState(false)
     const [requirements, setRequirements] = React.useState<string[]>([]);
     const [newRequirement, setNewRequirement] = React.useState<string>(''); // State for new requirement input
     const [editIndex, setEditIndex] = React.useState<number | null>(null); // Track the index of the requirement being edited
@@ -91,6 +92,7 @@ const NewGigForm = ({ industries }: {
 
             if (res.status === 201) {
                 form.reset();
+                setOpen(false)
                 return toast.success('Gig created successfully');
             } else {
                 toast.error('Failed to create gig');
@@ -102,7 +104,7 @@ const NewGigForm = ({ industries }: {
 
     return (
         <>
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                     <Button type='button'>
                         Post a gig
@@ -267,7 +269,7 @@ const NewGigForm = ({ industries }: {
                                                         disabled={editIndex !== index}
                                                         onBlur={saveEdit} // Stop editing on blur
                                                     />
-                                                <div className='absolute top-3 right-4 flex gap-x-2'>
+                                                <div className='absolute top-3 right-3 flex gap-x-2 bg-white'>
                                                     {editIndex === index ? (
                                                         <Check size={16} className='cursor-pointer text-green-600' onClick={saveEdit} />
                                                     ) : (
