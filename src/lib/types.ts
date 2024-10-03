@@ -7,6 +7,10 @@ export interface TGig extends TGigSchema {
   is_active: boolean;
   company_logo: string;
   company_name: string;
+  application_count:string;
+  schedule: string;
+  remote: boolean;
+  experience: string;
   is_deleted: boolean;
   created_at: Date;
   updated_at: Date;

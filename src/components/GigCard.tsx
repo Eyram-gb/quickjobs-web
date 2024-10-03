@@ -9,21 +9,33 @@ const GigCard = ({ gig }: { gig: TGig }) => {
     console.log(gig)
     return (
         <Link href={`/gigs/${gig.id}`}>
-            <div className='w-64 rounded-lg border transition duration-300 hover:shadow-lg p-4 h-64 flex flex-col'>
+            <div className='w-72 rounded-lg border transition duration-300 hover:shadow-lg p-4 h-60 flex flex-col'>
                 <h3 className='text-[10px] font-black text-gray-500 ml-auto'>{getRelativeTime(gig.created_at)}</h3>
                 <div className='flex gap-1.5 items-center'>
-                    <div className='relative h-12 w-12'>
+                    <div className='relative h-10 w-10'>
                         <Image alt='logo' src={gig.company_logo} fill className='object-cover rounded-full' />
                     </div>
-                    <h3 className='font-semibold text-sm'>{gig.company_name}</h3>
+                    <div className=''>
+                        <h2 className='text-sm font-semibold leading-none mt-1'>{gig.title}</h2>
+                        <div className='flex gap-0.5 items-center'>
+                            <h3 className='text-xs text-gray-500 font-semibold'>{gig.company_name}</h3>
+                            <p className='font-bold'>&#183;</p>
+                            <h3 className='text-xs text-gray-400 font-semibold'>{gig.application_count} Applicants</h3>
+                        </div>
+                    </div>
                 </div>
-                <div className='mt-4'>
-                    <h2 className='text-lg font-bold leading-none'>
+                <div className='flex gap-2 flex-wrap mt-3'>
+                    <div className='bg-purple-100 text-purple-800 rounded-md text-xs w-fit p-1 font-semibold'>{gig.experience}</div>
+                    <div className='bg-emerald-100 text-emerald-800 rounded-md text-xs w-fit p-1 font-semibold'>{gig.schedule}</div>
+                    {gig.remote && <div className='bg-amber-100 text-amber-800 rounded-md text-xs w-fit p-1 font-semibold'>Remote</div>}
+                </div>
+                <div className='mt-3'>
+                    {/* <h2 className='text-lg font-bold leading-none'>
                         {gig.title}
-                    </h2>
+                    </h2> */}
                     <p className='text-xs mt-1.5'>
                         {gig.description.slice(0, 100)}
-                        {gig.description.length > 100? '...': ''}
+                        {gig.description.length > 100 ? '...' : ''}
                     </p>
                 </div>
                 {/* <div className='flex gap-1 flex-wrap mt-1.5'>

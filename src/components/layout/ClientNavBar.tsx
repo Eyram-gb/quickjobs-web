@@ -16,7 +16,7 @@ export const ClientNavBar = () => {
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
               <a href="/" className="text-xl font-bold flex gap-2 items-center">
-                <img src="/logo.svg" alt="logo" className='h-8'/>
+                <img src="/logo.svg" alt="logo" className='h-8' />
                 <p className='text-2xl font-medium'>Quickjobs</p>
               </a>
             </div>
@@ -47,7 +47,7 @@ export const ClientNavBar = () => {
 
 export const ClientNavProfile = () => {
   const { client_profile, logout, user } = useAuthStore();
-    const router = useRouter();
+  const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -90,7 +90,7 @@ export const ClientNavProfile = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className='flex gap-x-4'
-          onClick={()=> {
+          onClick={() => {
             router.push('/');
             logout()
           }}

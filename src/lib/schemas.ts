@@ -24,14 +24,29 @@ export const GigSchema = z.object({
     description: "Is budget for the gig negotiable",
     required_error: "Negotiable field is required",
   }),
+  remote: z.enum(["true", "false"], {
+    description: "Is budget for the gig negotiable",
+    required_error: "Negotiable field is required",
+  }),
+  schedule: z.enum(["part-time", "full-time"], {
+    description: "Schedule for the gig",
+    required_error: "Schedule field is required",
+  }),
+  experience: z.enum(["entry level", "intermediate", 'expect'], {
+    description: "Schedule for the gig",
+    required_error: "Schedule field is required",
+  }),
   budget_range: z.string({
     description: "Budget range of the gig",
     required_error: "Budget is required",
   }),
-  requirements: z.string({
-    description: "Skills required for the gig",
-    required_error: "Skills are required",
-  }).array().optional(),
+  requirements: z
+    .string({
+      description: "Skills required for the gig",
+      required_error: "Skills are required",
+    })
+    .array()
+    .optional(),
 });
 
 export type TGigSchema = z.infer<typeof GigSchema>;

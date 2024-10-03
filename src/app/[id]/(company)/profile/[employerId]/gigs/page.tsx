@@ -13,7 +13,9 @@ const Gigs = async ({
     {
         params: { employerId: string, id: string };
     }) => {
-    const res = await fetch(`${API_BASE_URL}/gigs/${employerId}/employer`);
+    const res = await fetch(`${API_BASE_URL}/gigs/${employerId}/employer`, {
+      cache: "no-store",
+    });
     const data: TGigDetails[] = await res.json();
 
     console.log(data);

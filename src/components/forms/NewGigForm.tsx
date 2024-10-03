@@ -202,73 +202,168 @@ const NewGigForm = ({ industries }: {
                                         </FormItem>
                                     )}
                                 />
-                                    <FormField
-                                        control={form.control}
-                                        name="negotiable"
-                                        render={({ field }) => (
-                                            <FormItem className="w-1/2">
-                                                <FormLabel className='text-lg font-semibold'>Negotiable</FormLabel>
+                                <FormField
+                                    control={form.control}
+                                    name="negotiable"
+                                    render={({ field }) => (
+                                        <FormItem className="w-1/2">
+                                            <FormLabel className='text-lg font-semibold'>Negotiable</FormLabel>
+                                            <FormControl>
+                                                <RadioGroup
+                                                    onValueChange={field.onChange}
+                                                    defaultValue={field.value}
+                                                    className="flex gap-x-4 pt-2"
+                                                >
+                                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                                        <FormControl>
+                                                            <RadioGroupItem value={'true'} />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">
+                                                            True
+                                                        </FormLabel>
+                                                    </FormItem>
+                                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                                        <FormControl>
+                                                            <RadioGroupItem value={'false'} />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">False</FormLabel>
+                                                    </FormItem>
+                                                </RadioGroup>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div className='grid grid-cols-3 gap-4'>
+                                <FormField
+                                    control={form.control}
+                                    name="experience"
+                                    render={({ field }) => (
+                                        <FormItem className='col-span-1'>
+                                            <FormLabel className='text-lg font-semibold'>Experience</FormLabel>
+                                            <Select onValueChange={field.onChange}>
                                                 <FormControl>
-                                                    <RadioGroup
-                                                        onValueChange={field.onChange}
-                                                        defaultValue={field.value}
-                                                        className="flex gap-x-4"
-                                                    >
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                <RadioGroupItem value={'true'} />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">
-                                                                True
-                                                            </FormLabel>
-                                                        </FormItem>
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                <RadioGroupItem value={'false'} />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">False</FormLabel>
-                                                        </FormItem>
-                                                    </RadioGroup>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select experience level you are expecting" />
+                                                    </SelectTrigger>
                                                 </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
+                                                <SelectContent>
+                                                    <SelectItem value='entry level'>
+                                                        Entry level
+                                                    </SelectItem>
+                                                    <SelectItem value='intermediate'>
+                                                        Intermediate
+                                                    </SelectItem>
+                                                    <SelectItem value='expert'>
+                                                        Expert
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            {/* <FormDescription>
+                                            You can manage email addresses in your{" "}
+                                            <Link href="/examples/forms">email settings</Link>.
+                                        </FormDescription> */}
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="schedule"
+                                    render={({ field }) => (
+                                        <FormItem className='col-span-1'>
+                                            <FormLabel className='text-lg font-semibold'>Schedule</FormLabel>
+                                            <Select onValueChange={field.onChange}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Part time or Full time" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value='part-time'>
+                                                        Part Time
+                                                    </SelectItem>
+                                                    <SelectItem value='full-time'>
+                                                        Full Time
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            {/* <FormDescription>
+                                            You can manage email addresses in your{" "}
+                                            <Link href="/examples/forms">email settings</Link>.
+                                        </FormDescription> */}
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="remote"
+                                    render={({ field }) => (
+                                        <FormItem className="col-span-1">
+                                            <FormLabel className='text-lg font-semibold pb-5'>Remote</FormLabel>
+                                            <FormControl>
+                                                <RadioGroup
+                                                    onValueChange={field.onChange}
+                                                    defaultValue={field.value}
+                                                    className="flex gap-x-4 pt-2"
+                                                >
+                                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                                        <FormControl>
+                                                            <RadioGroupItem value={'true'} />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">
+                                                            True
+                                                        </FormLabel>
+                                                    </FormItem>
+                                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                                        <FormControl>
+                                                            <RadioGroupItem value={'false'} />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">False</FormLabel>
+                                                    </FormItem>
+                                                </RadioGroup>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
                             <div>
-                            <FormField
-                                control={form.control}
-                                name="requirements"
-                                render={({ field }) => (
-                                    <FormItem className='w-full'>
-                                        <FormLabel className='text-lg font-semibold'>Requirements</FormLabel>
-                                        <FormControl>
-                                            <Textarea 
-                                            placeholder="Gig description" 
-                                            {...field} 
-                                            className='resize-none' 
-                                            value={newRequirement}
-                                        onChange={(e) => setNewRequirement(e.target.value)}
-                                          />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <Button type='button' onClick={addRequirement} className='mt-2'>
-                                        Add Requirement
-                                    </Button>
-                            <div className='my-4'>
+                                <FormField
+                                    control={form.control}
+                                    name="requirements"
+                                    render={({ field }) => (
+                                        <FormItem className='w-full'>
+                                            <FormLabel className='text-lg font-semibold'>Requirements</FormLabel>
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder="Gig description"
+                                                    {...field}
+                                                    className='resize-none'
+                                                    value={newRequirement}
+                                                    onChange={(e) => setNewRequirement(e.target.value)}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <Button type='button' onClick={addRequirement} className='mt-2'>
+                                    Add Requirement
+                                </Button>
+                                <div className='my-4'>
                                     <ul className='w-full space-y-3'>
                                         {requirements.map((req, index) => (
                                             <li key={index} className='relative text-xs w-full'>
-                                                    <Input
-                                                        value={req}
-                                                        onChange={(e) => handleEditChange(e.target.value)}
-                                                        className='w-full'
-                                                        disabled={editIndex !== index}
-                                                        onBlur={saveEdit} // Stop editing on blur
-                                                    />
+                                                <Input
+                                                    value={req}
+                                                    onChange={(e) => handleEditChange(e.target.value)}
+                                                    className='w-full'
+                                                    disabled={editIndex !== index}
+                                                    onBlur={saveEdit} // Stop editing on blur
+                                                />
                                                 <div className='absolute top-3 right-3 flex gap-x-2 bg-white'>
                                                     {editIndex === index ? (
                                                         <Check size={16} className='cursor-pointer text-green-600' onClick={saveEdit} />
@@ -281,7 +376,7 @@ const NewGigForm = ({ industries }: {
                                         ))}
                                     </ul>
 
-                            </div>
+                                </div>
                             </div>
                             <Button type='submit' disabled={!isDirty || isSubmitting} className='w-full mt-8'>
                                 Create Gig
