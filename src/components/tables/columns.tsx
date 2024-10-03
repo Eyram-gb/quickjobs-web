@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "../ui/checkbox"
 import { Badge } from "../ui/badge"
@@ -23,7 +23,7 @@ export interface Application {
     created_at: string;
     gig_title: string;
     gig_description: string;
-    status: 'pending' | 'accepted' | 'rejected';
+    status: 'pending' | 'reviewing' | 'accepted' | 'rejected';
 }
 
 export const columns: ColumnDef<Application>[] = [
@@ -151,7 +151,7 @@ export function DropdownMenuRadioGroupDemo() {
     )
 }
 
-const statusOptions: Array<string> = ['pending', 'accepted', 'rejected'];
+const statusOptions: Array<string> = ['pending', 'accepted', 'reviewing', 'rejected'];
 
 interface UpdateStatusDropdownProps {
     applicationId: string;
@@ -199,7 +199,9 @@ const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ application
                             ? "bg-emerald-100 text-emerald-800 border-emerald-500 cursor-pointer"
                             : selectedStatus === "pending"
                                 ? "bg-orange-100 text-orange-800 border-orange-500 cursor-pointer"
-                                : "bg-rose-100 text-rose-800 border-rose-500 cursor-pointer"
+                                : selectedStatus === "reviewing"
+                                    ? "bg-cyan-100 text-cyan-800 border-cyan-500 cursor-pointer"
+                                    : "bg-rose-100 text-rose-800 border-rose-500 cursor-pointer"
                     }
                 >
                     {selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1)} <ChevronsUpDown size={14} />
@@ -210,8 +212,8 @@ const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ application
                 <DropdownMenuSeparator />
                 {statusOptions.map((status) => (
                     <DropdownMenuItem key={status} onClick={() => handleStatusChange(status)}>
-                        {selectedStatus === status && <span className="mr-2"><Check size={16}/></span>}
-                        <span className={`${selectedStatus !== status? 'ml-6': ''}`}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                        {selectedStatus === status && <span className="mr-2"><Check size={16} /></span>}
+                        <span className={`${selectedStatus !== status ? 'ml-6' : ''}`}>{status.charAt(0).toUpperCase() + status.slice(1)}</span>
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>

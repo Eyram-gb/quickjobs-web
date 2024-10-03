@@ -26,6 +26,8 @@ export default async function ClientApplications({ params: { clientId } }: { par
             return `${baseClass} bg-orange-100 text-orange-800 border-orange-500`;
         } else if (status === "rejected") {
             return `${baseClass} bg-rose-100 text-rose-800 border-rose-500`;
+        } else if (status === "reviewing") {
+            return `${baseClass} bg-cyan-100 text-cyan-800 border-cyan-500`;
         }
         return baseClass;
     }
