@@ -306,7 +306,7 @@ const NewGigForm = ({ industries }: {
                                             <FormControl>
                                                 <RadioGroup
                                                     onValueChange={field.onChange}
-                                                    defaultValue={field.value}
+                                                    // defaultValue={field.value}
                                                     className="flex gap-x-4 pt-2"
                                                 >
                                                     <FormItem className="flex items-center space-x-3 space-y-0">

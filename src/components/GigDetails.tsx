@@ -5,13 +5,15 @@ import Gig from '@/components/GigCard';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from './ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { getRelativeTime } from '@/lib/utils';
-import { TGig } from '@/lib/types';
+import { TGig, TGigDetails } from '@/lib/types';
+import Image from 'next/image'
+import Link from 'next/link'
 import { useAuthStore } from '@/lib/store/authStore';
 import { DialogTrigger, Dialog, DialogContent, DialogDescription, DialogTitle } from './ui/dialog';
 import ApplyGig from './forms/ApplyGig';
 import EditGig from './forms/EditGig';
 
-const GigDetails = ({ gig }: { gig: TGig }) => {
+const GigDetails = ({ gig }: { gig: TGigDetails }) => {
     const { client_profile, user, employer_profile } = useAuthStore()
     const isGigCreator = user?.id === gig.user_id;
     return (
@@ -24,11 +26,17 @@ const GigDetails = ({ gig }: { gig: TGig }) => {
                     <BreadcrumbNavigation />
                     <p className='text-sm'>{getRelativeTime(gig.created_at)}</p>
                 </div>
-                <h1 className='text-center text-5xl font-bold'>Gig Details</h1>
-                <div>
-                    <div>
+                <div className='grid grid-cols-10 gap-10 mt-8'>
+                    <div className='col-span-7'>
                         <div className='space-y-5'>
-                            <h2 className='text-2xl font-semibold'>{gig.title}</h2>
+                            <div className='flex justify-between items-center'>
+                                <h2 className='text-2xl font-semibold'>{gig.title}</h2>
+                                <div className='flex gap-2 flex-wrap'>
+                                    <div className='bg-purple-100 text-purple-800 rounded-md text-xs w-fit p-1 font-semibold'>{gig.experience}</div>
+                                    <div className='bg-emerald-100 text-emerald-800 rounded-md text-xs w-fit p-1 font-semibold'>{gig.schedule}</div>
+                                    {gig.remote && <div className='bg-amber-100 text-amber-800 rounded-md text-xs w-fit p-1 font-semibold'>Remote</div>}
+                                </div>
+                            </div>
                             <div>
                                 <h2 className='text-lg font-semibold'>Description</h2>
                                 <p className='text-sm'>{gig.description}</p>
@@ -89,14 +97,42 @@ const GigDetails = ({ gig }: { gig: TGig }) => {
                             </div>
                         </div>
                     </div>
+                    <div className='shadow border col-span-3 rounded-lg p-4 h-fit sticky top-24'>
+                        <div className='flex items-center gap-2'>
+                            <div className='w-12 h-12 relative rounded-md overflow-hidden'>
+                                <Image
+                                    src={gig.company_logo}
+                                    alt='logo'
+                                    fill
+                                    className='object-cover bg-gray-100'
+                                />
+                            </div>
+                            <h2 className='font-semibold text-sm'>{gig.company_name}</h2>
+                        </div>
+                        <div className='border-b pb-4'>
+                            <div className='mt-4'>
+                                <h2 className='text-xs font-semibold'>Website</h2>
+                                <Link href='https:website.com' target='_blank' rel='noreferrer' className='text-xs text-cyan-400 hover:underline'>{gig.website}</Link>
+                            </div>
+                            <div className=''>
+                                <h2 className='text-xs font-semibold'>Location</h2>
+                                <p className='text-xs'>Johannesburg, SA</p>
+                            </div>
+
+                        </div>
+                        <div className='mt-5'>
+                            <h2 className='text-xs font-semibold'>About</h2>
+                            <p className='text-xs text-gray-400'>{gig.company_bio}</p>
+                        </div>
+                    </div>
                 </div>
                 <div className='mt-10 space-y-3'>
                     <h2 className='text-3xl font-bold'>Related Gigs</h2>
-                    <div className='flex gap-5 flex-wrap'>
+                    {/* <div className='flex gap-5 flex-wrap'>
                         <Gig gig={gig} />
                         <Gig gig={gig} />
                         <Gig gig={gig} />
-                    </div>
+                    </div> */}
                 </div>
             </div></>
     )
@@ -123,11 +159,3 @@ function BreadcrumbNavigation() {
         </Breadcrumb>
     )
 }
-
-const StickyComponent = () => {
-    return (
-        <div className="w-16 h-44 bg-blue-500 rounded-full flex items-center justify-center text-white cursor-pointer hover:bg-blue-600 transition-colors">
-            <span className="transform -rotate-90 whitespace-nowrap">Quick Action</span>
-        </div>
-    );
-};

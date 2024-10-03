@@ -32,7 +32,7 @@ export const GigSchema = z.object({
     description: "Schedule for the gig",
     required_error: "Schedule field is required",
   }),
-  experience: z.enum(["entry level", "intermediate", 'expect'], {
+  experience: z.enum(["entry level", "intermediate", 'expert'], {
     description: "Schedule for the gig",
     required_error: "Schedule field is required",
   }),
