@@ -14,6 +14,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { motion } from 'framer-motion';
+import { useSearchParams } from 'next/navigation'
+
 
 
 export function SearchFilter() {
@@ -31,7 +33,9 @@ export function SearchFilter() {
         expert: false,
     })
     const [animateButton, setAnimateButton] = useState(false); // State for animation
+    const searchParams = useSearchParams()
 
+    const search = searchParams.get('search')
     const handleJobTypeChange = (type: keyof typeof jobTypes) => {
         setJobTypes(prev => ({ ...prev, [type]: !prev[type] }))
     }
@@ -41,8 +45,25 @@ export function SearchFilter() {
     }
 
     const handleApplyFilters = () => {
-        // Implement your filter application logic here
-        console.log("Applying filters:", { jobTypes, experienceLevel })
+        // const selectedJobTypes = Object.entries(jobTypes)
+        //     .filter(([_, checked]) => checked)
+        //     .map(([key]) => key)
+        //     .join(',');
+
+        // const selectedExperienceLevels = Object.entries(experienceLevel)
+        //     .filter(([_, checked]) => checked)
+        //     .map(([key]) => key)
+        //     .join(',');
+
+        // const params = new URLSearchParams();
+        // if (selectedJobTypes) params.set('jobTypes', selectedJobTypes);
+        // if (selectedExperienceLevels) params.set('experienceLevels', selectedExperienceLevels);
+        // if (searchInput) params.set('search', searchInput);
+
+        // Update the URL with the new search parameters
+        // window.history.pushState({}, '', `?${params.toString()}`);
+
+        console.log("Applying filters:", { jobTypes, experienceLevel });
     }
 
     const handleInputClick = () => {
@@ -68,7 +89,7 @@ export function SearchFilter() {
                 </motion.button>
                 {/* <Search className='absolute top-2.5 right-3' size={18} /> */}
             </div>
-            {searchInput}
+            Search: {search}
             <DropdownMenu>
                 <DropdownMenuTrigger className='py-2 px-4 rounded-md border flex gap-2 items-center font-medium text-sm'>Filter <SlidersHorizontal size={16} /></DropdownMenuTrigger>
                 <DropdownMenuContent className="w-[300px] p-4">
