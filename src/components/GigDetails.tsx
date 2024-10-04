@@ -12,16 +12,18 @@ import { useAuthStore } from '@/lib/store/authStore';
 import { DialogTrigger, Dialog, DialogContent, DialogDescription, DialogTitle } from './ui/dialog';
 import ApplyGig from './forms/ApplyGig';
 import EditGig from './forms/EditGig';
+import { useQuery } from '@tanstack/react-query';
+import { API_BASE_URL } from '@/lib/constants';
+import axios from "axios";
+import { GigLoadingComponent } from './LoadingComponents';
 
 const GigDetails = ({ gig }: { gig: TGigDetails }) => {
     const { client_profile, user, employer_profile } = useAuthStore()
     const isGigCreator = user?.id === gig.user_id;
+    console.log(gig.industry_id)
     return (
         <>
             <div className='p-24'>
-                {/* <div className='sticky top-[100px] w-1/4'>
-                <StickyComponent />
-            </div> */}
                 <div className='flex justify-between'>
                     <BreadcrumbNavigation />
                     <p className='text-sm'>{getRelativeTime(gig.created_at)}</p>
@@ -128,11 +130,7 @@ const GigDetails = ({ gig }: { gig: TGigDetails }) => {
                 </div>
                 <div className='mt-10 space-y-3'>
                     <h2 className='text-3xl font-bold'>Related Gigs</h2>
-                    {/* <div className='flex gap-5 flex-wrap'>
-                        <Gig gig={gig} />
-                        <Gig gig={gig} />
-                        <Gig gig={gig} />
-                    </div> */}
+                   <RelatedGigs industryId={gig.industry_id}/>
                 </div>
             </div></>
     )
@@ -157,5 +155,33 @@ function BreadcrumbNavigation() {
                 </BreadcrumbItem>
             </BreadcrumbList>
         </Breadcrumb>
+    )
+}
+const getRelatedGigs = async (industryId:number) => {
+    const response = await axios.get(
+        `${API_BASE_URL}/gigs?industryId=${industryId}&limit=3`,
+    );
+    return response.data;
+};
+function RelatedGigs ({industryId}: {industryId: number}) {
+    const {data , isPending, isError} = useQuery({
+  queryKey: ['todos', industryId],
+  queryFn: async () => {
+    const data: TGig[] = await getRelatedGigs(industryId)
+    return data;
+  },
+})
+if(isPending) return <GigLoadingComponent />
+if(isError) return <div>error....</div>
+    return (
+         <div className=''>
+                    <div className='flex gap-5 flex-wrap'>
+                        {
+                            data?.map((item, idx)=>(
+                                <Gig gig={item} key={idx} />
+                            ))
+                        }
+                    </div>
+                </div>
     )
 }

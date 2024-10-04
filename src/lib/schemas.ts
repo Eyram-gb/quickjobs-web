@@ -15,7 +15,7 @@ export const GigSchema = z.object({
     required_error: "Duration is required",
   }),
   industry_id: z
-    .string({
+    .number({
       description: "Industry ID of the gig",
       required_error: "Industry is required",
     })

@@ -16,9 +16,8 @@ export default async function ClientApplications({ params: { clientId } }: { par
         cache: "no-store",
     })
     const data: TClientApplication[] = await res.json();
-    console.log(data)
     function getStatusClass(status: string) {
-        const baseClass = "text-[10px] mb-2"; // General style for all conditions
+        const baseClass = "text-[10px] mb-2"; // Base style for all conditions
 
         if (status === "accepted") {
             return `${baseClass} bg-emerald-100 text-emerald-800 border-emerald-500`;
@@ -34,24 +33,24 @@ export default async function ClientApplications({ params: { clientId } }: { par
     return (
         <div className='p-8 flex gap-4'>
             {
-                data.map((item,idx) =>{
-                    return(
+                data.map((item, idx) => {
+                    return (
 
-            <Card className='p-2 w-56' key={idx}>
-                <div className='flex justify-end'>
-                   <Badge
-                    variant="outline"
-                    className={getStatusClass(item.status)}
-                >
-                    {item.status}
-                </Badge>
-                </div>
-                <p className='font-semibold'>{item.gig_title}</p>
-                <p className='text-xs text-gray-400 leading-tight'>
-                    {item.gig_description.slice(0, 100)}
-                        {item.gig_description.length > 100? '...': ''}
-                        </p>
-            </Card>
+                        <Card className='p-2 w-56' key={idx}>
+                            <div className='flex justify-end'>
+                                <Badge
+                                    variant="outline"
+                                    className={getStatusClass(item.status)}
+                                >
+                                    {item.status}
+                                </Badge>
+                            </div>
+                            <p className='font-semibold'>{item.gig_title}</p>
+                            <p className='text-xs text-gray-400 leading-tight'>
+                                {item.gig_description.slice(0, 110)}
+                                {item.gig_description.length > 110 ? '...' : ''}
+                            </p>
+                        </Card>
                     )
                 })
             }

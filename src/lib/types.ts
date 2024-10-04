@@ -33,10 +33,10 @@ export interface TGigDetails {
   negotiable: "true" | "false";
   requirements: string[];
   company_logo: string;
-      company_name: string;
-      website: string;
-      company_bio: string;
-  industry_id: string;
+  company_name: string;
+  website: string;
+  company_bio: string;
+  industry_id: number;
   created_at: Date;
   updated_at: string;
   is_active: boolean;

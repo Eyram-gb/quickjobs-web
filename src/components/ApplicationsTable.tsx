@@ -1,3 +1,4 @@
+import React from "react";
 import { columns, Application } from "./tables/columns"
 import { DataTable } from "./tables/DataTable"
 import { API_BASE_URL } from "@/lib/constants"
@@ -10,11 +11,16 @@ export default async function ApplicationsTable({ params: { employerId } }: { pa
 
   return (
     <>
-      <DataTable columns={columns} data={data} initialColumnVisibility={{
-        gig_id: false,
-        applicant_id: false,
-        gig_description: false,
-      }} />
+      <DataTable
+        columns={columns}
+        data={data}
+        initialColumnVisibility={{
+          gig_id: false,
+          applicant_id: false,
+          gig_description: false,
+          created_at: false,
+        }}
+      />
     </>
   )
 }

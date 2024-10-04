@@ -38,7 +38,6 @@ const ApplyGig = ({ gigId, applicantId }: {
 
     const onSubmit: SubmitHandler<TApplyGig> = async (data) => {
         try {
-            console.log(data)
             const res = await fetch(`${API_BASE_URL}/applications`, {
                 method: 'POST',
                 headers: {

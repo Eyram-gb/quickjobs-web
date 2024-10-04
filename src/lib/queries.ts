@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { API_BASE_URL } from "./constants";
-import { TGig } from "./types";
+import { TGig, TGigDetails } from "./types";
 
 export const getIndustries = async () => {
   try {
@@ -37,7 +37,7 @@ export const getGigs = async () => {
 export const getGigById = async (id: string) => {
   try {
     const res = await fetch(`${API_BASE_URL}/gigs/${id}`);
-    const data = (await res.json()) as TGig;
+    const data = (await res.json()) as TGigDetails;
     if (res.status === 200) {
       return data;
     } else {

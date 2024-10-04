@@ -12,7 +12,7 @@ import { queryClient } from "@/lib/queryclient";
 import MainLayout from "@/components/layout/MainLayout";
 import React from "react";
 
-const montserrat = Montserrat({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"], display: "swap", });
 
 export const metadata: Metadata = {
   title: "Create Next App",

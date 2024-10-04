@@ -30,19 +30,11 @@ const GigCard = ({ gig }: { gig: TGig }) => {
                     {gig.remote && <div className='bg-amber-100 text-amber-800 rounded-md text-xs w-fit p-1 font-semibold'>Remote</div>}
                 </div>
                 <div className='mt-3'>
-                    {/* <h2 className='text-lg font-bold leading-none'>
-                        {gig.title}
-                    </h2> */}
                     <p className='text-xs mt-1.5'>
-                        {gig.description.slice(0, 100)}
-                        {gig.description.length > 100 ? '...' : ''}
+                        {gig.description.slice(0, 110)}
+                        {gig.description.length > 110 ? '...' : ''}
                     </p>
                 </div>
-                {/* <div className='flex gap-1 flex-wrap mt-1.5'>
-                    <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>Remote</p>
-                    <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>In-Person</p>
-                    <p className='text-xs bg-gray-200 px-2 py-1 rounded-md w-max font-semibold'>Flexible Schedule</p>
-                </div> */}
                 <div className='flex justify-between items-end mt-auto border-t pt-1.5'>
                     <h3 className='text-xs text-gray-500'>Kigali, RW</h3>
                     <Button type='button' className='text-xs h-8'>
