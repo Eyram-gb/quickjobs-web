@@ -1,19 +1,29 @@
 import GigCard from '@/components/GigCard';
 import { Input } from '@/components/ui/input';
 import { getGigs } from '@/lib/queries';
-import { Search } from 'lucide-react';
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+import { Search, SlidersHorizontal } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import React from 'react'
+import { SearchFilter } from '@/components/SearchFilter';
 
 const Gigs = async () => {
   const gigs = await getGigs();
   return (
     <div>
       <div className='w-full my-8'>
-        {gigs && gigs?.length > 0 &&
-          <div className='max-w-xl relative mx-auto'>
-            <Input className='rounded-full py-4' />
-            <Search className='absolute top-2.5 right-3' size={18} />
-          </div>
+        {gigs && gigs?.length > 0 &&          
+            <SearchFilter />
         }
       </div>
       <div className='flex gap-5 flex-wrap p-12'>
@@ -26,4 +36,4 @@ const Gigs = async () => {
   )
 }
 
-export default Gigs
+export default Gigs;
