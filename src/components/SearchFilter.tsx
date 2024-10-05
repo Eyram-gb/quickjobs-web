@@ -15,8 +15,16 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'; // Import useMutation
+import axios from 'axios'; // Import axios for API calls
+import { API_BASE_URL } from "@/lib/constants";
+import { TGig } from "@/lib/types";
 
-
+interface TFilters {
+    jobTypes: string[];
+    experienceLevels: string[];
+    searchInput: string;
+}
 
 export function SearchFilter() {
     const [searchInput, setSearchInput] = useState('');
@@ -33,9 +41,9 @@ export function SearchFilter() {
         expert: false,
     })
     const [animateButton, setAnimateButton] = useState(false); // State for animation
-    const searchParams = useSearchParams()
+    // const searchParams = useSearchParams()
 
-    const search = searchParams.get('search')
+    // const search = searchParams.get('search')
     const handleJobTypeChange = (type: keyof typeof jobTypes) => {
         setJobTypes(prev => ({ ...prev, [type]: !prev[type] }))
     }
@@ -43,27 +51,31 @@ export function SearchFilter() {
     const handleExperienceLevelChange = (level: keyof typeof experienceLevel) => {
         setExperienceLevel(prev => ({ ...prev, [level]: !prev[level] }))
     }
+    const fetchJobs = async (filters: TFilters): Promise<TGig> => {
+        const { jobTypes, experienceLevels } = filters;
+        const res = await axios.get(`${API_BASE_URL}/gigs?jobTypes=${jobTypes}&experienceLevels=${experienceLevels}`)
+        return res.data;
+    }
+
+    const { data, refetch } = useQuery({
+        queryKey: ['gigs', { jobTypes, experienceLevel, searchInput }], // Include filters in the query key
+        queryFn: () => fetchJobs({
+            jobTypes: Object.keys(jobTypes).filter(key => jobTypes[key as keyof typeof jobTypes]),
+            experienceLevels: Object.keys(experienceLevel).filter(key => experienceLevel[key as keyof typeof experienceLevel]),
+            searchInput
+        }),
+        enabled: false
+    })
 
     const handleApplyFilters = () => {
-        // const selectedJobTypes = Object.entries(jobTypes)
-        //     .filter(([_, checked]) => checked)
-        //     .map(([key]) => key)
-        //     .join(',');
+        const filters = {
+            jobTypes: Object.keys(jobTypes).filter(key => jobTypes[key as keyof typeof jobTypes]),
+            experienceLevels: Object.keys(experienceLevel).filter(key => experienceLevel[key as keyof typeof experienceLevel]),
+            searchInput
+        };
+        // const {jobTypes, experienceLevels, searchInput} = filters;
 
-        // const selectedExperienceLevels = Object.entries(experienceLevel)
-        //     .filter(([_, checked]) => checked)
-        //     .map(([key]) => key)
-        //     .join(',');
-
-        // const params = new URLSearchParams();
-        // if (selectedJobTypes) params.set('jobTypes', selectedJobTypes);
-        // if (selectedExperienceLevels) params.set('experienceLevels', selectedExperienceLevels);
-        // if (searchInput) params.set('search', searchInput);
-
-        // Update the URL with the new search parameters
-        // window.history.pushState({}, '', `?${params.toString()}`);
-
-        console.log("Applying filters:", { jobTypes, experienceLevel });
+        console.log("Applying filters:", filters);
     }
 
     const handleInputClick = () => {
@@ -89,7 +101,7 @@ export function SearchFilter() {
                 </motion.button>
                 {/* <Search className='absolute top-2.5 right-3' size={18} /> */}
             </div>
-            Search: {search}
+            {/* Search: {search} */}
             <DropdownMenu>
                 <DropdownMenuTrigger className='py-2 px-4 rounded-md border flex gap-2 items-center font-medium text-sm'>Filter <SlidersHorizontal size={16} /></DropdownMenuTrigger>
                 <DropdownMenuContent className="w-[300px] p-4">
@@ -125,7 +137,7 @@ export function SearchFilter() {
                                 </div>
                             ))}
                         </div>
-                        <Button className="w-full" onClick={handleApplyFilters}>
+                        <Button className="w-full" onClick={()=>refetch()}>
                             Apply Filters
                         </Button>
                     </div>
