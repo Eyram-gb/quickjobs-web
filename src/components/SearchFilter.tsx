@@ -51,9 +51,11 @@ export function SearchFilter() {
     const handleExperienceLevelChange = (level: keyof typeof experienceLevel) => {
         setExperienceLevel(prev => ({ ...prev, [level]: !prev[level] }))
     }
-    const fetchJobs = async (filters: TFilters): Promise<TGig> => {
+    const fetchJobs = async (filters: TFilters): Promise<TGig[]> => {
         const { jobTypes, experienceLevels } = filters;
-        const res = await axios.get(`${API_BASE_URL}/gigs?jobTypes=${jobTypes}&experienceLevels=${experienceLevels}`)
+        const jobTypesParam = jobTypes.join(','); // Convert array to comma-separated string
+        const experienceLevelsParam = experienceLevels.join(','); // Convert array to comma-separated string
+        const res = await axios.get(`${API_BASE_URL}/gigs?jobTypes=${jobTypesParam}&experienceLevels=${experienceLevelsParam}`)
         return res.data;
     }
 
