@@ -18,7 +18,7 @@ const retrieveGigs = async (params?: string) => {
 
 const Gigs = () => {
     const params = useSearchParams();
-    const [filters, setFilters] = useState({ jobTypes: [], experienceLevels: [], searchInput: '' });
+    const [filters, setFilters] = useState<{ jobTypes: string[]; experienceLevels: string[]; searchInput: string }>({ jobTypes: [], experienceLevels: [], searchInput: '' });
 
     useEffect(() => {
         const jobTypes = params.getAll('jobTypes');
