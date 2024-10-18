@@ -1,32 +1,20 @@
 'use client'
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import { Input } from '@/components/ui/input';
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { motion } from 'framer-motion';
-import { useSearchParams } from 'next/navigation'
-import { useQuery } from '@tanstack/react-query'; // Import useMutation
-import axios from 'axios'; // Import axios for API calls
-import { API_BASE_URL } from "@/lib/constants";
-import { TGig } from "@/lib/types";
-
-interface TFilters {
-    jobTypes: string[];
-    experienceLevels: string[];
-    searchInput: string;
-}
+import { useRouter } from 'next/navigation'; // Import useRouter to manipulate URL
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import { Button } from '@/components/ui/button'; // Import your Button component
 
 export function SearchFilter() {
+    const router = useRouter(); // Initialize router
     const [searchInput, setSearchInput] = useState('');
     const [jobTypes, setJobTypes] = useState({
         fullTime: false,
@@ -34,76 +22,51 @@ export function SearchFilter() {
         internship: false,
         projectWork: false,
         volunteering: false,
-    })
+    });
     const [experienceLevel, setExperienceLevel] = useState({
         entry: false,
         intermediate: false,
         expert: false,
-    })
-    const [animateButton, setAnimateButton] = useState(false); // State for animation
-    // const searchParams = useSearchParams()
+    });
 
-    // const search = searchParams.get('search')
-    const handleJobTypeChange = (type: keyof typeof jobTypes) => {
-        setJobTypes(prev => ({ ...prev, [type]: !prev[type] }))
-    }
-
-    const handleExperienceLevelChange = (level: keyof typeof experienceLevel) => {
-        setExperienceLevel(prev => ({ ...prev, [level]: !prev[level] }))
-    }
-    const fetchJobs = async (filters: TFilters): Promise<TGig[]> => {
-        const { jobTypes, experienceLevels } = filters;
-        const jobTypesParam = jobTypes.join(','); // Convert array to comma-separated string
-        const experienceLevelsParam = experienceLevels.join(','); // Convert array to comma-separated string
-        const res = await axios.get(`${API_BASE_URL}/gigs?jobTypes=${jobTypesParam}&experienceLevels=${experienceLevelsParam}`)
-        return res.data;
-    }
-
-    const { data, refetch } = useQuery({
-        queryKey: ['gigs', { jobTypes, experienceLevel, searchInput }], // Include filters in the query key
-        queryFn: () => fetchJobs({
-            jobTypes: Object.keys(jobTypes).filter(key => jobTypes[key as keyof typeof jobTypes]),
-            experienceLevels: Object.keys(experienceLevel).filter(key => experienceLevel[key as keyof typeof experienceLevel]),
-            searchInput
-        }),
-        enabled: false
-    })
-
-    const handleApplyFilters = () => {
+    const updateURLParams = () => {
         const filters = {
             jobTypes: Object.keys(jobTypes).filter(key => jobTypes[key as keyof typeof jobTypes]),
             experienceLevels: Object.keys(experienceLevel).filter(key => experienceLevel[key as keyof typeof experienceLevel]),
             searchInput
         };
-        // const {jobTypes, experienceLevels, searchInput} = filters;
 
-        console.log("Applying filters:", filters);
-    }
+        // Update URL parameters
+        const queryParams = new URLSearchParams();
+        if (filters.searchInput) queryParams.append('searchInput', filters.searchInput);
+        filters.jobTypes.forEach(type => queryParams.append('jobTypes', type));
+        filters.experienceLevels.forEach(level => queryParams.append('experienceLevels', level));
 
-    const handleInputClick = () => {
-        setAnimateButton(true); // Trigger animation on input click
-    }
+        router.push(`/gigs?${queryParams.toString()}`); // Update the URL with new parameters
+        console.log("Updating filters in URL:", filters);
+    };
+
+    const handleJobTypeChange = (type: keyof typeof jobTypes) => {
+        setJobTypes(prev => ({ ...prev, [type]: !prev[type] }));
+    };
+
+    const handleExperienceLevelChange = (level: keyof typeof experienceLevel) => {
+        setExperienceLevel(prev => ({ ...prev, [level]: !prev[level] }));
+    };
+
+    const handleApplyFilters = () => {
+        updateURLParams(); // Call the function to update URL when the button is clicked
+    };
 
     return (
         <div className='flex gap-5 items-center justify-center'>
             <div className='max-w-xl relative flex-1'>
                 <Input
                     value={searchInput}
-                    onChange={((e) => setSearchInput(e.target.value))}
-                    onClick={handleInputClick} // Add click handler
+                    onChange={(e) => setSearchInput(e.target.value)} // Update search input
                     className='rounded-full py-4'
                 />
-                <motion.button
-                    className='absolute right-1 rounded-full bg-teal-500 h-8 px-4 text-white text-sm font-semibold top-0 bottom-0 my-auto'
-                    initial={{ x: -100, opacity: 0 }} // Start position and opacity
-                    animate={{ x: animateButton ? 0 : -100, opacity: animateButton ? 1 : 0 }} // Animate position and opacity
-                    transition={{ type: 'spring', stiffness: 300 }} // Animation properties
-                >
-                    Search
-                </motion.button>
-                {/* <Search className='absolute top-2.5 right-3' size={18} /> */}
             </div>
-            {/* Search: {search} */}
             <DropdownMenu>
                 <DropdownMenuTrigger className='py-2 px-4 rounded-md border flex gap-2 items-center font-medium text-sm'>Filter <SlidersHorizontal size={16} /></DropdownMenuTrigger>
                 <DropdownMenuContent className="w-[300px] p-4">
@@ -139,12 +102,10 @@ export function SearchFilter() {
                                 </div>
                             ))}
                         </div>
-                        <Button className="w-full" onClick={()=>refetch()}>
-                            Apply Filters
-                        </Button>
                     </div>
                 </DropdownMenuContent>
             </DropdownMenu>
+            <Button onClick={handleApplyFilters}>Apply</Button> {/* Add Apply button */}
         </div>
     )
 }

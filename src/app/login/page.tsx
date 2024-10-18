@@ -36,7 +36,7 @@ const Login = () => {
     const { email, password } = data;
     try {
       setIsLoading(true)
-      const loginRes = await fetch(`/api/login`, {
+      const loginRes = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

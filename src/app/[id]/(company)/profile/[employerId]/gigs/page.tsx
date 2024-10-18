@@ -20,7 +20,7 @@ const Gigs = async ({
 
     console.log(data);
     return (
-        <div className='p-10'>
+        <div className='p-10 flex gap-4 flex-wrap'>
             {
                 data.map((item) => (
                     <Card key={item.id} className='w-80 p-4'>
@@ -36,7 +36,7 @@ const Gigs = async ({
                                 <Checkbox id="expired" className='data-[state=checked]:bg-rose-500' />
                             </div>
                         </div>
-                        <p className='text-xs'>{item.description}</p>
+                        <p className='text-xs'>{item.description.length >135 ? `${item.description.slice(0,135)}...`: item.description}</p>
                         <div className='flex justify-between mt-4'>
                             <Link
                                 href={`/${id}/profile/${employerId}/applications?gigId=${item.id}`}
