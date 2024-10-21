@@ -88,7 +88,7 @@ export function SearchFilter() {
     return (
         <div> 
         <div className='flex gap-5 items-center justify-center'>
-            <div className='max-w-xl relative flex-1'>
+            <div className='max-w-md relative flex-1'>
                 <Input
                     value={searchInput}
                     type='search'
@@ -97,7 +97,7 @@ export function SearchFilter() {
                 />
             </div>
             <DropdownMenu>
-                <DropdownMenuTrigger className='py-2 px-4 rounded-md border flex gap-2 items-center font-medium text-sm'>Filter <SlidersHorizontal size={16} /></DropdownMenuTrigger>
+                <DropdownMenuTrigger className='py-2 px-4 rounded-md border flex gap-2 items-center font-medium text-sm bg-gray-50'>Filter <SlidersHorizontal size={16} /></DropdownMenuTrigger>
                 <DropdownMenuContent className="w-[300px] p-4">
                     <div className="space-y-4">
                         <div className="space-y-2">

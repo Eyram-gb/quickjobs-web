@@ -8,7 +8,7 @@ import { getRelativeTime } from '@/lib/utils'
 const GigCard = ({ gig }: { gig: TGig }) => {
     return (
         <Link href={`/gigs/${gig.id}`}>
-            <div className='w-72 rounded-lg border transition duration-300 hover:shadow-lg p-4 h-60 flex flex-col'>
+            <div className='max-w-80 rounded-lg border transition duration-300 hover:shadow-lg p-4 h-60 flex flex-col'>
                 <h3 className='text-[10px] font-black text-gray-500 ml-auto'>{getRelativeTime(gig.created_at)}</h3>
                 <div className='flex gap-1.5 items-center'>
                     <div className='relative h-10 w-10'>

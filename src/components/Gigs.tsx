@@ -30,14 +30,14 @@ const Gigs = () => {
     });
 
     if (error) return <div>{error.message}</div>;
-    if (isPending) return <div><GigsLoadingComponent/>.</div>;
+    if (isPending) return <div><GigsLoadingComponent />.</div>;
 
     return (
         <div>
             <div className='my-8'>
                 {/* <SearchFilter /> */}
             </div>
-            <div className='flex gap-4 flex-wrap'>
+            <div className='flex gap-8 flex-wrap'>
                 {data?.map((item, index) => (
                     <GigCard gig={item} key={index} />
                 ))}
