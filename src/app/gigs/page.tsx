@@ -6,21 +6,14 @@ import { API_BASE_URL } from '@/lib/constants';
 import axios from 'axios';
 import { getQueryClient } from '@/lib/queryclient';
 import Gigs from '@/components/Gigs';
-
-const retrieveGigs = async () => {
-  console.log('fetching giiggggggsssss 11111')
-  const response = await axios.get(`${API_BASE_URL}/gigs`,
-  );
-  console.log('fetcheeedd giiggggggsssss 11111')
-  return response.data as TGig[];
-};
+import { fetchGigs } from '@/lib/queries';
 
 async function GigsPage () {
   const queryClient = getQueryClient()
   await queryClient.prefetchQuery({
     queryKey: ['gigs'],
     queryFn: async () => {
-      const gigs = await retrieveGigs()
+      const gigs = await fetchGigs()
       console.log(gigs)
       return gigs
     },

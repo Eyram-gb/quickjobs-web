@@ -8,13 +8,7 @@ import axios from 'axios'
 import { TGig } from '@/lib/types'
 import { useSearchParams } from 'next/navigation'
 import { SearchFilter } from './SearchFilter'
-
-const retrieveGigs = async (params?: string) => {
-    console.log('fetching gigs with params:', params);
-    const response = await axios.get(`${API_BASE_URL}/gigs${params}`);
-    console.log('fetched gigs:', response.data);
-    return response.data as TGig[];
-};
+import { fetchGigs } from '@/lib/queries'
 
 const Gigs = () => {
     const params = useSearchParams();
@@ -30,7 +24,7 @@ const Gigs = () => {
 
     const { data, isPending, error } = useQuery({
         queryKey: ['gigs', filters], // Include filters in the query key
-        queryFn: () => retrieveGigs(`?jobTypes=${filters.jobTypes.join(',')}&experienceLevels=${filters.experienceLevels.join(',')}&searchInput=${filters.searchInput}`), // Pass filters to the API call
+        queryFn: () => fetchGigs(`?jobTypes=${filters.jobTypes.join(',')}&experienceLevels=${filters.experienceLevels.join(',')}&searchInput=${filters.searchInput}`), // Pass filters to the API call
         enabled: true // Always enabled since we want to fetch gigs based on filters
     });
 
