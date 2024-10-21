@@ -135,12 +135,12 @@ export function SearchFilter() {
                 </DropdownMenuContent>
             </DropdownMenu>
             <div>
-            <Button onClick={handleApplyFilters}>Apply Filters</Button> {/* Add Apply button */}
+            <Button className='h-9' onClick={handleApplyFilters}>Apply Filters</Button> {/* Add Apply button */}
 
             </div>
         </div>
         <div className='mt-6'>
-            <p className='text-2xl font-bold text-center mb-3'>&apos;{searchInput}&apos;</p>
+            {/* <p className='text-2xl font-bold text-center mb-3'>&apos;{searchInput}&apos;</p> */}
             <div>
             <div className="flex justify-center gap-3 flex-wrap">
                     {/* <Label className="font-semibold">Selected Job Types</Label> */}

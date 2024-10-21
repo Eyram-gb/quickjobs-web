@@ -9,6 +9,7 @@ import { TGig } from '@/lib/types'
 import { useSearchParams } from 'next/navigation'
 import { SearchFilter } from './SearchFilter'
 import { fetchGigs } from '@/lib/queries'
+import GigsLoadingComponent from './GigsLoadingComponent'
 
 const Gigs = () => {
     const params = useSearchParams();
@@ -29,12 +30,12 @@ const Gigs = () => {
     });
 
     if (error) return <div>{error.message}</div>;
-    if (isPending) return <div>loading...</div>;
+    if (isPending) return <div><GigsLoadingComponent/>.</div>;
 
     return (
         <div>
             <div className='my-8'>
-                <SearchFilter />
+                {/* <SearchFilter /> */}
             </div>
             <div className='flex gap-4 flex-wrap'>
                 {data?.map((item, index) => (

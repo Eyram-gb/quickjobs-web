@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { getRelativeTime } from '@/lib/utils'
 
 const GigCard = ({ gig }: { gig: TGig }) => {
-    console.log(gig)
     return (
         <Link href={`/gigs/${gig.id}`}>
             <div className='w-72 rounded-lg border transition duration-300 hover:shadow-lg p-4 h-60 flex flex-col'>
@@ -25,8 +24,8 @@ const GigCard = ({ gig }: { gig: TGig }) => {
                     </div>
                 </div>
                 <div className='flex gap-2 flex-wrap mt-3'>
-                    <div className='bg-purple-100 text-purple-800 rounded-md text-xs w-fit p-1 font-semibold'>{gig.experience}</div>
-                    <div className='bg-emerald-100 text-emerald-800 rounded-md text-xs w-fit p-1 font-semibold'>{gig.schedule}</div>
+                    <div className='bg-purple-100 text-purple-800 rounded-md text-xs w-fit p-1 font-semibold'>{gig.experience.replace('_', ' ')}</div>
+                    <div className='bg-emerald-100 text-emerald-800 rounded-md text-xs w-fit p-1 font-semibold'>{gig.schedule.replace('_', ' ')}</div>
                     {gig.remote && <div className='bg-amber-100 text-amber-800 rounded-md text-xs w-fit p-1 font-semibold'>Remote</div>}
                 </div>
                 <div className='mt-3'>

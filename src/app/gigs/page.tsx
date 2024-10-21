@@ -27,7 +27,10 @@ async function GigsPage () {
         } */}
       </div>
         <HydrationBoundary state={dehydrate(queryClient)}>
+            <SearchFilter />
+            <div className='px-10'>
           <Gigs />
+            </div>
         </HydrationBoundary>
         {/* {data && data?.length > 0 ? data?.map((item, index) => (
           <GigCard gig={item} key={index} />
