@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
@@ -14,7 +14,8 @@ import { API_BASE_URL } from '@/lib/constants';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '@/lib/store/authStore';
 import { GigSchema, TGigSchema } from '@/lib/schemas';
-import { Pencil, X, Check } from 'lucide-react'; // Import Check icon
+import { Pencil, X, Check, LocateFixed } from 'lucide-react'; // Import Check icon
+import axios from 'axios';
 
 const NewGigForm = ({ industries }: {
     industries: {
@@ -22,8 +23,25 @@ const NewGigForm = ({ industries }: {
         name: string
     }[]
 }) => {
-    const [open, setOpen] = React.useState(false)
+    const [open, setOpen] = React.useState<boolean>(false);
     const [requirements, setRequirements] = React.useState<string[]>([]);
+    const [location, setLocation] = React.useState<{
+        country: string;
+        countryCode: string;
+        region: string;
+        regionName: string;
+        city: string;
+        lat: number;
+        lon: number;
+    }>({
+        country: '',
+        countryCode: '',
+        region: '',
+        regionName: '',
+        city: '',
+        lat: 0,
+        lon: 0,
+    });
     const [newRequirement, setNewRequirement] = React.useState<string>(''); // State for new requirement input
     const [editIndex, setEditIndex] = React.useState<number | null>(null); // Track the index of the requirement being edited
 
@@ -68,20 +86,30 @@ const NewGigForm = ({ industries }: {
     const {
         formState: { isDirty, isSubmitting }, control
     } = form;
-
+console.log(form.watch())
     const { employer_profile, user } = useAuthStore();
 
     const onSubmit: SubmitHandler<TGigSchema> = async (data) => {
         try {
-            const industry_id = Number(data.industry_id);
+            const industry_id = Number(data.industry_id); // Ensure this is a number
+            console.log('Converted industry_id:', industry_id); // Log the converted value
             const gigInfo = {
                 ...data,
                 requirements,
-                industry_id,
+                industry_id, // This will now be a number
                 employer_id: employer_profile?.id,
-                user_id: user?.id
+                user_id: user?.id,
+                location: {
+                  country: location.country,
+        countryCode: location.countryCode,
+        region: location.region,
+        regionName: location.regionName,
+        city: location.city,
+        lat: location.lat,
+        long: location.lon,  
+                }
             }
-            console.log(gigInfo)
+            console.log(gigInfo);
             const res = await fetch(`${API_BASE_URL}/gigs`, {
                 method: 'POST',
                 headers: {
@@ -102,6 +130,14 @@ const NewGigForm = ({ industries }: {
         }
     }
 
+    useEffect(() => {
+        const getLocation = async () => {
+            const response = await axios.get('http://ip-api.com/json');
+            setLocation(response.data);
+            console.log(response.data);
+        };
+        getLocation();
+    }, []);
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>
@@ -114,6 +150,7 @@ const NewGigForm = ({ industries }: {
                     <DialogHeader>
                         <DialogTitle>Create a New Gig</DialogTitle>
                     </DialogHeader>
+                    {/* <Button onClick={getLocation}>Location</Button> */}
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-2'>
                             <FormField
@@ -178,15 +215,23 @@ const NewGigForm = ({ industries }: {
                                                     }
                                                 </SelectContent>
                                             </Select>
-                                            {/* <FormDescription>
-                                            You can manage email addresses in your{" "}
-                                            <Link href="/examples/forms">email settings</Link>.
-                                        </FormDescription> */}
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
 
+                            </div>
+                            {/* LOCATION */}
+                            <div className='flex gap-4'>
+                                {/* <Button onClick={getLocation} className='flex gap-2 items-center'>Current Location <LocateFixed size='14' /></Button> */}
+                                <div className='w-full'>
+                                    <FormLabel className='text-lg font-semibold'>Country</FormLabel>
+                                    <Input placeholder="14 working days" value={location?.country} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, country: e.target.value }))} />
+                                </div>
+                                <div className='w-full'>
+                                    <FormLabel className='text-lg font-semibold'>City</FormLabel>
+                                    <Input placeholder="14 working days" value={location?.city} onChange={(e) => setLocation((prevLocation) => ({ ...prevLocation, city: e.target.value }))} />
+                                </div>
                             </div>
                             <div className='flex gap-x-4 w-full'>
                                 <FormField
@@ -249,7 +294,7 @@ const NewGigForm = ({ industries }: {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    <SelectItem value='entry level'>
+                                                    <SelectItem value='entry_level'>
                                                         Entry level
                                                     </SelectItem>
                                                     <SelectItem value='intermediate'>
@@ -260,10 +305,6 @@ const NewGigForm = ({ industries }: {
                                                     </SelectItem>
                                                 </SelectContent>
                                             </Select>
-                                            {/* <FormDescription>
-                                            You can manage email addresses in your{" "}
-                                            <Link href="/examples/forms">email settings</Link>.
-                                        </FormDescription> */}
                                             <FormMessage />
                                         </FormItem>
                                     )}
@@ -281,10 +322,10 @@ const NewGigForm = ({ industries }: {
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    <SelectItem value='part-time'>
+                                                    <SelectItem value='part_time'>
                                                         Part Time
                                                     </SelectItem>
-                                                    <SelectItem value='full-time'>
+                                                    <SelectItem value='full_time'>
                                                         Full Time
                                                     </SelectItem>
                                                 </SelectContent>

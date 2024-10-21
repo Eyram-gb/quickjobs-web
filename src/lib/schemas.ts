@@ -15,7 +15,7 @@ export const GigSchema = z.object({
     required_error: "Duration is required",
   }),
   industry_id: z
-    .number({
+    .string({
       description: "Industry ID of the gig",
       required_error: "Industry is required",
     })
@@ -28,11 +28,11 @@ export const GigSchema = z.object({
     description: "Is budget for the gig negotiable",
     required_error: "Negotiable field is required",
   }),
-  schedule: z.enum(["part-time", "full-time"], {
+  schedule: z.enum(["part_time", "full_time"], {
     description: "Schedule for the gig",
     required_error: "Schedule field is required",
   }),
-  experience: z.enum(["entry level", "intermediate", 'expert'], {
+  experience: z.enum(["entry_level", "intermediate", 'expert'], {
     description: "Schedule for the gig",
     required_error: "Schedule field is required",
   }),

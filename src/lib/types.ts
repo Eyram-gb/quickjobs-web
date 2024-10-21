@@ -8,9 +8,18 @@ export interface TGig extends TGigSchema {
   company_logo: string;
   company_name: string;
   application_count:string;
-  schedule: "part-time" | "full-time";
+  schedule: "part_time" | "full_time" | 'internship';
+  location: {
+    country: string;
+        countryCode: string;
+        region: string;
+        regionName: string;
+        city: string;
+        lat: number;
+        lon: number;
+  }
   remote: "true" | "false";
-  experience: "entry level" | "intermediate" | "expert";
+  experience: "entry_level" | "intermediate" | "expert";
   is_deleted: boolean;
   created_at: Date;
   updated_at: Date;
@@ -25,9 +34,9 @@ export interface TGigDetails {
   description: string;
   duration: string;
   application_count: string;
-  schedule: "part-time" | "full-time";
+  schedule: "part_time" | "full_time" | 'internship';
   remote: "true" | "false";
-  experience: "entry level" | "intermediate" | "expert";
+  experience: "entry_level" | "intermediate" | "expert";
   location: string | null;
   budget_range: string;
   negotiable: "true" | "false";
