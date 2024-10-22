@@ -4,10 +4,12 @@ import React from 'react'
 import { Button } from './ui/button'
 import Link from 'next/link'
 import { getRelativeTime } from '@/lib/utils'
+import { Dialog, DialogTrigger } from './ui/dialog'
+import { MapDialog } from './MapDialog'
 
 const GigCard = ({ gig }: { gig: TGig }) => {
     return (
-        <Link href={`/gigs/${gig.id}`}>
+        <div>
             <div className='max-w-80 rounded-lg border transition duration-300 hover:shadow-lg p-4 h-60 flex flex-col'>
                 <h3 className='text-[10px] font-black text-gray-500 ml-auto'>{getRelativeTime(gig.created_at)}</h3>
                 <div className='flex gap-1.5 items-center'>
@@ -34,14 +36,22 @@ const GigCard = ({ gig }: { gig: TGig }) => {
                         {gig.description.length > 110 ? '...' : ''}
                     </p>
                 </div>
-                <a href={`https://www.google.com/maps/search/${gig.location?.lat},+${gig.location?.lon}`} target='_blank' rel='noreferrer' className='flex justify-between items-end mt-auto border-t pt-1.5'>
+                <Dialog>
+                <div className='flex justify-between items-end mt-auto border-t pt-1.5'>
+                {/* <a href={`https://www.google.com/maps/search/${gig.location?.lat},+${gig.location?.lon}`} target='_blank' rel='noreferrer'>
                     <h3 className='text-xs hover:border-b text-cyan-400'>{gig.location?.city}, {gig.location?.countryCode} </h3>
+                </a> */}
+                <DialogTrigger >
+                    <h3 className='text-xs hover:border-b text-cyan-400'>{gig.location?.city}, {gig.location?.countryCode} </h3>
+                    </DialogTrigger>
                     <Button type='button' className='text-xs h-8'>
-                        Apply
+                        <Link href={`/gigs/${gig.id}`}>Apply</Link>
                     </Button>
-                </a>
+                </div>  
+                <MapDialog latitude={gig.location?.lat as number} longitude={gig.location?.long as number} gigTitle={gig.title} />                  
+                </Dialog>
             </div>
-        </Link>
+        </div>
     )
 }
 

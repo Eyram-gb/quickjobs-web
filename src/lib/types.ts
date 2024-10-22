@@ -16,7 +16,7 @@ export interface TGig extends TGigSchema {
         regionName: string;
         city: string;
         lat: number;
-        lon: number;
+        long: number;
   };
   remote: "true" | "false";
   experience: "entry_level" | "intermediate" | "expert";
@@ -43,7 +43,7 @@ export interface TGigDetails {
         regionName: string;
         city: string;
         lat: number;
-        lon: number;
+        long: number;
   };
   budget_range: string;
   negotiable: "true" | "false";

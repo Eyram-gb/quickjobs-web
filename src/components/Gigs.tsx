@@ -31,7 +31,7 @@ const Gigs = () => {
 
     if (error) return <div>{error.message}</div>;
     if (isPending) return <div><GigsLoadingComponent />.</div>;
-
+console.log(data)
     return (
         <div>
             <div className='my-8'>
