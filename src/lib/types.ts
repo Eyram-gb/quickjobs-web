@@ -52,7 +52,7 @@ export interface TGigDetails {
   company_name: string;
   website: string;
   company_bio: string;
-  industry_id: number;
+  industry_id: string;
   created_at: Date;
   updated_at: string;
   is_active: boolean;

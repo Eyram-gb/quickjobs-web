@@ -157,13 +157,13 @@ function BreadcrumbNavigation() {
         </Breadcrumb>
     )
 }
-const getRelatedGigs = async (industryId:number) => {
+const getRelatedGigs = async (industryId:string) => {
     const response = await axios.get(
         `${API_BASE_URL}/gigs?industryId=${industryId}&limit=3`,
     );
     return response.data;
 };
-function RelatedGigs ({industryId}: {industryId: number}) {
+function RelatedGigs ({industryId}: {industryId: string}) {
     const {data , isPending, isError} = useQuery({
   queryKey: ['todos', industryId],
   queryFn: async () => {

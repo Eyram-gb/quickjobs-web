@@ -21,7 +21,7 @@ const GigCard = ({ gig }: { gig: TGig }) => {
                         <div className='flex gap-0.5 items-center'>
                             <h3 className='text-xs text-gray-500 font-semibold'>{gig.company_name}</h3>
                             <p className='font-bold'>&#183;</p>
-                            <h3 className='text-xs text-gray-400 font-semibold'>{gig.application_count} Applicants</h3>
+                            <h3 className='text-xs text-gray-400 font-semibold'>{gig.application_count} Applications</h3>
                         </div>
                     </div>
                 </div>

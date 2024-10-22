@@ -7,9 +7,9 @@ import { cookies } from 'next/headers'
 
 const CreateProfile = async ({
     params: { id },
-    children,
+    // children,
 }: {
-    children: React.ReactNode;
+    // children: React.ReactNode;
     params: { id: string };
 }) => {
     const getUser = async (userId: string) => {

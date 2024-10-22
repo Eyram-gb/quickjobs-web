@@ -36,8 +36,15 @@ export const getGigs = async () => {
 };
 
 export const fetchGigs = async (params?: string) => {
-  const response = await axios.get(`${API_BASE_URL}/gigs${params}`);
-  return response.data as TGig[];
+   try {
+     const response = await axios.get(
+       `${API_BASE_URL}/gigs${params ? params : ""}`
+     );
+     return response.data as TGig[];
+   } catch (error) {
+     console.error("Error fetching gigs:", error);
+     throw error; // Rethrow the error to be handled in the component
+   }
 };
 
 export const getGigById = async (id: string) => {

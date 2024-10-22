@@ -5,8 +5,11 @@ import { TGig } from '@/lib/types';
 import { API_BASE_URL } from '@/lib/constants';
 import axios from 'axios';
 import { getQueryClient } from '@/lib/queryclient';
-import Gigs from '@/components/Gigs';
+import AllGigs from '@/components/AllGigs';
 import { fetchGigs } from '@/lib/queries';
+
+export const dynamic = "force-dynamic";
+// export const fetchCache = "force-no-store";
 
 async function GigsPage () {
   const queryClient = getQueryClient()
@@ -14,7 +17,6 @@ async function GigsPage () {
     queryKey: ['gigs'],
     queryFn: async () => {
       const gigs = await fetchGigs()
-      console.log(gigs)
       return gigs
     },
   })
@@ -26,10 +28,10 @@ async function GigsPage () {
           <SearchFilter />
         } */}
       </div>
-        <HydrationBoundary state={dehydrate(queryClient)}>
             <SearchFilter />
+        <HydrationBoundary state={dehydrate(queryClient)}>
             <div className='px-10'>
-          <Gigs />
+          <AllGigs />
             </div>
         </HydrationBoundary>
         {/* {data && data?.length > 0 ? data?.map((item, index) => (

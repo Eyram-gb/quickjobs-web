@@ -11,7 +11,7 @@ import { SearchFilter } from './SearchFilter'
 import { fetchGigs } from '@/lib/queries'
 import GigsLoadingComponent from './GigsLoadingComponent'
 
-const Gigs = () => {
+const AllGigs = () => {
     const params = useSearchParams();
     const [filters, setFilters] = useState<{ jobTypes: string[]; experienceLevels: string[]; searchInput: string }>({ jobTypes: [], experienceLevels: [], searchInput: '' });
 
@@ -29,9 +29,18 @@ const Gigs = () => {
         enabled: true // Always enabled since we want to fetch gigs based on filters
     });
 
-    if (error) return <div>{error.message}</div>;
-    if (isPending) return <div><GigsLoadingComponent />.</div>;
-console.log(data)
+    if (error) {
+        console.error('Error fetching gigs:', error); // Log error
+        return <div>{error.message}</div>;
+    }
+    if (isPending) return <div><GigsLoadingComponent /></div>;
+
+    // Ensure data is an array before mapping
+    if (!Array.isArray(data)) {
+        console.error('Unexpected data format:', data); // Log unexpected data
+        return <div>Error: Unexpected data format</div>;
+    }
+    
     return (
         <div>
             <div className='my-8'>
@@ -46,4 +55,4 @@ console.log(data)
     );
 };
 
-export default Gigs;
+export default AllGigs;
