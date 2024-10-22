@@ -34,8 +34,8 @@ const GigCard = ({ gig }: { gig: TGig }) => {
                         {gig.description.length > 110 ? '...' : ''}
                     </p>
                 </div>
-                <a href={`https://www.google.com/maps/search/${gig.location.lat},+${gig.location.long}`} target='_blank' rel='noreferrer' className='flex justify-between items-end mt-auto border-t pt-1.5'>
-                    <h3 className='text-xs hover:border-b text-cyan-400'>{gig.location.city}, {gig.location.countryCode} </h3>
+                <a href={`https://www.google.com/maps/search/${gig.location?.lat},+${gig.location?.lon}`} target='_blank' rel='noreferrer' className='flex justify-between items-end mt-auto border-t pt-1.5'>
+                    <h3 className='text-xs hover:border-b text-cyan-400'>{gig.location?.city}, {gig.location?.countryCode} </h3>
                     <Button type='button' className='text-xs h-8'>
                         Apply
                     </Button>

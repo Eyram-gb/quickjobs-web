@@ -28,7 +28,7 @@ export const GigSchema = z.object({
     description: "Is budget for the gig negotiable",
     required_error: "Negotiable field is required",
   }),
-  schedule: z.enum(["part_time", "full_time"], {
+  schedule: z.enum(["part_time", "full_time", "internship"], {
     description: "Schedule for the gig",
     required_error: "Schedule field is required",
   }),
