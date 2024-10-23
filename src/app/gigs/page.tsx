@@ -11,13 +11,23 @@ import { fetchGigs } from '@/lib/queries';
 export const dynamic = "force-dynamic";
 // export const fetchCache = "force-no-store";
 
-async function GigsPage () {
+async function GigsPage({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   const queryClient = getQueryClient()
   await queryClient.prefetchQuery({
     queryKey: ['gigs'],
     queryFn: async () => {
-      const gigs = await fetchGigs()
-      return gigs
+      const jobTypes = Array.isArray(searchParams?.jobTypes) ? searchParams.jobTypes.join(',') : '';
+      const experienceLevels = Array.isArray(searchParams?.experienceLevels) ? searchParams.experienceLevels.join(',') : '';
+      const searchInput = searchParams?.searchInput || '';
+      const industryId = searchParams?.industryId || ''; // Extract industryId
+
+      const paramsString = `?jobTypes=${jobTypes}&experienceLevels=${experienceLevels}&searchInput=${searchInput}&industryId=${industryId}`; // Include industryId
+      const gigs = await fetchGigs(paramsString); // Pass the formatted query string
+      return gigs;
     },
   })
 

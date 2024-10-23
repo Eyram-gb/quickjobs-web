@@ -13,19 +13,20 @@ import GigsLoadingComponent from './GigsLoadingComponent'
 
 const AllGigs = () => {
     const params = useSearchParams();
-    const [filters, setFilters] = useState<{ jobTypes: string[]; experienceLevels: string[]; searchInput: string }>({ jobTypes: [], experienceLevels: [], searchInput: '' });
+    const [filters, setFilters] = useState<{ jobTypes: string[]; experienceLevels: string[]; searchInput: string; industryId: string }>({ jobTypes: [], experienceLevels: [], searchInput: '', industryId: '' });
 
     useEffect(() => {
         const jobTypes = params.getAll('jobTypes');
         const experienceLevels = params.getAll('experienceLevels');
         const searchInput = params.get('searchInput') || '';
+        const industryId = params.get('industryId') || ''; // Extract industryId
 
-        setFilters({ jobTypes, experienceLevels, searchInput }); // Update filters from URL params
+        setFilters({ jobTypes, experienceLevels, searchInput, industryId }); // Update filters to include industryId
     }, [params]);
 
     const { data, isPending, error } = useQuery({
         queryKey: ['gigs', filters], // Include filters in the query key
-        queryFn: () => fetchGigs(`?jobTypes=${filters.jobTypes.join(',')}&experienceLevels=${filters.experienceLevels.join(',')}&searchInput=${filters.searchInput}`), // Pass filters to the API call
+        queryFn: () => fetchGigs(`?jobTypes=${filters.jobTypes.join(',')}&experienceLevels=${filters.experienceLevels.join(',')}&searchInput=${filters.searchInput}&industryId=${filters.industryId}`), // Pass filters to the API call
         enabled: true // Always enabled since we want to fetch gigs based on filters
     });
 

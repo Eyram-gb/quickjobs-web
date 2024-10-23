@@ -45,6 +45,8 @@ export const getIndustryGigsCount = async () => {
       gig_count: NamedCurve,
     }[];
 
+    console.log(data)
+
     if (res.status === 200) {
       return data;
     } else {
