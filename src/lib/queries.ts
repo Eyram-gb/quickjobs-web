@@ -31,7 +31,27 @@ export const getGigs = async () => {
       throw new Error("error fetching gigs. try again");
     }
   } catch (error) {
-    console.log("error fetching industries");
+    console.log("error fetching giigs");
+  }
+};
+export const getIndustryGigsCount = async () => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/gigs/industry/count`, {
+      cache: "no-store",
+    });
+    const data = (await res.json()) as {
+      industry_id: number,
+      industry_name: string,
+      gig_count: NamedCurve,
+    }[];
+
+    if (res.status === 200) {
+      return data;
+    } else {
+      throw new Error("error fetching industry gigs count.");
+    }
+  } catch (error) {
+    console.log("error fetching industry gigs count");
   }
 };
 
