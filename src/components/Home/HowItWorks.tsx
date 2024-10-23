@@ -32,15 +32,17 @@ const HowItWorks = () => {
         </div>
         <div className='flex justify-center gap-6 flex-wrap mt-32'>
             {jobItems.map((item, index) => (
-                <div key={index} className='w-72 h-72 border bg-white hover:shadow-xl transition duration-300 rounded-xl p-4'>
-                    <div className='w-20 h-20 rounded-full flex justify-center items-center bg-teal-100 -mt-14 mx-auto mb-8'>
-                        {item.icon}
+                <div key={index} className='w-72 h-72 border bg-white hover:shadow-xl transition duration-300 rounded-xl p-4 pb-8 flex flex-col justify-between'>
+                    <div>
+                        <div className='w-20 h-20 rounded-full flex justify-center items-center bg-teal-100 -mt-14 mx-auto mb-8'>
+                            {item.icon}
+                        </div>
+                        <div className='text-center space-y-6'>
+                            <h4 className='text-2xl font-medium'>{item.title}</h4>
+                            <p className='text-gray-400 text-sm'>{item.description}</p>
+                        </div>
                     </div>
-                    <div className='text-center space-y-6'>
-                        <h4 className='text-2xl font-medium'>{item.title}</h4>
-                        <p className='text-gray-400 text-sm'>{item.description}</p>
-                        <Link href='/' className='text-green-400 w-fit mx-auto border-b border-green-400 flex gap-2'>Browse Jobs <ArrowUpRight/></Link>
-                    </div>
+                    <Link href='/' className='text-green-400 w-fit mx-auto border-b border-green-400 flex gap-2'>Browse Jobs <ArrowUpRight/></Link>
                 </div>
             ))}
         </div>
