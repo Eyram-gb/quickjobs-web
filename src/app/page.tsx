@@ -1,3 +1,7 @@
+import Hero from "@/components/Home/Hero";
+import Categories from "@/components/Home/Categories";
+import HowItWorks from "@/components/Home/HowItWorks";
+import WhyUs from "@/components/Home/WhyUs";
 import Image from "next/image";
 import React from "react";
 // import MainLayout from "../components/layout/MainLayout";
@@ -5,7 +9,12 @@ import React from "react";
 export default function Home() {
   return (
     <>
-      <div>Home</div>
+      <div>
+        <Hero />  
+        <HowItWorks/>
+        <WhyUs />  
+        <Categories />  
+      </div>
     </>
   );
 }

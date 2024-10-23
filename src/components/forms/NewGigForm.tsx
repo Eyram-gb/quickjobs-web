@@ -86,7 +86,7 @@ const NewGigForm = ({ industries }: {
     const {
         formState: { isDirty, isSubmitting }, control
     } = form;
-console.log(form.watch())
+    console.log(form.watch())
     const { employer_profile, user } = useAuthStore();
 
     const onSubmit: SubmitHandler<TGigSchema> = async (data) => {
@@ -100,13 +100,13 @@ console.log(form.watch())
                 employer_id: employer_profile?.id,
                 user_id: user?.id,
                 location: {
-                  country: location.country,
-        countryCode: location.countryCode,
-        region: location.region,
-        regionName: location.regionName,
-        city: location.city,
-        lat: location.lat,
-        long: location.lon,  
+                    country: location.country,
+                    countryCode: location.countryCode,
+                    region: location.region,
+                    regionName: location.regionName,
+                    city: location.city,
+                    lat: location.lat,
+                    long: location.lon,
                 }
             }
             console.log(gigInfo);
@@ -121,6 +121,7 @@ console.log(form.watch())
             if (res.status === 201) {
                 form.reset();
                 setOpen(false)
+                setRequirements([])
                 return toast.success('Gig created successfully');
             } else {
                 toast.error('Failed to create gig');
