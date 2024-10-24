@@ -24,10 +24,27 @@ export interface UserChat {
     chatUser: string;
     userId: string;
 }
-
-export const useWebSocket = ({ senderId, recipientId }: { senderId: string, recipientId: string }) => {
+export interface TNotification {
+    type: "chats" | "application_status";
+    id: number;
+    user_id: string | null;
+    created_at: Date | null;
+    updated_at: Date | null;
+    message: string;
+    read: boolean;
+}
+export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: string, recipientId?: string, userId?: string }) => {
     const { user } = useAuthStore()
     const [messages, setMessages] = useState<Message[]>([])
+    const [unreadNotifications, setUnreadNotifications] = useState< {
+    id: number;
+    created_at: Date | null;
+    updated_at: Date | null;
+    user_id: string | null;
+    message: string;
+    type: "application_status" | "chats";
+    read: boolean;
+}[]>([])
     const [userChats, setUserChats] = useState<UserChat[]>([])
     const socketRef = useRef<Socket | null>(null);
 
@@ -55,6 +72,26 @@ export const useWebSocket = ({ senderId, recipientId }: { senderId: string, reci
             addMessage(newMessage);
         });
 
+        socket.on('receivedNotification', (newNotification) => {
+            console.log('Received new notification:', newNotification);
+            // Handle the new notification (e.g., update state, show alert, etc.)
+        });
+
+        socket.emit('getNotifications', { userId }, (response: SocketResponse<{
+            notifications_data: {
+                id: number;
+                created_at: Date | null;
+                updated_at: Date | null;
+                user_id: string | null;
+                message: string;
+                type: "application_status" | "chats";
+                read: boolean;
+            }[] }>) => {
+            console.log('Received unread notifications:', response);
+            if (response.status === 'OK' && response.data) {
+                setUnreadNotifications(response.data.notifications_data);
+            }
+        });
         socket.emit('getChatHistory', { senderId, recipientId }, (response: SocketResponse<{ chatHistory: Message[] }>) => {
             console.log('Received chat history:', response);
             if (response.status === 'OK' && response.data) {
@@ -89,6 +126,21 @@ export const useWebSocket = ({ senderId, recipientId }: { senderId: string, reci
         });
     }, [user, recipientId]);
 
+    const createNotification = useCallback((notificationType: string, userId: string, message: string) => {
+        if (!socketRef.current) return;
+console.log(notificationType);
+console.log(userId);
+        console.log(message);
+
+        socketRef.current.emit('notifications', { type: notificationType, user_id: userId, message }, (response: SocketResponse<{ data: TNotification }>) => {
+            if (response.status === 'OK') {
+                console.log('Notification created successfully:', response.data);
+            } else {
+                console.error('Failed to create notification:', response.error);
+            }
+        });
+    }, []);
+
     const getUserChats = useCallback(() => {
         if (!user || !socketRef.current) return;
 
@@ -106,6 +158,7 @@ export const useWebSocket = ({ senderId, recipientId }: { senderId: string, reci
         messages,
         userChats,
         sendMessage,
-        getUserChats
+        getUserChats,
+        createNotification
     }
 }

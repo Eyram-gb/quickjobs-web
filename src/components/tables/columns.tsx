@@ -10,6 +10,8 @@ import { Dialog, DialogTrigger } from "../ui/dialog"
 import MessageClientDialog from "../MessageClientDialog"
 import { API_BASE_URL } from '@/lib/constants'
 import { toast } from 'sonner'
+import { useWebSocket } from '@/lib/hooks/useWebSocket'
+import { useAuthStore } from '@/lib/store/authStore'
 
 export interface Application {
     application_id: string;
@@ -67,7 +69,7 @@ export const columns: ColumnDef<Application>[] = [
         header: "Status",
         cell: ({ row }) => {
             const application = row.original;
-            return <UpdateStatusDropdown applicationId={application.application_id} currentStatus={application.status} />;
+            return <UpdateStatusDropdown application={application} />;
         },
     },
     {
@@ -154,28 +156,30 @@ export function DropdownMenuRadioGroupDemo() {
 const statusOptions: Array<string> = ['pending', 'accepted', 'reviewing', 'rejected'];
 
 interface UpdateStatusDropdownProps {
-    applicationId: string;
-    currentStatus: string;
+    application: Application;
 }
 
-const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ applicationId, currentStatus }) => {
-    const [selectedStatus, setSelectedStatus] = useState<string>(currentStatus);
+const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ application }) => {
+    const [selectedStatus, setSelectedStatus] = useState<string>(application.status);
+    const { user } = useAuthStore();
+    const { createNotification } = useWebSocket({ userId: user?.id })
 
     const handleStatusChange = async (newStatus: string) => {
         const promise = async () => {
-            const response = await fetch(`${API_BASE_URL}/applications/${applicationId}`, {
+            const response = await fetch(`${API_BASE_URL}/applications/${application.application_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    application_id: applicationId,
+                    application_id: application.application_id,
                     status: newStatus,
                 }),
             });
 
             if (response.status === 201) {
                 setSelectedStatus(newStatus);
+                createNotification('application_status', user?.id as string, `Your application status for the gig titled ${application.gig_title} has been updated to ${application.status}`)
                 return { name: newStatus }; // Return the new status for the success message
             } else {
                 throw new Error('Failed to update status'); // Throw an error if the response is not 201
@@ -188,6 +192,8 @@ const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ application
             error: 'Error updating status',
         });
     };
+
+
 
     return (
         <DropdownMenu>
