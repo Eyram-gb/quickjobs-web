@@ -28,13 +28,13 @@ const HowItWorks = () => {
         <h4 className='text-center bg-purple-200 px-5 py-2 rounded-full w-fit text-sm font-medium mx-auto'>HOW IT WORKS</h4>
         <div className='mt-5'>
           <h2 className='text-center font-semibold text-4xl w-[60vw] mx-auto'>The simple path to creating and finding opportunities</h2>
-<p className='text-sm text-gray-400 text-center'>The trusted platform for hiring skilled workers and landing reliable jobs—anywhere, anytime.</p>
+<p className='text-sm text-gray-500 font-medium text-center'>The trusted platform for hiring skilled workers and landing reliable jobs—anywhere, anytime.</p>
         </div>
         <div className='flex justify-center gap-6 flex-wrap mt-32'>
             {jobItems.map((item, index) => (
                 <div key={index} className='w-72 h-72 border bg-white hover:shadow-xl transition duration-300 rounded-xl p-4 pb-8 flex flex-col justify-between'>
                     <div>
-                        <div className='w-20 h-20 rounded-full flex justify-center items-center bg-teal-100 -mt-14 mx-auto mb-8'>
+                        <div className='w-20 h-20 rounded-full flex justify-center items-center bg-rose-100 -mt-14 mx-auto mb-8'>
                             {item.icon}
                         </div>
                         <div className='text-center space-y-6'>
