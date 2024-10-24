@@ -36,15 +36,15 @@ export interface TNotification {
 export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: string, recipientId?: string, userId?: string }) => {
     const { user } = useAuthStore()
     const [messages, setMessages] = useState<Message[]>([])
-    const [unreadNotifications, setUnreadNotifications] = useState< {
-    id: number;
-    created_at: Date | null;
-    updated_at: Date | null;
-    user_id: string | null;
-    message: string;
-    type: "application_status" | "chats";
-    read: boolean;
-}[]>([])
+    const [unreadNotifications, setUnreadNotifications] = useState<{
+        id: number;
+        created_at: Date | null;
+        updated_at: Date | null;
+        user_id: string | null;
+        message: string;
+        type: "application_status" | "chats";
+        read: boolean;
+    }[]>([])
     const [userChats, setUserChats] = useState<UserChat[]>([])
     const socketRef = useRef<Socket | null>(null);
 
@@ -86,8 +86,9 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
                 message: string;
                 type: "application_status" | "chats";
                 read: boolean;
-            }[] }>) => {
-            console.log('Received unread notifications:', response);
+            }[]
+        }>) => {
+            console.log('-----getting notiications-----', response);
             if (response.status === 'OK' && response.data) {
                 setUnreadNotifications(response.data.notifications_data);
             }
@@ -111,7 +112,7 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
             socket.off('connect');
             socket.off('receiveMessage');
         };
-    }, [senderId, recipientId, addMessage, user?.user_type]);
+    }, [senderId, recipientId, addMessage, user?.user_type, userId]);
 
     const sendMessage = useCallback((message: string) => {
         console.log('Sending message:', message);
@@ -128,8 +129,8 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
 
     const createNotification = useCallback((notificationType: string, userId: string, message: string) => {
         if (!socketRef.current) return;
-console.log(notificationType);
-console.log(userId);
+        console.log(notificationType);
+        console.log(userId);
         console.log(message);
 
         socketRef.current.emit('notifications', { type: notificationType, user_id: userId, message }, (response: SocketResponse<{ data: TNotification }>) => {
@@ -157,6 +158,7 @@ console.log(userId);
     return {
         messages,
         userChats,
+        unreadNotifications,
         sendMessage,
         getUserChats,
         createNotification

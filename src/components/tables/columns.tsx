@@ -162,7 +162,9 @@ interface UpdateStatusDropdownProps {
 const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ application }) => {
     const [selectedStatus, setSelectedStatus] = useState<string>(application.status);
     const { user } = useAuthStore();
-    const { createNotification } = useWebSocket({ userId: user?.id })
+    const { createNotification } = useWebSocket({ userId: application.user_id })
+
+    console.log(application)
 
     const handleStatusChange = async (newStatus: string) => {
         const promise = async () => {
@@ -179,7 +181,7 @@ const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ application
 
             if (response.status === 201) {
                 setSelectedStatus(newStatus);
-                createNotification('application_status', user?.id as string, `Your application status for the gig titled ${application.gig_title} has been updated to ${application.status}`)
+                createNotification('application_status', application.user_id, `Your application status for the gig titled ${application.gig_title} has been updated to ${application.status}`)
                 return { name: newStatus }; // Return the new status for the success message
             } else {
                 throw new Error('Failed to update status'); // Throw an error if the response is not 201
