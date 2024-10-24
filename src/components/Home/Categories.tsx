@@ -44,7 +44,7 @@ const Categories = async () => {
                             {getIndustryIcon(item.industry_name)}
                             <div>
                                 <p className='font-semibold text-lg leading-none text-center'>{item.industry_name}</p>
-                                <p className='text-sm text-green-500 font-medium text-center'>{item.gig_count} jobs available</p>
+                                <p className='text-sm text-green-500 font-medium text-center'>{item.gig_count} job{Number(item.gig_count) <= 1 ? '' : 's'} available</p>
                             </div>
                         </Link>
                     )
