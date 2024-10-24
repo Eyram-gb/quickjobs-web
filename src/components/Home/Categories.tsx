@@ -37,7 +37,7 @@ const Categories = async () => {
 
             <div className="bg-[url('/chaos_1.svg')] bg-no-repeat bg-center space-y-10 h-full">
                 <h2 className='font-semibold text-4xl text-center pt-8'>Browse by categories</h2>
-                <div className='flex gap-6 flex-wrap'>
+                <div className='flex gap-6 flex-wrap justify-center'>
                     {data?.map((item, idx) =>
                         <Link href={`/gigs?industryId=${item.industry_id}`} key={idx} className='flex gap-3 items-center px-4 flex-col justify-cemter w-80 border py-5 rounded-lg bg-white/10 backdrop-blur-sm'>
                             {/* ICON */}

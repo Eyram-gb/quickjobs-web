@@ -11,7 +11,7 @@ const Hero = () => {
                     <h1 className='text-6xl font-bold'> The easiest way to <span className='text-amber-500'>hire</span>         or  <span className='text-teal-900'>get hired</span> as a professional from anywhere.
                     </h1>
                     <div className='pt-6 flex gap-5'>
-                        <ShinyButton  className='rounded-full text-black py-5 text-base font-bold'>Start Hiring Professionals</ShinyButton>
+                        <ShinyButton className='rounded-full text-black py-5 text-base font-bold'>Start Hiring Professionals</ShinyButton>
                         <ShimmerButton className='bg-rose-500 font-semibold'>Find Your Next Opportunity</ShimmerButton>
 
                     </div>
