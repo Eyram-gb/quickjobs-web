@@ -35,11 +35,26 @@ export const ClientNavBar = () => {
                     <Button className=''>Register</Button>
                   </div> :
                     <div className='flex gap-4 items-center'>
-                      <div className='relative'>
+                      <DropdownMenu>
+  <DropdownMenuTrigger className='relative focus:outline-none'>
                       <Bell/>
                       <div className='bg-rose-500 text-white text-[10px] flex justify-center items-center w-4 h-4 rounded-full absolute -top-2 -right-1'>{unreadNotifications.length}</div>
-
-                      </div>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent className='max-w-sm'>
+    <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+    {
+      unreadNotifications.map((item)=>{
+        return(
+          <>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>{item.message}</DropdownMenuItem>
+        </>
+        )
+      })
+    }
+  </DropdownMenuContent>
+</DropdownMenu>
+                      
                       <ClientNavProfile />
                     </div>
                   }

@@ -36,15 +36,7 @@ export interface TNotification {
 export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: string, recipientId?: string, userId?: string }) => {
     const { user } = useAuthStore()
     const [messages, setMessages] = useState<Message[]>([])
-    const [unreadNotifications, setUnreadNotifications] = useState<{
-        id: number;
-        created_at: Date | null;
-        updated_at: Date | null;
-        user_id: string | null;
-        message: string;
-        type: "application_status" | "chats";
-        read: boolean;
-    }[]>([])
+    const [unreadNotifications, setUnreadNotifications] = useState<TNotification[]>([])
     const [userChats, setUserChats] = useState<UserChat[]>([])
     const socketRef = useRef<Socket | null>(null);
 
@@ -136,12 +128,14 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
         socketRef.current.emit('notifications', { type: notificationType, user_id: userId, message }, (response: SocketResponse<{ data: TNotification }>) => {
             if (response.status === 'OK') {
                 console.log('Notification created successfully:', response.data);
+                // Update unread notifications state when a new notification is created
+                setUnreadNotifications(prev => [...prev, response.data?.data as TNotification]);
             } else {
                 console.error('Failed to create notification:', response.error);
             }
         });
     }, []);
-
+    
     const getUserChats = useCallback(() => {
         if (!user || !socketRef.current) return;
 
@@ -156,6 +150,7 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
     }, [user]);
 
     return {
+        socket: socketRef,
         messages,
         userChats,
         unreadNotifications,
