@@ -9,7 +9,7 @@ import React from "react";
 export default async function ApplicationsTable(
   {
     params: { employerId },
-    searchParams 
+    searchParams
   }:
     {
       params: { employerId: string };
@@ -18,9 +18,14 @@ export default async function ApplicationsTable(
 ) {
   // const { employer_profile } = useAuthStore()
   const { gigId } = searchParams;
-  const res = await fetch(`${API_BASE_URL}/applications/employer/${employerId}?gigId=${gigId ? gigId : ''}`)
+  const url = gigId
+    ? `${API_BASE_URL}/applications/employer/${employerId}?gigId=${gigId}`
+    : `${API_BASE_URL}/applications/employer/${employerId}`;
+  const res = await fetch(url);
   const data: Application[] = await res.json()
   console.log(searchParams)
+  console.log(gigId)
+  console.log(data)
 
   // Remove the useQuery hook and loading/error states
   // if (isPending) return <div>Loading...</div>
@@ -33,6 +38,8 @@ export default async function ApplicationsTable(
         applicant_id: false,
         gig_description: false,
       }} />
+      asfdgfhgjhktjrthergwefadsvcx
+      srdtfygulhi
     </>
   )
 }

@@ -70,6 +70,8 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
         []
     )
+
+    console.log(data)
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(initialColumnVisibility) //pass empty object if there are no default visibility columns
     const [rowSelection, setRowSelection] = useState({})
 

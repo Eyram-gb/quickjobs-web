@@ -9,6 +9,9 @@ export default async function ApplicationsTable({ params: { employerId } }: { pa
   })
   const data: Application[] = await res.json()
 
+  console.log('employerId', employerId)
+  console.log('data', data)
+
   return (
     <>
       <DataTable
@@ -21,6 +24,7 @@ export default async function ApplicationsTable({ params: { employerId } }: { pa
           created_at: false,
         }}
       />
+      {/* hghfgdfsdsfghjkl */}
     </>
   )
 }

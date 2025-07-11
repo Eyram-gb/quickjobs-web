@@ -63,7 +63,9 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
             console.log('Received new message:', newMessage);
             addMessage(newMessage);
         });
-
+        // socket.on('notifications', ()=>{
+        //     console.log('listening to notifications')
+        // })
         socket.on('receivedNotification', (newNotification) => {
             console.log('Received new notification:', newNotification);
             // Handle the new notification (e.g., update state, show alert, etc.)
@@ -103,6 +105,9 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
             console.log('Cleaning up socket listeners');
             socket.off('connect');
             socket.off('receiveMessage');
+            socket.off('notifications');
+            socket.off('receivedNotification');
+            socket.off('getNotifications');
         };
     }, [senderId, recipientId, addMessage, user?.user_type, userId]);
 

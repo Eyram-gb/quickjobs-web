@@ -164,7 +164,7 @@ const UpdateStatusDropdown: React.FC<UpdateStatusDropdownProps> = ({ application
     const { user } = useAuthStore();
     const { createNotification } = useWebSocket({ userId: application.user_id })
 
-    console.log(application)
+    // console.log(application)
 
     const handleStatusChange = async (newStatus: string) => {
         const promise = async () => {
