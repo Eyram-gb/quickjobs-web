@@ -19,16 +19,14 @@ const ChatsUI: React.FC = () => {
     const { user } = useAuthStore();
     const [selectedChat, setSelectedChat] = useState<UserChat | null>(null);
     const { messages, userChats, sendMessage, getUserChats } = useWebSocket({
-        senderId: user?.id,
-        recipientId: selectedChat?.userId,
+        senderId: user?.id || '',
+        recipientId: selectedChat?.userId || '',
     });
 
     useEffect(() => {
         if (user) {
             getUserChats();
         }
-
-        console.log(userChats)
     }, [user, getUserChats]);
 
     const handleChatSelect = (chat: UserChat) => {
