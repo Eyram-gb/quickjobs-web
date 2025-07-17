@@ -16,7 +16,7 @@ const CreateProfile = async ({
         try {
             console.log('-------ENTERED-----')
             const res = await fetch(
-                `/api/getUser/${userId}`,
+                `${process.env.NEXT_PUBLIC_BASE_URL ?? ''}/api/getUser/${userId}`,
                 {
                     // cache: 'no-store',
                     method: "GET",
@@ -36,8 +36,8 @@ const CreateProfile = async ({
         }
     };
     const user = await getUser(id)
-console.log('user:', user);
-console.log('user_type:', user?.user_type);
+    console.log('user:', user);
+    console.log('user_type:', user?.user_type);
 
     return (
         <div className='flex justify-center max-w-xl mx-auto p-8 border rounded-md mt-12'>
