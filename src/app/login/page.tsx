@@ -66,8 +66,10 @@ const Login = () => {
 
         if (profile) {
           if (user.user_type === 'client') {
+            console.log('setting client profile')
             setClientProfile(profile)
           } else {
+            console.log('setting employer profile')
             setEmployerProfile(profile)
           }
         }

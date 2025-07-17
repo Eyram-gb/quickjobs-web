@@ -36,14 +36,16 @@ const CreateProfile = async ({
         }
     };
     const user = await getUser(id)
-    console.log(user?.user_type);
-    // const cookieStore = cookies()
+console.log('user:', user);
+console.log('user_type:', user?.user_type);
 
     return (
         <div className='flex justify-center max-w-xl mx-auto p-8 border rounded-md mt-12'>
-            {
-                user?.user_type === 'client' ?
-                    <NewClientForm user_id={id} email={user.email} /> : <NewCompanyForm user_id={id} email={user?.email as string} />
+            {!user
+                ? <div>User not found</div>
+                : user.user_type?.toLowerCase() === 'client'
+                    ? <NewClientForm user_id={id} email={user.email} />
+                    : <NewCompanyForm user_id={id} email={user.email} />
             }
         </div>
     )
