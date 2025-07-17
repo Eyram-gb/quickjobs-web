@@ -27,6 +27,7 @@ export async function GET(
     const user = await userRes.json();
     // return userRes.json();
     // const user = await getUserById(userId);
+    console.log("-----USER-----", user);
     return NextResponse.json(user);
   } catch (error) {
     return NextResponse.json(

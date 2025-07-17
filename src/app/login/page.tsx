@@ -62,6 +62,7 @@ const Login = () => {
         })
 
         const profile = await profileRes.json()
+        console.log('profile', profile)
 
         if (profile) {
           if (user.user_type === 'client') {

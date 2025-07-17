@@ -36,8 +36,8 @@ const CreateProfile = async ({
         }
     };
     const user = await getUser(id)
-    console.log(user);
-    const cookieStore = cookies()
+    console.log(user?.user_type);
+    // const cookieStore = cookies()
 
     return (
         <div className='flex justify-center max-w-xl mx-auto p-8 border rounded-md mt-12'>
