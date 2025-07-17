@@ -16,7 +16,7 @@ const CreateProfile = async ({
         try {
             console.log('-------ENTERED-----')
             const res = await fetch(
-                `http://localhost:3000/api/getUser/${userId}`,
+                `/api/getUser/${userId}`,
                 {
                     // cache: 'no-store',
                     method: "GET",
