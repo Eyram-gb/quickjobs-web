@@ -21,8 +21,8 @@ export default async function ApplicationsTable(
   const url = gigId
     ? `${API_BASE_URL}/applications/employer/${employerId}?gigId=${gigId}`
     : `${API_BASE_URL}/applications/employer/${employerId}`;
-  const res = await fetch(url);
-  const data: Application[] = await res.json()
+  const res = await fetch(url, { cache: "no-store" });
+  const data: Application[] = await res.json();
   console.log(searchParams)
   console.log(gigId)
   console.log(data)
@@ -38,8 +38,6 @@ export default async function ApplicationsTable(
         applicant_id: false,
         gig_description: false,
       }} />
-      asfdgfhgjhktjrthergwefadsvcx
-      srdtfygulhi
     </>
   )
 }
