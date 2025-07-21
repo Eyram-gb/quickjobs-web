@@ -1,4 +1,27 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# QuickJobs Frontend
+
+QuickJobs Frontend is a web application built with [Next.js](https://nextjs.org/) that serves as the user interface for the QuickJobs platform. The platform is designed to connect job seekers with employers, streamline the job search process, and provide a modern, responsive experience for users.
+
+## Project Overview
+
+QuickJobs Frontend provides the following core features:
+
+- **Job Listings:** Users can browse and search for available job opportunities, filter by category, location, and other criteria.
+- **Job Details:** Each job listing includes detailed information such as job description, requirements, company profile, and application instructions.
+- **User Authentication:** Job seekers and employers can create accounts, log in, and manage their profiles securely.
+- **Application Management:** Job seekers can apply for jobs directly through the platform, track their applications, and receive notifications.
+- **Employer Dashboard:** Employers can post new job openings, manage existing listings, and review applications from candidates.
+- **Responsive Design:** The application is optimized for both desktop and mobile devices, ensuring a seamless experience across platforms.
+- **Modern UI:** Utilizes [Tailwind CSS](https://tailwindcss.com/) for styling and [next/font](https://nextjs.org/docs/basic-features/font-optimization) for optimized font loading.
+- **Chat Feature:** Enables real-time messaging between job seekers and employers, allowing direct communication regarding job opportunities, interviews, and application status.
+
+## Technology Stack
+
+- **Framework:** Next.js (React-based)
+- **Styling:** Tailwind CSS, PostCSS
+- **Font Optimization:** next/font (Google Fonts integration)
+- **Package Management:** npm, yarn, pnpm, or bun
+- **Deployment:** Vercel Platform
 
 ## Getting Started
 
