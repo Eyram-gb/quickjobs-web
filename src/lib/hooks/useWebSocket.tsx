@@ -59,6 +59,17 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
             socket.emit('join', senderId);
         });
 
+        socket.on('disconnect', (reason) => {
+            console.warn('Socket disconnected:', reason);
+            // Attempt to reconnect after a short delay
+            setTimeout(() => {
+                if (socket && !socket.connected) {
+                    console.log('Attempting to reconnect socket...');
+                    socket.connect();
+                }
+            }, 1000);
+        });
+
         socket.on('receiveMessage', (newMessage: Message) => {
             console.log('Received new message:', newMessage);
             addMessage(newMessage);
@@ -104,12 +115,19 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
         return () => {
             console.log('Cleaning up socket listeners');
             socket.off('connect');
+            socket.off('disconnect');
             socket.off('receiveMessage');
             socket.off('notifications');
             socket.off('receivedNotification');
             socket.off('getNotifications');
         };
     }, [senderId, recipientId, addMessage, user?.user_type, userId]);
+
+    useEffect(() => {
+        if (socketRef.current && senderId) {
+            socketRef.current.emit('join', senderId);
+        }
+    }, [senderId]);
 
     const sendMessage = useCallback((message: string) => {
         console.log('Sending message:', message);
@@ -140,7 +158,7 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
             }
         });
     }, []);
-    
+
     const getUserChats = useCallback(() => {
         if (!user || !socketRef.current) return;
 

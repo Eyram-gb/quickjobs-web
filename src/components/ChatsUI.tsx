@@ -14,18 +14,23 @@ import { EllipsisVertical, SendHorizontal } from 'lucide-react';
 import { UserChat, useWebSocket } from '@/lib/hooks/useWebSocket';
 import { useAuthStore } from '@/lib/store/authStore';
 import { getTime } from '@/lib/utils';
+import toast from 'react-hot-toast';
+
 
 const ChatsUI: React.FC = () => {
     const { user } = useAuthStore();
     const [selectedChat, setSelectedChat] = useState<UserChat | null>(null);
-    const { messages, userChats, sendMessage, getUserChats } = useWebSocket({
+    const { messages, userChats, sendMessage, getUserChats, socket } = useWebSocket({
         senderId: user?.id || '',
         recipientId: selectedChat?.userId || '',
     });
 
     useEffect(() => {
+        console.log('entering effect')
+        console.log(user)
         if (user) {
             getUserChats();
+            console.log('entered effect')
         }
     }, [user, getUserChats]);
 
@@ -35,6 +40,10 @@ const ChatsUI: React.FC = () => {
 
     const handleSendMessage = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if(!socket.current?.connected){
+            toast.error('no socket connection')
+            return;
+        }
         const messageInput = e.currentTarget.elements.namedItem('message') as HTMLInputElement;
         if (messageInput.value.trim() && selectedChat) {
             sendMessage(messageInput.value.trim());
