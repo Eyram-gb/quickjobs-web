@@ -56,7 +56,7 @@ const MessageClientDialog = ({ recipient_id, client_name }: { recipient_id: stri
             <DialogContent>
                 <div className="p-4 border-b border-gray-300 flex justify-between items-center">
                     <div>
-                        <div className="font-bold">Client Name</div>
+                        <div className="font-bold">{client_name} </div>
                     </div>
                     <div>
                         <DropdownMenu>
