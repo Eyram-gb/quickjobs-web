@@ -10,7 +10,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { EllipsisVertical, SendHorizontal } from 'lucide-react';
+import { EllipsisVertical, SendHorizontal, Loader2, AlertCircle, RotateCcw, CheckCheck } from 'lucide-react';
 import { UserChat, useWebSocket } from '@/lib/hooks/useWebSocket';
 import { useAuthStore } from '@/lib/store/authStore';
 import { getTime } from '@/lib/utils';
@@ -20,7 +20,7 @@ import toast from 'react-hot-toast';
 const ChatsUI: React.FC = () => {
     const { user } = useAuthStore();
     const [selectedChat, setSelectedChat] = useState<UserChat | null>(null);
-    const { messages, userChats, sendMessage, getUserChats, socket } = useWebSocket({
+    const { messages, userChats, sendMessage, getUserChats, socket, retryMessage } = useWebSocket({
         senderId: user?.id || '',
         recipientId: selectedChat?.userId || '',
     });
@@ -102,17 +102,41 @@ const ChatsUI: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex-1 p-4 overflow-y-auto">
-                            {messages.map(message => (
-                                <div key={message.id} className={`flex mb-4 ${message.sender_id === user?.id ? 'justify-end' : ''}`}>
-                                    {message.sender_id !== user?.id && <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div>}
-                                    <div className={`p-1.5 rounded-lg max-w-xs ${message.sender_id === user?.id ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                            {messages.map((message, index) => (
+                                <div key={message.id || message.tempId || index} className={`flex mb-4 ${message.sender_id === user?.id ? 'justify-end' : ''}`}>
+                                    {/* {message.sender_id !== user?.id && <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div>} */}
+                                    <div className={`p-1.5 rounded-lg max-w-xs relative ${message.sender_id === user?.id ? 'bg-blue-100' : 'bg-gray-100'}`}>
                                         <div className='text-xs mr-10'>{message.message_text}</div>
-                                        <div className="text-gray-500 text-[10px] flex justify-end leading-none">
-                                            {getTime(message?.created_at as Date)}
+                                        <div className="text-gray-500 text-[10px] flex justify-between items-center leading-none mt-1">
+                                            <div className="flex items-center gap-1">
+                                                {message.status === 'pending' && (
+                                                    <Loader2 className="w-3 h-3 animate-spin text-gray-400" />
+                                                )}
+                                                {message.status === 'sent' && (
+                                                    <CheckCheck className="w-3 h-3 text-teal-300" />
+                                                )}
+                                                {message.status === 'failed' && (
+                                                    <div className="flex items-center gap-1">
+                                                        <AlertCircle className="w-3 h-3 text-red-500" />
+                                                        <span className="text-red-500 text-[8px]">Failed</span>
+                                                        <button
+                                                            onClick={() => retryMessage(message)}
+                                                            className="ml-1 p-0.5 hover:bg-gray-200 rounded"
+                                                            title="Retry sending message"
+                                                        >
+                                                            <RotateCcw className="w-2.5 h-2.5 text-red-500" />
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div>
+                                                {getTime(message?.created_at as Date)}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             ))}
+                            <div className='mb-10'/>
                         </div>
                         <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-300 flex">
                             <input

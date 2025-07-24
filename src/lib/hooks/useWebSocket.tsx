@@ -18,6 +18,8 @@ export interface Message {
     sender_id?: string | null;
     recipient_id?: string | null;
     message_text: string;
+    status?: 'pending' | 'sent' | 'failed';
+    tempId?: string; // For tracking pending messages
 }
 
 export interface UserChat {
@@ -42,7 +44,37 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
 
     const addMessage = useCallback((newMessage: Message) => {
         console.log('Adding new message:', newMessage);
-        setMessages(prevMessages => [...prevMessages, newMessage]);
+        setMessages(prevMessages => {
+            // If this is a server-confirmed message and matches a pending message by tempId, replace it
+            if (newMessage.id && newMessage.tempId) {
+                return prevMessages.map(msg =>
+                    msg.tempId === newMessage.tempId
+                        ? { ...newMessage, status: 'sent' as const }
+                        : msg
+                );
+            }
+
+            // If message with this id already exists, skip
+            if (newMessage.id && prevMessages.some(msg => msg.id === newMessage.id)) {
+                console.log('Message already exists with ID:', newMessage.id);
+                return prevMessages;
+            }
+
+            // For messages without ID, check for duplicates by content and sender (within 5s window)
+            const existingMessage = prevMessages.find(msg =>
+                !msg.tempId &&
+                msg.sender_id === newMessage.sender_id &&
+                msg.message_text === newMessage.message_text &&
+                msg.created_at && newMessage.created_at &&
+                Math.abs(new Date(msg.created_at).getTime() - new Date(newMessage.created_at).getTime()) < 5000
+            );
+            if (existingMessage) {
+                console.log('Duplicate message detected, skipping');
+                return prevMessages;
+            }
+
+            return [...prevMessages, { ...newMessage, status: 'sent' }];
+        });
     }, []);
 
     useEffect(() => {
@@ -133,11 +165,42 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
         console.log('Sending message:', message);
         if (!user || !socketRef.current) return;
 
+        // Generate a temporary ID for the pending message
+        const tempId = `temp_${Date.now()}_${Math.random()}`;
+
+        // Immediately add the message with pending status
+        const pendingMessage: Message = {
+            tempId,
+            sender_id: user.id,
+            recipient_id: recipientId,
+            message_text: message,
+            status: 'pending',
+            created_at: new Date()
+        };
+
+        setMessages(prevMessages => [...prevMessages, pendingMessage]);
+
         socketRef.current.emit('sendMessage', { message, senderId: user.id, recipientId }, (response: SocketResponse<{ message: Message }>) => {
             if (response.status === 'OK' && response.data) {
                 console.log('Message sent successfully:', response.data.message);
+                // Update the pending message with the server response
+                setMessages(prevMessages =>
+                    prevMessages.map(msg =>
+                        msg.tempId === tempId
+                            ? { ...response.data!.message, status: 'sent' as const }
+                            : msg
+                    )
+                );
             } else {
                 console.error('Failed to send message:', response.error);
+                // Mark the message as failed
+                setMessages(prevMessages =>
+                    prevMessages.map(msg =>
+                        msg.tempId === tempId
+                            ? { ...msg, status: 'failed' as const }
+                            : msg
+                    )
+                );
             }
         });
     }, [user, recipientId]);
@@ -172,6 +235,48 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
         });
     }, [user]);
 
+    const retryMessage = useCallback((failedMessage: Message) => {
+        if (!failedMessage.tempId) return;
+
+        // Update message status to pending
+        setMessages(prevMessages =>
+            prevMessages.map(msg =>
+                msg.tempId === failedMessage.tempId
+                    ? { ...msg, status: 'pending' as const }
+                    : msg
+            )
+        );
+
+        // Retry sending the message
+        if (!user || !socketRef.current) return;
+
+        socketRef.current.emit('sendMessage', {
+            message: failedMessage.message_text,
+            senderId: user.id,
+            recipientId
+        }, (response: SocketResponse<{ message: Message }>) => {
+            if (response.status === 'OK' && response.data) {
+                console.log('Message retry successful:', response.data.message);
+                setMessages(prevMessages =>
+                    prevMessages.map(msg =>
+                        msg.tempId === failedMessage.tempId
+                            ? { ...response.data!.message, status: 'sent' as const }
+                            : msg
+                    )
+                );
+            } else {
+                console.error('Failed to retry message:', response.error);
+                setMessages(prevMessages =>
+                    prevMessages.map(msg =>
+                        msg.tempId === failedMessage.tempId
+                            ? { ...msg, status: 'failed' as const }
+                            : msg
+                    )
+                );
+            }
+        });
+    }, [user, recipientId]);
+
     return {
         socket: socketRef,
         messages,
@@ -179,6 +284,7 @@ export const useWebSocket = ({ senderId, recipientId, userId }: { senderId?: str
         unreadNotifications,
         sendMessage,
         getUserChats,
-        createNotification
+        createNotification,
+        retryMessage
     }
 }
