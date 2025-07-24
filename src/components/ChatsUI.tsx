@@ -20,6 +20,7 @@ import toast from 'react-hot-toast';
 const ChatsUI: React.FC = () => {
     const { user } = useAuthStore();
     const [selectedChat, setSelectedChat] = useState<UserChat | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
     const { messages, userChats, sendMessage, getUserChats, socket, retryMessage } = useWebSocket({
         senderId: user?.id || '',
         recipientId: selectedChat?.userId || '',
@@ -51,6 +52,12 @@ const ChatsUI: React.FC = () => {
         }
     };
 
+    const filteredChats = userChats
+        ? userChats.filter(chat =>
+            chat.chatUser.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        : [];
+
     console.log(userChats)
 
     return (
@@ -62,10 +69,12 @@ const ChatsUI: React.FC = () => {
                         type="text"
                         placeholder="Search..."
                         className="rounded-full -mb-[1.3px]"
+                        value={searchTerm}
+                        onChange={e => setSearchTerm(e.target.value)}
                     />
                 </div>
                 <div className="flex-1 overflow-y-auto">
-                    {userChats ? userChats.map(chat => (
+                    {filteredChats.length > 0 ? filteredChats.map(chat => (
                         <div
                             key={chat.chatUser}
                             className={`flex items-center p-4 border-b border-gray-300 cursor-pointer ${selectedChat?.userId === chat.userId ? 'bg-gray-200' : ''}`}
@@ -74,11 +83,10 @@ const ChatsUI: React.FC = () => {
                             <div className="w-10 h-10 bg-gray-300 rounded-full mr-4"></div>
                             <div className="flex-1 min-w-0">
                                 <div className="font-bold">{chat.chatUser}</div>
-                                {/* You might want to add a preview of the last message here */}
                             </div>
                             <div className="text-gray-500 text-xs self-start mt-1">7:24pm</div>
                         </div>
-                    )) : <p>No User Chats</p>}
+                    )) : <p className="p-4 text-gray-500">No chats found</p>}
                 </div>
             </div>
             <div className="flex-1 flex flex-col">
