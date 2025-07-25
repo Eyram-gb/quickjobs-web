@@ -18,15 +18,15 @@ export const EmployerNavBar = () => {
             <div className="flex-shrink-0">
               <a href="/" className="text-xl font-bold flex gap-2 items-center relative">
                 <img src="/logo.svg" alt="logo" className='h-8' />
-                <p className='text-2xl font-medium'>Quickjobs</p>
+                <p className='text-2xl font-medium md:block hidden'>Quickjobs</p>
               </a>
             </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-center space-x-4">
-                <a href="/dashboard" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">
+            <div className="">
+              <div className="flex items-center space-x-4">
+                <a href="/dashboard" className="text-gray-700 hover:bg-gray-100 py-2 rounded-md text-sm font-medium">
                   Dashboard
                 </a>
-                <a href="/gigs" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">
+                <a href="/gigs" className="text-gray-700 hover:bg-gray-100 py-2 rounded-md text-sm font-medium">
                   Gigs
                 </a>
                 {!isAuthenticated ? <div className='flex gap-x-2'>

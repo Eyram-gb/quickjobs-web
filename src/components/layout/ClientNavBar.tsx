@@ -10,7 +10,7 @@ import { useWebSocket } from '@/lib/hooks/useWebSocket';
 
 export const ClientNavBar = () => {
   const { isAuthenticated, client_profile, logout, user } = useAuthStore();
-  const {unreadNotifications} = useWebSocket({userId:user?.id})
+  const { unreadNotifications } = useWebSocket({ userId: user?.id })
   return (
     <>
       <nav className="sticky top-0 z-50 bg-white shadow-md">
@@ -30,34 +30,34 @@ export const ClientNavBar = () => {
                 <a href="/jobs" className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">
                   Gigs
                 </a>
-                  {!isAuthenticated ? <div className='flex gap-x-2'>
-                    <Link className={buttonVariants({ variant: "outline" })} href='/login'>Login</Link>
-                    <Button className=''>Register</Button>
-                  </div> :
-                    <div className='flex gap-4 items-center'>
-                      <DropdownMenu>
-  <DropdownMenuTrigger className='relative focus:outline-none'>
-                      <Bell/>
-                      <div className='bg-rose-500 text-white text-[10px] flex justify-center items-center w-4 h-4 rounded-full absolute -top-2 -right-1'>{unreadNotifications.length}</div>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent className='max-w-sm'>
-    <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-    {
-      unreadNotifications.map((item)=>{
-        return(
-          <>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>{item.message}</DropdownMenuItem>
-        </>
-        )
-      })
-    }
-  </DropdownMenuContent>
-</DropdownMenu>
-                      
-                      <ClientNavProfile />
-                    </div>
-                  }
+                {!isAuthenticated ? <div className='flex gap-x-2'>
+                  <Link className={buttonVariants({ variant: "outline" })} href='/login'>Login</Link>
+                  <Button className=''>Register</Button>
+                </div> :
+                  <div className='flex gap-4 items-center'>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className='relative focus:outline-none'>
+                        <Bell />
+                        <div className='bg-rose-500 text-white text-[10px] flex justify-center items-center w-4 h-4 rounded-full absolute -top-2 -right-1'>{unreadNotifications.length}</div>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className='max-w-sm'>
+                        <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                        {
+                          unreadNotifications.map((item) => {
+                            return (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>{item.message}</DropdownMenuItem>
+                              </>
+                            )
+                          })
+                        }
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <ClientNavProfile />
+                  </div>
+                }
               </div>
             </div>
           </div>

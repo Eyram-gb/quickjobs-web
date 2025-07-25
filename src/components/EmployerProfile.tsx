@@ -25,7 +25,7 @@ const EmployerProfile = ({ industries }: {
                     {/* BANNER AND PROFILE IMAGES */}
                     <div className='relative h-56 bg-sky-50'>
                     </div>
-                    <div className='px-8 mt-4 flex justify-between'>
+                    <div className='px-8 mt-4 flex flex-col md:flex-row justify-between'>
                         <div className='flex gap-x-6'>
                             <div className='bg-teal-100 h-28 w-28 border-4 border-white rounded-full -mt-12 relative z-10 overflow-hidden'>
                                 <Image alt='logo' src={employer_profile?.logo_url || ''} fill className='object-cover' />
@@ -40,7 +40,7 @@ const EmployerProfile = ({ industries }: {
                         </div>
                     </div>
                     {/* <hr className='mx-8 my-6' /> */}
-                    <div className='grid grid-cols-6 px-8 gap-4 mt-6'>
+                    <div className='md:grid grid-cols-6 px-8 gap-4 mt-6'>
                         <div className='col-span-4 border-r'>
                             <h2 className='font-semibold'>Bio</h2>
                             <p className='text-sm'>{employer_profile?.description}</p>
