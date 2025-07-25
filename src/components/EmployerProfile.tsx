@@ -20,7 +20,7 @@ const EmployerProfile = ({ industries }: {
     const { employer_profile, user } = useAuthStore();
     return (
         <>
-            <div className=''>
+            <div className='mb-20'>
                 <div className=''>
                     {/* BANNER AND PROFILE IMAGES */}
                     <div className='relative h-56 bg-sky-50'>
